@@ -3,137 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>P2P Video Call - Simple</title>
+    <title>Video Call P2P - Stabil</title>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
-        body {
-            font-family: sans-serif;
-            background: #1a1a1a;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-        .video-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            width: 100%;
-            max-width: 800px;
-        }
-        video {
-            width: 100%;
-            background: #000;
-            border-radius: 8px;
-            border: 2px solid #333;
-        }
-        .controls {
-            margin-bottom: 20px;
-            background: #333;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-        }
-        input {
-            padding: 8px;
-            border-radius: 4px;
-            border: none;
-            margin-right: 5px;
-        }
-        button {
-            padding: 8px 15px;
-            cursor: pointer;
-            background: #28a745;
-            color: white;
-            border: none;
-            border-radius: 4px;
-        }
-        #my-id {
-            font-weight: bold;
-            color: #ffc107;
-            margin-bottom: 10px;
-        }
+        body { font-family: 'Segoe UI', sans-serif; background: #1a1a1a; color: white; text-align: center; margin: 0; padding: 20px; }
+        .controls { background: #2d2d2d; padding: 20px; border-radius: 15px; display: inline-block; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .id-label { font-size: 1.2rem; margin-bottom: 5px; }
+        #my-id { font-size: 2rem; color: #00ffcc; font-weight: bold; display: block; margin-bottom: 15px; }
+        input { padding: 12px; border-radius: 8px; border: none; width: 120px; text-align: center; font-size: 1.1rem; }
+        button { padding: 12px 20px; border-radius: 8px; border: none; background: #007bff; color: white; font-weight: bold; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .video-wrapper { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+        .v-box { width: 100%; max-width: 400px; background: #000; border-radius: 12px; overflow: hidden; border: 2px solid #444; position: relative; }
+        video { width: 100%; aspect-ratio: 4/3; object-fit: cover; }
+        .tag { position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.5); padding: 3px 8px; border-radius: 4px; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
-    <h2>WebRTC P2P Camera</h2>
-
     <div class="controls">
-        <div id="my-id">Menghubungkan ke server...</div>
-        <input type="text" id="remote-id" placeholder="Masukkan ID teman">
-        <button id="btn-call">Hubungkan ke Teman</button>
+        <div class="id-label">ID Anda (Berikan ke teman):</div>
+        <span id="my-id">Memuat...</span>
+        
+        <input type="number" id="peer-id-input" placeholder="ID Teman">
+        <button id="connect-btn">Panggil Video</button>
     </div>
 
-    <div class="video-grid">
-        <div>
-            <p>Kamera Saya</p>
+    <div class="video-wrapper">
+        <div class="v-box">
             <video id="local-video" autoplay muted playsinline></video>
+            <div class="tag">Kamera Anda</div>
         </div>
-        <div>
-            <p>Kamera Lawan</p>
+        <div class="v-box">
             <video id="remote-video" autoplay playsinline></video>
+            <div class="tag">Kamera Teman</div>
         </div>
     </div>
 
     <script>
+        const myIdDisplay = document.getElementById('my-id');
+        const peerIdInput = document.getElementById('peer-id-input');
+        const connectBtn = document.getElementById('connect-btn');
         const localVideo = document.getElementById('local-video');
         const remoteVideo = document.getElementById('remote-video');
-        const btnCall = document.getElementById('btn-call');
-        const remoteIdInput = document.getElementById('remote-id');
-        const myIdDisplay = document.getElementById('my-id');
 
         let localStream;
         
-        // 1. Inisialisasi PeerJS
-        const peer = new Peer();
+        // 1. Buat ID 4 Angka
+        const customId = Math.floor(1000 + Math.random() * 9000).toString();
+        const peer = new Peer(customId);
 
-        // 2. Dapatkan ID sendiri dari server PeerJS
-        peer.on('open', (id) => {
-            myIdDisplay.innerText = "ID Anda: " + id;
-            console.log('My ID is: ' + id);
+        peer.on('open', id => {
+            myIdDisplay.innerText = id;
         });
 
-        // 3. Akses Kamera Lokal
-        navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-            .then(stream => {
-                localStream = stream;
-                localVideo.srcObject = stream;
-            })
-            .catch(err => {
-                console.error("Gagal akses kamera: ", err);
-                alert("Harap izinkan akses kamera");
-            });
+        // 2. Siapkan Kamera Sejak Awal
+        async function startCamera() {
+            try {
+                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                localVideo.srcObject = localStream;
+            } catch (err) {
+                console.error("Gagal kamera:", err);
+                alert("Klik izinkan kamera agar aplikasi berjalan!");
+            }
+        }
+        startCamera();
 
-        // 4. MENERIMA PANGGILAN
-        peer.on('call', (call) => {
+        // 3. Menangani Panggilan Masuk (Penerima)
+        peer.on('call', call => {
+            console.log("Panggilan masuk...");
             // Jawab panggilan dengan stream kita
             call.answer(localStream);
             
-            // Terima stream dari lawan
-            call.on('stream', (remoteStream) => {
+            call.on('stream', remoteStream => {
+                console.log("Menerima stream teman...");
                 remoteVideo.srcObject = remoteStream;
             });
         });
 
-        // 5. MELAKUKAN PANGGILAN
-        btnCall.addEventListener('click', () => {
-            const remoteId = remoteIdInput.value;
-            if (!remoteId) return alert("Masukkan ID lawan dulu!");
+        // 4. Melakukan Panggilan (Pengirim)
+        connectBtn.onclick = () => {
+            const remoteId = peerIdInput.value;
+            if (!remoteId) return alert("Masukkan ID teman!");
 
+            console.log("Menghubungi: " + remoteId);
             const call = peer.call(remoteId, localStream);
             
-            call.on('stream', (remoteStream) => {
+            call.on('stream', remoteStream => {
+                console.log("Teman menjawab, menampilkan video...");
                 remoteVideo.srcObject = remoteStream;
             });
+
+            call.on('error', err => {
+                console.error("Call error:", err);
+                alert("Gagal menyambung.");
+            });
+        };
+
+        // Penanganan error global
+        peer.on('error', err => {
+            if(err.type === 'peer-disconnected') console.log("Teman terputus.");
+            if(err.type === 'unavailable-id') location.reload();
+            console.error("Peer Error:", err);
         });
 
-        // Tangani Error
-        peer.on('error', (err) => {
-            console.error(err);
-            alert("Error: " + err.type);
-        });
     </script>
 </body>
 </html>
