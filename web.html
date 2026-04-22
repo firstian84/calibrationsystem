@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+    <title>Firstian Technology Innovation</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -13,6 +13,7 @@
             font-family: 'Space Grotesk', sans-serif;
             background-color: #0a0a0a;
             color: #e5e7eb;
+            scroll-behavior: smooth;
         }
 
         .glass-card {
@@ -34,10 +35,6 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .nav-link {
-            transition: color 0.2s;
-        }
-
         .nav-link:hover {
             color: #3b82f6;
         }
@@ -47,91 +44,110 @@
 
     <nav class="fixed w-full z-50 glass-card border-b border-white/5 py-4 px-6 flex justify-between items-center">
         <div class="text-xl font-bold tracking-tighter uppercase">
-                   </div>
+            Firstian <span class="text-blue-500">Tech</span>
+        </div>
+        <div class="hidden md:flex gap-8 text-xs font-medium tracking-widest uppercase">
+            <a href="#home" class="nav-link">Home</a>
+            <a href="#services" class="nav-link">Services</a>
+            <a href="#locations" class="nav-link">Contact</a>
+        </div>
     </nav>
 
     <section id="home" class="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-20">
         <div class="inline-block px-3 py-1 border border-blue-500/30 rounded-full text-blue-400 text-xs tracking-widest uppercase mb-6 bg-blue-500/10">
-            memulai 2015 
+            Est. 2015
         </div>
         <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
-            Berkreasi  <br><span class="gradient-text">Tanpa Batas.</span>
+            Berkreasi <br><span class="gradient-text">Tanpa Batas.</span>
         </h1>
         <p class="max-w-2xl text-gray-400 text-lg mb-10 leading-relaxed">
-            Menghadirkan solusi desain berkelanjutan dan fungsional. ilmiah dengan estetika untuk menciptakan produk berteknologi tinggi yang sesuai dengan anggaran.
+            Since 2015, we've put science first to create affordable, high-end designs without limitations. 
+            A firm belief in sustainable and functional design defines the services at 
+            <span class="text-white font-semibold">@Firstian Technology Innovation.</span>
         </p>
+        <div class="flex gap-4">
+            <a href="#services" class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full font-bold transition-all">Explore Services</a>
+            <a href="mailto:Firstian84@gmail.com" class="px-8 py-3 border border-white/10 hover:bg-white/5 rounded-full font-bold transition-all">Get in Touch</a>
+        </div>
     </section>
 
     <section id="services" class="py-24 px-6 md:px-12 bg-[#0d0d0d]">
         <div class="mb-16 text-center">
-            <h2 class="text-3xl font-bold uppercase tracking-widest mb-4">Professional Kami</h2>
+            <h2 class="text-3xl font-bold uppercase tracking-widest mb-4">Professional Services</h2>
+            <p class="text-gray-500 max-w-xl mx-auto mb-8 text-sm">From hands-on creative work to practical advice, we ensure you find exactly what you're looking for.</p>
             <div class="h-1 w-20 bg-blue-600 mx-auto"></div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div class="glass-card p-8 rounded-2xl">
                 <i data-lucide="layout" class="text-blue-500 mb-6"></i>
-                <h3 class="text-xl font-bold mb-4 uppercase">Architectural interior</h3>
-                <ul class="text-sm text-gray-400 space-y-2">
-                    <li>• Site & Contour Analysis</li>
-                    <li>• Feng Shui Analysis</li>
-                    <li>• Mesh Modeling & Master Plan</li>
-                    <li>• Quantity Surveying & CAD</li>
+                <h3 class="text-xl font-bold mb-4 uppercase">Architectural Interior</h3>
+                <ul class="text-xs text-gray-400 space-y-2">
+                    <li>• Site, Contour, View & Circulation Analysis</li>
+                    <li>• Feng Shui Analysis & Reference Images</li>
+                    <li>• Mesh Modeling, Room Concept & Revisions</li>
+                    <li>• Master Plan, Site Plan & Color Scheme</li>
+                    <li>• 3D Images, Quantity Material & CAD Construction</li>
                 </ul>
             </div>
 
             <div class="glass-card p-8 rounded-2xl">
                 <i data-lucide="layers" class="text-blue-500 mb-6"></i>
                 <h3 class="text-xl font-bold mb-4 uppercase">Creative Multimedia</h3>
-                <ul class="text-sm text-gray-400 space-y-2">
-                    <li>• Storyboarding & Animation</li>
-                    <li>• Game Development & Rigging</li>
-                    <li>• VFX & Particle Effects</li>
-                    <li>• High-End Rendering</li>
+                <ul class="text-xs text-gray-400 space-y-2">
+                    <li>• Storyboarding, Modeling & Texturing</li>
+                    <li>• Level Design & World Building</li>
+                    <li>• Animation, Skinning & Rigid Body Physics</li>
+                    <li>• Face Motion & Particle Effects</li>
+                    <li>• High-End Rendering, Compositing & VFX</li>
                 </ul>
             </div>
 
             <div class="glass-card p-8 rounded-2xl">
                 <i data-lucide="shield-check" class="text-blue-500 mb-6"></i>
                 <h3 class="text-xl font-bold mb-4 uppercase">Tactical & Security</h3>
-                <ul class="text-sm text-gray-400 space-y-2">
-                    <li>• Private Investigation & Escort</li>
-                    <li>• Autonomous Robotic Systems</li>
-                    <li>• Fire Rescue & Paramedic Skills</li>
-                    <li>• Tactical Technology Tools</li>
+                <ul class="text-xs text-gray-400 space-y-2">
+                    <li>• Paramedic & Fire Rescue Skills</li>
+                    <li>• Private Investigation & Bodyguard</li>
+                    <li>• Escort & Diplomatic Negotiations</li>
+                    <li>• Tactical Tech Tools & National KUHP Support</li>
+                    <li>• Autonomous Robotic Systems (HW/SW)</li>
                 </ul>
             </div>
 
             <div class="glass-card p-8 rounded-2xl">
                 <i data-lucide="cpu" class="text-blue-500 mb-6"></i>
                 <h3 class="text-xl font-bold mb-4 uppercase">Industrial Tech</h3>
-                <ul class="text-sm text-gray-400 space-y-2">
-                    <li>• Algorithm & Sensing</li>
-                    <li>• Prototype Development</li>
-                    <li>• Controller Calibration</li>
-                    <li>• Real Scale Modeling</li>
+                <ul class="text-xs text-gray-400 space-y-2">
+                    <li>• Digital Design & Algorithm Development</li>
+                    <li>• Sensoring & Controller Calibration</li>
+                    <li>• Real Scale Modelling & Prototyping</li>
+                    <li>• Assembly & Build Quality Assurance</li>
+                    <li>• Product Development</li>
                 </ul>
             </div>
 
             <div class="glass-card p-8 rounded-2xl">
                 <i data-lucide="zap" class="text-blue-500 mb-6"></i>
-                <h3 class="text-xl font-bold mb-4 uppercase">Cakra</h3>
-                <ul class="text-sm text-gray-400 space-y-2">
-                    <li>• Positive Thinking Practices</li>
+                <h3 class="text-xl font-bold mb-4 uppercase">Cakra & Wellness</h3>
+                <ul class="text-xs text-gray-400 space-y-2">
+                    <li>• Positive Thinking & Concentration Mastery</li>
+                    <li>• Effective Thinking & Senses Level Increase</li>
                     <li>• Inner Electrostatic Control</li>
-                    <li>• Touchless Self Defence</li>
-                    <li>• Concentration Mastery</li>
+                    <li>• Touchless Self Defence (Extreme Emotion Threat)</li>
+                    <li>• Mental & Spiritual Discipline</li>
                 </ul>
             </div>
 
             <div class="glass-card p-8 rounded-2xl">
                 <i data-lucide="camera" class="text-blue-500 mb-6"></i>
                 <h3 class="text-xl font-bold mb-4 uppercase">Media Production</h3>
-                <ul class="text-sm text-gray-400 space-y-2">
-                    <li>• Drone Footage & Photography</li>
+                <ul class="text-xs text-gray-400 space-y-2">
+                    <li>• Drone Footage & Green Screen Editing</li>
+                    <li>• Artistic Photography & Photo Themes</li>
+                    <li>• Movie & Photo Editing</li>
+                    <li>• Artistic Visual Effects (VFX)</li>
                     <li>• Independent Movie Production</li>
-                    <li>• Green Screen Editing</li>
-                    <li>• Artistic Visual Effects</li>
                 </ul>
             </div>
         </div>
@@ -141,20 +157,27 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div>
                 <h2 class="text-4xl font-bold mb-8 uppercase tracking-tighter">Operational <br><span class="text-blue-500">Network.</span></h2>
-                <p class="text-gray-400 mb-8">Kami beroperasi di berbagai titik strategis di Jakarta Selatan untuk mendukung kebutuhan klien secara maksimal.</p>
+                <p class="text-gray-400 mb-8">We operate across strategic points in South Jakarta to ensure maximum client support and technical excellence.</p>
                 
                 <div class="space-y-6">
                     <div class="flex items-start gap-4">
-                        <i data-lucide="map-pin" class="text-blue-500 shrink-0"></i>
+                        <i data-lucide="home" class="text-blue-500 shrink-0"></i>
                         <div>
-                            <p class="font-bold">Head Office 1 (M Center)</p>
-                            <p class="text-sm text-gray-500 italic">Lt. 5 R210, Kebayoran Lama, Jakarta Selatan.</p>
+                            <p class="font-bold">Living Address</p>
+                            <p class="text-sm text-gray-500 italic">Pondok Jaya 3 No.7A, Mampang Prapatan, South Jakarta.</p>
                         </div>
                     </div>
                     <div class="flex items-start gap-4">
                         <i data-lucide="map-pin" class="text-blue-500 shrink-0"></i>
                         <div>
-                            <p class="font-bold">Business Office 2 (18 Office Park)</p>
+                            <p class="font-bold">Office 1 (M Center)</p>
+                            <p class="text-sm text-gray-500 italic">Lt. 5 R210, Jl. Teuku Nyak Arief No.16, Kebayoran Lama, Jakarta Selatan.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <i data-lucide="map-pin" class="text-blue-500 shrink-0"></i>
+                        <div>
+                            <p class="font-bold">Office 2 (18 Office Park)</p>
                             <p class="text-sm text-gray-500 italic">Jl. TB Simatupang No.18, Pasar Minggu, Jakarta Selatan.</p>
                         </div>
                     </div>
@@ -162,31 +185,35 @@
                         <i data-lucide="hammer" class="text-blue-500 shrink-0"></i>
                         <div>
                             <p class="font-bold">Technical Workshop</p>
-                            <p class="text-sm text-gray-500 italic">Jl. Pondok Jaya VII No.6B, Mampang Prpt, Jakarta Selatan.</p>
+                            <p class="text-sm text-gray-500 italic">Jl. Pondok Jaya VII No.6B, Pela Mampang, Jakarta Selatan.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <i data-lucide="mail" class="text-blue-500 shrink-0"></i>
+                        <div>
+                            <p class="font-bold">Direct Inquiry</p>
+                            <p class="text-sm text-blue-400">Firstian84@gmail.com</p>
                         </div>
                     </div>
                 </div>
             </div>
-                    </div>
+            
+            <div class="flex items-center justify-center">
+                <div class="glass-card p-10 rounded-3xl border-blue-500/20 text-center">
+                    <h3 class="text-2xl font-bold mb-4">Ready to start?</h3>
+                    <p class="text-gray-400 mb-6 text-sm">Set up an introductory meeting to discuss your project requirements.</p>
+                    <a href="mailto:Firstian84@gmail.com" class="inline-block px-10 py-4 bg-white text-black font-bold rounded-xl hover:bg-blue-500 hover:text-white transition-all">Contact Us Now</a>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <footer class="py-12 border-t border-white/5 text-center text-xs text-gray-600 uppercase tracking-widest">
+    <footer class="py-12 border-t border-white/5 text-center text-[10px] text-gray-600 uppercase tracking-[0.2em]">
         &copy; 2026 Firstian Technology Innovation. All Rights Reserved.
     </footer>
 
     <script>
-        // Initialize Icons
         lucide.createIcons();
-
-        // Smooth Scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
     </script>
 </body>
 </html>
