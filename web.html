@@ -202,7 +202,7 @@
                         <i class="fas fa-eraser"></i> Hapus
                     </button>
                     <button class="btn btn-ss" onclick="takeScreenshot()">
-                        <i class="fas fa-camera-retro"></i> Screenshot TTD
+                        <i class="fas fa-camera-retro"></i> Screenshot Layar
                     </button>
                 </div>
 
@@ -285,15 +285,29 @@
         }, 1000);
     }
 
-    // Fungsi Baru: Screenshot Tanda Tangan
+    // Fungsi Diperbarui: Screenshot Seluruh Layar Form
     function takeScreenshot() {
-        const element = document.querySelector(".canvas-box");
-        html2canvas(element).then(canvas => {
+        const element = document.getElementById("capture-area");
+        
+        // Mematikan sementara animasi pulse agar screenshot bersih
+        const gpsBtn = document.getElementById('gps-btn');
+        gpsBtn.style.animation = 'none';
+
+        html2canvas(element, {
+            backgroundColor: "#0a0a0a",
+            logging: false,
+            useCORS: true,
+            scale: 2 // Kualitas lebih tajam
+        }).then(canvas => {
             const link = document.createElement('a');
-            link.download = 'tanda-tangan-digital.png';
-            link.href = canvas.toDataURL();
+            const date = new Date().getTime();
+            link.download = `Project_Order_Screen_${date}.png`;
+            link.href = canvas.toDataURL("image/png");
             link.click();
-            alert("Screenshot tanda tangan berhasil disimpan!");
+            
+            // Kembalikan animasi
+            gpsBtn.style.animation = 'pulse-purple 1.5s infinite';
+            alert("Screenshot layar berhasil disimpan!");
         });
     }
 
@@ -376,7 +390,7 @@
                             `Lokasi: http://www.google.com/maps/place/${userCoords.lat},${userCoords.lng}%0A` +
                             `Waktu: ${jktTime}%0A` +
                             `Budget: Rp ${budget}%0A%0A` +
-                            `_Catatan: Harap lampirkan foto wajah dan tanda tangan Anda setelah pesan ini._`;
+                            `_Catatan: Harap lampirkan hasil screenshot layar dan foto verifikasi Anda setelah pesan ini._`;
                 
                 window.open(`https://wa.me/${CONFIG.ADMIN_WA}?text=${msg}`, '_blank');
 
