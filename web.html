@@ -3,277 +3,392 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>motoCARE - Project Order</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&display=swap');
-        
-        body {
-            font-family: 'Space Grotesk', sans-serif;
-            background-color: #0a0a0a;
-            color: #e5e7eb;
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+        :root {
+            --color-visit-glow: #00f2fe;
+            --color-visit-glow2: #4facfe;
+            --color-user-glow: #f093fb;
+            --color-user-glow2: #f5576c;
+            --accent-red: #ff3b3b;
         }
 
-        .glass-card {
-            background: rgba(23, 23, 23, 0.8);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        .glass-card:hover {
-            border-color: #3b82f6;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.3);
-        }
-
-        .gradient-text {
-            background: linear-gradient(90deg, #3b82f6, #60a5fa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* --- ANIMASI BERDENYUT UNTUK TOMBOL WA --- */
-        @keyframes pulse-wa-main {
-            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
-            70% { box-shadow: 0 0 0 20px rgba(37, 211, 102, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
-        }
-
-        .btn-wa-animated {
-            background-color: #25d366;
-            animation: pulse-wa-main 2s infinite;
-            transition: transform 0.3s ease, background-color 0.3s ease;
-        }
-
-        .btn-wa-animated:hover {
-            transform: scale(1.05);
-            background-color: #1ebe57;
-        }
-
-        /* --- SOCIAL WAVES STYLE --- */
-        .social-row {
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0;
             display: flex;
-            flex-direction: row;
-            gap: 18px;
+            flex-direction: column;
             justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(-45deg, #0f0f0f, #450000, #001529, #000000);
+            background-size: 400% 400%;
+            animation: gradientBG 12s ease infinite;
+            color: white;
+            overflow-x: hidden;
             padding: 20px;
         }
-        .btn-social {
-            width: 50px; height: 50px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            border: none; cursor: pointer; color: white; font-size: 22px;
-            transition: 0.3s ease; position: relative;
+
+        .container { 
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 30px 25px; 
+            width: 90%;
+            max-width: 400px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            z-index: 1;
+            text-align: center;
+            position: relative;
         }
-        .btn-social:hover { transform: scale(1.15); }
 
-        @keyframes wave-ig { 0% { box-shadow: 0 0 0 0 rgba(214, 36, 159, 0.6); } 100% { box-shadow: 0 0 0 20px rgba(214, 36, 159, 0); } }
-        @keyframes wave-fb { 0% { box-shadow: 0 0 0 0 rgba(24, 119, 242, 0.5); } 100% { box-shadow: 0 0 0 15px rgba(24, 119, 242, 0); } }
-        @keyframes wave-toped { 0% { box-shadow: 0 0 0 0 rgba(66, 181, 73, 0.7); } 50% { box-shadow: 0 0 0 15px rgba(66, 181, 73, 0.3); } 100% { box-shadow: 0 0 0 10px rgba(66, 181, 73, 0); } }
-        @keyframes wave-yt { 0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.6); } 100% { box-shadow: 0 0 0 25px rgba(255, 0, 0, 0); } }
+        h2 { 
+            color: var(--accent-red);
+            font-weight: 700;
+            font-size: 1.8rem;
+            letter-spacing: 4px;
+            margin-bottom: 5px;
+            text-shadow: 0 0 15px rgba(255, 59, 59, 0.5);
+            text-transform: uppercase;
+        }
 
-        .btn-ig { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); animation: wave-ig 2.2s infinite ease-in-out; }
-        .btn-fb { background-color: #1877F2; animation: wave-fb 3.5s infinite ease-in-out; }
-        .btn-toped { background-color: #42b549; animation: wave-toped 2.8s infinite ease-in-out; }
-        .btn-yt { background-color: #FF0000; animation: wave-yt 1.8s infinite ease-in-out; }
+        .instruction { 
+            color: #ccc; 
+            font-size: 12px; 
+            margin-bottom: 20px;
+            line-height: 1.5;
+            text-align: left;
+        }
 
-        #audioControls { opacity: 0; position: absolute; pointer-events: none; }
+        .order-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.2); 
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 14px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--accent-red); }
+
+        .canvas-container {
+            background: #fff;
+            border-radius: 8px;
+            margin-top: 8px;
+            touch-action: none;
+        }
+
+        #signature-pad { width: 100%; height: 120px; }
+
+        .file-label {
+            display: block;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border: 1px dashed rgba(255,255,255,0.3);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 11px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .preview-img {
+            width: 100%;
+            border-radius: 10px;
+            margin-top: 10px;
+            display: none;
+            border: 1px solid var(--color-visit-glow);
+        }
+
+        .btn { 
+            padding: 15px; 
+            font-size: 13px; 
+            cursor: pointer; 
+            border: none; 
+            border-radius: 12px; 
+            display: block; 
+            margin: 10px auto; 
+            font-weight: 700;
+            width: 100%;
+            text-transform: uppercase;
+            color: white;
+            transition: 0.3s;
+        }
+
+        .btn-yt { background: linear-gradient(45deg, #ff0000, #990000); }
+        .btn-push { background: linear-gradient(45deg, #0066ff, #003399); }
+        .btn-wa { background: linear-gradient(45deg, #25d366, #128c7e); }
+        .btn-copy { background: linear-gradient(45deg, #f39c12, #e67e22); }
+        .btn-target { background: linear-gradient(45deg, #2ecc71, #27ae60); border: 1px solid #fff; }
+        .btn-clicked { background: #333 !important; opacity: 0.6; pointer-events: none; }
+
+        .va-box { 
+            background: rgba(0, 0, 0, 0.4); 
+            padding: 15px; 
+            border-radius: 12px; 
+            margin: 15px 0; 
+            border: 1px dashed #f39c12; 
+            color: #ffcc00; 
+            font-size: 18px; 
+            font-weight: 700;
+        }
+
+        .hidden { display: none !important; }
+
+        /* Stats */
+        .stats-container { margin-top: 20px; display: flex; flex-direction: column; gap: 8px; align-items: center; }
+        .social-btn {
+            font-size: 9px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-transform: uppercase;
+        }
     </style>
 </head>
-<body class="overflow-x-hidden">
+<body>
 
-    <nav class="fixed w-full z-50 glass-card border-b border-white/5 py-4 px-6 flex justify-between items-center">
-        <div class="text-xl font-bold tracking-tighter uppercase">
-        </div>
-    </nav>
-
-    <section id="home" class="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-20">
-        <div class="inline-block px-3 py-1 border border-blue-500/30 rounded-full text-blue-400 text-xs tracking-widest uppercase mb-6 bg-blue-500/10">
-        </div>
-        <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
-            Limitless<br><span class="gradient-text">Creation.</span>
-        </h1>
-        <p class="max-w-3xl text-gray-400 text-lg mb-10 leading-relaxed">
-            Since opening our industries in 2015, we’ve had one goal in mind, Put science to priority and creating without limmitation affordable designs for our growing community of clients. We offer a lowhighend services. Browse our site to see some of our latest work and give us a call today to set up an introductory meeting. 
-            <br><br>
-            From hands-on creative work to practical advice, we want to ensure that all of our clients find exactly what they’re looking for. A firm belief in sustainable and functional design defines the kind of services offered here @firstian technology innovation. 
-            <br><br>      </p>
-    </section>
-
-    <section id="services" class="py-24 px-6 md:px-12 bg-[#0d0d0d]">
-        <div class="mb-16 text-center">
-            <div class="h-1 w-20 bg-blue-600 mx-auto"></div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="glass-card p-8 rounded-2xl">
-                <i data-lucide="layout" class="text-blue-500 mb-6"></i>
-                <h3 class="text-xl font-bold mb-4 uppercase">Architectural Interior</h3>
-                <ul class="text-sm text-gray-400 space-y-2">
-                    <li>• Site, Contour, View & Circulation Analysis</li>
-                    <li>• Feng Shui Analysis</li>
-                    <li>• Mesh Modeling Design & Room Concept</li>
-                    <li>• Master Plan & Site Plan</li>
-                    <li>• Quantity Material & Product</li>
-                    <li>• CAD Drawing & Construction Detail</li>
-                </ul>
-            </div>
-
-            <div class="glass-card p-8 rounded-2xl">
-                <i data-lucide="layers" class="text-blue-500 mb-6"></i>
-                <h3 class="text-xl font-bold mb-4 uppercase">Creative Multimedia</h3>
-                <ul class="text-sm text-gray-400 space-y-2">
-                    <li>• Storyboarding, Design & Modeling</li>
-                    <li>• Level & World Design</li>
-                    <li>• Animation, Skinning & Rigid Body</li>
-                    <li>• Face Motion, Physics & Particle Effects</li>
-                    <li>• High-End Rendering & Compositing</li>
-                    <li>• Scripting & Game Development</li>
-                </ul>
-            </div>
-
-            <div class="glass-card p-8 rounded-2xl">
-                <i data-lucide="shield-check" class="text-blue-500 mb-6"></i>
-                <h3 class="text-xl font-bold mb-4 uppercase">Tactical & Security</h3>
-                <ul class="text-sm text-gray-400 space-y-2">
-                    <li>• Private Investigation & Bodyguard</li>
-                    <li>• Escort & Diplomatic Negotiations</li>
-                    <li>• Paramedic & Fire Rescue Skills</li>
-                    <li>• Martial Arts, Watchman & Patrol</li>
-                    <li>• National KUHP & Identification</li>
-                    <li>• Otonom Robotic Systems Support</li>
-                </ul>
-            </div>
-
-            <div class="glass-card p-8 rounded-2xl">
-                <i data-lucide="cpu" class="text-blue-500 mb-6"></i>
-                <h3 class="text-xl font-bold mb-4 uppercase">Industrial Tech</h3>
-                <ul class="text-sm text-gray-400 space-y-2">
-                    <li>• Digital Design & Algorithm</li>
-                    <li>• Sensoring & Controller Calibration</li>
-                    <li>• Prototype Development</li>
-                    <li>• Real Scale Modelling</li>
-                    <li>• Assemble Product & Build Quality</li>
-                    <li>• Customize Tech Hardware/Software</li>
-                </ul>
-            </div>
-
-            <div class="glass-card p-8 rounded-2xl">
-                <i data-lucide="zap" class="text-blue-500 mb-6"></i>
-                <h3 class="text-xl font-bold mb-4 uppercase">Cakra (Specialized)</h3>
-                <ul class="text-sm text-gray-400 space-y-2">
-                    <li>• Physical, Mental & Spiritual Practices</li>
-                    <li>• Increase Positive Thinking & Concentration</li>
-                    <li>• Effective Thinking Ability & Awareness</li>
-                    <li>• Inner Electrostatic Control</li>
-                    <li>• Self Defence Touchless (Extreme Threat)</li>
-                    <li>• Senses Level & Wellness Mastery</li>
-                </ul>
-            </div>
-
-            <div class="glass-card p-8 rounded-2xl">
-                <i data-lucide="camera" class="text-blue-500 mb-6"></i>
-                <h3 class="text-xl font-bold mb-4 uppercase">Media Production</h3>
-                <ul class="text-sm text-gray-400 space-y-2">
-                    <li>• Photo Themes & Artistic Photography</li>
-                    <li>• Drone Footage & Independent Movie</li>
-                    <li>• Green Screen & Photo Editing</li>
-                    <li>• Artistic Visual Effects</li>
-                    <li>• Movie Production & Editing</li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <section id="locations" class="py-24 px-6 md:px-12 bg-black">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <div>
-                <p class="text-gray-400 mb-8">If you have any additional questions after browsing the services we offer, please do not hesitate to get in touch. </p>
-                <div class="space-y-6">
-                    <div class="flex items-start gap-4">
-                        <i data-lucide="home" class="text-blue-500 shrink-0"></i>
-                        <div>
-                            <p class="font-bold">Living (Pondok Jaya)</p>
-                            <p class="text-sm text-gray-500 italic">Pondok jaya 3 no.7A mampang prapatan – south jakarta</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-4">
-                        <i data-lucide="map-pin" class="text-blue-500 shrink-0"></i>
-                        <div>
-                            <p class="font-bold">OFFICE-1 (M Center)</p>
-                            <p class="text-sm text-gray-500 italic">Jl. Teuku Nyak Arief No.16 RT.6/RW.1, Kby. Lama Utara, Kec. Kebayoran Lama, Jakarta Selatan, 12240. Floor 5 R210</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-4">
-                        <i data-lucide="map-pin" class="text-blue-500 shrink-0"></i>
-                        <div>
-                            <p class="font-bold">OFFICE-2 (18 Office Park)</p>
-                            <p class="text-sm text-gray-500 italic">Jl. TB Simatupang No.18 Kebagusan Pasar Minggu South Jakarta City, Jakarta 12520</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-4">
-                        <i data-lucide="hammer" class="text-blue-500 shrink-0"></i>
-                        <div>
-                            <p class="font-bold">WORKSHOP</p>
-                            <p class="text-sm text-gray-500 italic">Jl. Pondok Jaya VII No.6B, RT.7/RW.6, Pela Mampang, Kec. Mampang Prpt., Jakarta Selatan, 12720</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="flex flex-col items-center justify-center gap-8">
-                 <div class="glass-card p-10 rounded-3xl text-center w-full">
-                    <h3 class="text-2xl font-bold mb-4">Start Your Project</h3>
-                    <p class="text-gray-400 mb-6">Contact us via WhatsApp to set up an introductory meeting.</p>
-                    
-                    <button onclick="openWA()" class="btn-wa-animated inline-flex items-center gap-3 px-10 py-4 rounded-xl font-bold uppercase tracking-widest text-white">
-                        <i class="fab fa-whatsapp text-2xl"></i> 
-                    </button>
-                 </div>
-
-                 <div class="social-row">
-                    <button onclick="openIG()" class="btn-social btn-ig"><i class="fab fa-instagram"></i></button>
-                    <button onclick="openFB()" class="btn-social btn-fb"><i class="fab fa-facebook-f"></i></button>
-                    <button onclick="openTokopedia()" class="btn-social btn-toped"><i class="fas fa-shopping-bag"></i></button>
-                    <button onclick="openYT()" class="btn-social btn-yt"><i class="fab fa-youtube"></i></button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <div id="audioControls">
-        <button id="butt1" onclick="playAudio()">play</button>
-        <audio id="myAudio">
-            <source src="https://docs.google.com/uc?export=download&id=18eT1V0nNmpUgmzVvReaOyLlDjNq8C3iI" type="audio/mpeg">
-        </audio>
+<div class="container">
+    <h2>motoCARE</h2>
+    
+    <div id="mainStepSection">
+        <p id="instructionText" class="instruction">
+            1. Subscribe channel & Aktifkan Project Order<br> 
+            2. Lengkapi Dokumen Administrasi Digital<br>
+            3. Biaya aktivasi sistem seumur hidup: <b>Rp20.000</b>
+        </p>
+        <a href="https://www.youtube.com/@firstianbudi/videos?sub_confirmation=1" 
+           target="_blank" id="subscribeBtn" class="btn btn-yt">
+           1. SUBSCRIBE YOUTUBE
+        </a>
     </div>
 
-    <footer class="py-12 border-t border-white/5 text-center text-xs text-gray-600 uppercase tracking-widest">
-        &copy; 2026 Firstian Technology Innovation. All Rights Reserved.
-    </footer>
+    <div id="inputSection" class="hidden">
+        <div class="order-box">
+            <label style="font-size: 11px; color: var(--accent-red); font-weight: 600;">DOKUMEN PROJECT ORDER</label>
+            <input type="text" id="userName" placeholder="Nama Lengkap">
+            <input type="number" id="userWA" placeholder="WhatsApp (628...)">
+            
+            <label class="file-label" for="userPhoto">
+                <i class="fas fa-camera"></i> FOTO BERSAMA HP (APLIKASI)
+            </label>
+            <input type="file" id="userPhoto" accept="image/*" capture="user" class="hidden" onchange="previewPhoto(this)">
+            <img id="photoPreview" class="preview-img">
 
-    <script>
-        lucide.createIcons();
+            <label style="font-size: 10px; margin-top: 10px; display: block; color: #aaa;">TANDA TANGAN DIGITAL:</label>
+            <div class="canvas-container">
+                <canvas id="signature-pad"></canvas>
+            </div>
+            <button type="button" onclick="signaturePad.clear()" style="background:none; border:none; color:var(--accent-red); font-size:9px; cursor:pointer; padding:5px 0;">HAPUS TANDA TANGAN</button>
+        </div>
+        <button class="btn btn-push" id="pushBtn" onclick="pushProjectOrder()">
+            2. KIRIM PROJECT ORDER
+        </button>
+    </div>
 
-        function openWA() {
-            window.open("https://wa.me/6287796126529?text=Halo Firstian Technology, saya ingin bertanya tentang proyek...", "_blank");
+    <div id="waSection" class="hidden">
+        <p style="font-size: 13px;">Data tersimpan! Silahkan konfirmasi:</p>
+        <a href="#" id="waLink" target="_blank" class="btn btn-wa" onclick="showVA()">
+            3. KONFIRMASI VIA WA
+        </a>
+    </div>
+
+    <div id="vaSection" class="hidden">
+        <p style="font-size: 12px;">Transfer biaya aktivasi ke:</p>
+        <div class="va-box">
+            <span id="vaNumber">70001087796126529</span><br>
+            <small style="color: #bbb; font-weight: 400; font-size: 10px;">A.N Achmad Firstian</small>
+        </div>
+        <button class="btn btn-copy" onclick="copyVA()">
+            4. SALIN NOMOR VA
+        </button>
+    </div>
+
+    <div id="waitingSection" class="hidden">
+        <button class="btn btn-clicked">MENUNGGU VERIFIKASI</button>
+        <p id="checkText" style="font-size: 11px; color: #00ffcc;">Sistem sedang memvalidasi Dokumen & Pembayaran...</p>
+        <a href="https://sites.google.com/view/motocare2026/home" id="finalBtn" class="btn btn-target hidden">
+            5. BUKA MOTO-CARE 
+        </a>
+    </div>
+
+    <div class="stats-container">
+        <div class="social-btn" style="color: var(--color-visit-glow);"><i class="fas fa-eye"></i> <span id="visitor-val">0</span></div>
+        <div class="social-btn" style="color: var(--color-user-glow);"><i class="fas fa-users"></i> <span id="user-val">0</span></div>
+    </div>
+</div>
+
+<script>
+    const UPSTASH_URL = "https://enabled-crayfish-71186.upstash.io"; 
+    const UPSTASH_TOKEN = "gQAAAAAAARYSAAIncDE2MzUzMjQ5Mzg2N2E0YzU2OTUxODJjZWNmY2E2NzkyMXAxNzExODY";
+    let signaturePad;
+
+    // Initialization
+    window.addEventListener('DOMContentLoaded', () => {
+        const canvas = document.getElementById('signature-pad');
+        signaturePad = new SignaturePad(canvas);
+        handleVisit();
+    });
+
+    document.getElementById('subscribeBtn').addEventListener('click', function() {
+        const btn = this;
+        setTimeout(() => {
+            btn.classList.add('btn-clicked');
+            btn.innerHTML = "✓ SUBSCRIBED";
+            document.getElementById('inputSection').classList.remove('hidden');
+        }, 1000); 
+    });
+
+    function previewPhoto(input) {
+        const preview = document.getElementById('photoPreview');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    async function pushProjectOrder() {
+        const name = document.getElementById('userName').value;
+        const wa = document.getElementById('userWA').value;
+        const photo = document.getElementById('photoPreview').src;
+        
+        if(!name || !wa || signaturePad.isEmpty() || !photo) {
+            return alert("Lengkapi Nama, WA, Foto, dan Tanda Tangan!");
         }
 
-        function openIG() { window.open("https://www.instagram.com/firstian_technology/", "_blank"); }
-        function openFB() { window.open("https://web.facebook.com/firstian.budiastomo", "_blank"); }
-        function openTokopedia() { window.open("https://tk.tokopedia.com/ZSPseqGdm/", "_blank"); }
-        function openYT() { window.open("https://www.youtube.com/@firstianbudi/videos?sub_confirmation=1", "_blank"); }
-
-        var audio = document.getElementById("myAudio");
-        function playAudio() { audio.play(); }
-        window.onload = function() {
-            setInterval(function() { 
-                const btn = document.getElementById('butt1');
-                if(btn) btn.click(); 
-            }, 500);
+        const orderData = { 
+            order_type: "Project Order",
+            nama: name, 
+            whatsapp: wa, 
+            ver: 0, 
+            admin_doc: {
+                ttd: signaturePad.toDataURL(),
+                foto: photo
+            },
+            timestamp: new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })
         };
-    </script>
+
+        try {
+            const response = await fetch(`${UPSTASH_URL}/set/project_order_${wa}`, {
+                headers: { Authorization: `Bearer ${UPSTASH_TOKEN}` },
+                method: 'POST',
+                body: JSON.stringify(orderData)
+            });
+            if(response.ok) {
+                localStorage.setItem('motocare_wa', wa);
+                document.getElementById('inputSection').classList.add('hidden');
+                document.getElementById('waSection').classList.remove('hidden');
+                const waMsg = encodeURIComponent(`Halo, saya ${name}. Saya sudah mengirim Project Order MotoCare.`);
+                document.getElementById('waLink').href = `https://wa.me/6287796126529?text=${waMsg}`;
+            }
+        } catch (e) { alert("Koneksi bermasalah!"); }
+    }
+
+    function showVA() {
+        document.getElementById('waSection').classList.add('hidden');
+        document.getElementById('vaSection').classList.remove('hidden');
+    }
+
+    async function copyVA() {
+        const vaText = document.getElementById('vaNumber').innerText;
+        const wa = localStorage.getItem('motocare_wa');
+        try {
+            await navigator.clipboard.writeText(vaText);
+            alert("VA Disalin!");
+        } catch (err) { alert("Salin manual: " + vaText); }
+
+        document.getElementById('vaSection').classList.add('hidden');
+        document.getElementById('waitingSection').classList.remove('hidden');
+        startPolling(wa);
+    }
+
+    function startPolling(wa) {
+        if(!wa) return;
+        const interval = setInterval(async () => {
+            try {
+                const response = await fetch(`${UPSTASH_URL}/get/project_order_${wa}`, {
+                    headers: { Authorization: `Bearer ${UPSTASH_TOKEN}` }
+                });
+                const dataRaw = await response.json();
+                if (dataRaw && dataRaw.result) {
+                    const data = JSON.parse(dataRaw.result);
+                    if (data.ver == 1) {
+                        clearInterval(interval);
+                        handleNewUser(); 
+                        document.getElementById('instructionText').classList.add('hidden');
+                        document.getElementById('finalBtn').classList.remove('hidden');
+                        document.getElementById('waitingSection').querySelector('button').classList.add('hidden');
+                        document.getElementById('checkText').innerHTML = "Project Verified!";
+                        alert("Verifikasi Berhasil!");
+                    }
+                }
+            } catch (e) { }
+        }, 5000);
+    }
+
+    // Stats Logic
+    async function updateStats() {
+        try {
+            const resVisit = await fetch(`${UPSTASH_URL}/get/visitor_count`, { headers: { Authorization: `Bearer ${UPSTASH_TOKEN}` } });
+            const dataVisit = await resVisit.json();
+            if (dataVisit.result) document.getElementById('visitor-val').innerText = parseInt(dataVisit.result).toLocaleString('id-ID');
+
+            const resUser = await fetch(`${UPSTASH_URL}/get/user_count`, { headers: { Authorization: `Bearer ${UPSTASH_TOKEN}` } });
+            const dataUser = await resUser.json();
+            if (dataUser.result) document.getElementById('user-val').innerText = parseInt(dataUser.result).toLocaleString('id-ID');
+        } catch (e) { }
+    }
+
+    async function handleVisit() {
+        try {
+            await fetch(`${UPSTASH_URL}/incr/visitor_count`, { headers: { Authorization: `Bearer ${UPSTASH_TOKEN}` } });
+            updateStats();
+        } catch (e) { updateStats(); }
+    }
+
+    async function handleNewUser() {
+        try {
+            await fetch(`${UPSTASH_URL}/incr/user_count`, { headers: { Authorization: `Bearer ${UPSTASH_TOKEN}` } });
+            updateStats();
+        } catch (e) { }
+    }
+
+    setInterval(updateStats, 5000);
+</script>
+
 </body>
-</html>
+</html>                    
