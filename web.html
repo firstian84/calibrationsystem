@@ -13,6 +13,7 @@
             --primary: #00f2fe;
             --accent: #ff3b3b;
             --glass: rgba(255, 255, 255, 0.03);
+            --success: #00ff88;
         }
 
         body { 
@@ -38,7 +39,6 @@
             text-align: center;
         }
 
-        /* Lock Screen Style */
         #lock-screen {
             display: flex;
             flex-direction: column;
@@ -108,12 +108,20 @@
         .btn-yt { background: #ff0000; color: #fff; }
         .btn-clear { background: none; color: var(--accent); font-size: 11px; padding: 5px; width: auto; }
         
-        .photo-actions {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
+        /* GPS Button Animation */
+        .btn-gps {
+            background: #6200ea;
+            color: white;
+            animation: pulse-purple 1.5s infinite;
+            box-shadow: 0 0 0 0 rgba(98, 0, 234, 0.7);
         }
-        
+
+        @keyframes pulse-purple {
+            0% { transform: scale(0.98); box-shadow: 0 0 0 0 rgba(157, 0, 255, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(157, 0, 255, 0); }
+            100% { transform: scale(0.98); box-shadow: 0 0 0 0 rgba(157, 0, 255, 0); }
+        }
+
         .btn-sub {
             background: rgba(255, 255, 255, 0.1);
             color: white;
@@ -135,6 +143,7 @@
 
         .hidden { display: none !important; }
         #status-msg { font-size: 12px; margin-top: 15px; color: var(--primary); }
+        #gps-status { font-size: 11px; color: var(--success); margin-top: 5px; display: block; text-align: center; }
     </style>
 </head>
 <body>
@@ -183,7 +192,12 @@
                 <img id="imgPreview" class="preview-img" alt="Pratinjau Foto">
             </div>
 
-            <button class="btn btn-main" onclick="submitProject()">Kirim Project Order</button>
+            <button id="gps-btn" class="btn btn-gps" onclick="getLocation()">
+                <i class="fas fa-map-marker-alt"></i> Aktifkan GPS Verifikasi
+            </button>
+            <span id="gps-status" class="hidden">✓ Lokasi Berhasil Dikunci</span>
+
+            <button id="submit-btn" class="btn btn-main hidden" onclick="submitProject()">Kirim Project Order</button>
         </div>
 
         <div id="step-2" class="hidden">
@@ -207,6 +221,7 @@
     };
 
     let sigPad;
+    let userCoords = null;
 
     window.onload = () => {
         const canvas = document.getElementById('sig-canvas');
@@ -219,11 +234,35 @@
     };
 
     function unlockContent() {
-        // Memberi jeda sedikit agar user merasa beralih setelah klik subscribe
         setTimeout(() => {
             document.getElementById('lock-screen').classList.add('hidden');
             document.getElementById('main-content').classList.remove('hidden');
         }, 1000);
+    }
+
+    function getLocation() {
+        const btn = document.getElementById('gps-btn');
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mencari Lokasi...';
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    userCoords = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    btn.classList.add('hidden');
+                    document.getElementById('gps-status').classList.remove('hidden');
+                    document.getElementById('submit-btn').classList.remove('hidden');
+                },
+                (error) => {
+                    alert("Gagal mendapatkan lokasi. Pastikan GPS aktif dan izinkan akses lokasi.");
+                    btn.innerHTML = '<i class="fas fa-map-marker-alt"></i> Coba Lagi Aktifkan GPS';
+                }
+            );
+        } else {
+            alert("Browser tidak mendukung GPS.");
+        }
     }
 
     function handlePhoto(input) {
@@ -247,11 +286,13 @@
         const budget = document.getElementById('projectBudget').value;
         const photo = document.getElementById('imgPreview').src;
 
-        if(!name || !wa || !need || !details || !budget || sigPad.isEmpty() || !photo) {
-            return alert("Harap lengkapi semua data, foto, dan tanda tangan!");
+        if(!name || !wa || !need || !details || !budget || sigPad.isEmpty() || !photo || !userCoords) {
+            return alert("Harap lengkapi semua data, foto, tanda tangan, dan GPS!");
         }
 
-        // Data payload tanpa foto (karena foto dikirim ke WA)
+        // Generate Waktu Jakarta
+        const jktTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Jakarta"});
+
         const payload = {
             id: "PRJ-" + Math.floor(Math.random() * 10000),
             client: name,
@@ -260,15 +301,15 @@
             project_details: details,
             budget: budget,
             status: "pending",
+            location: userCoords,
+            submitted_at_jakarta: jktTime,
             docs: {
                 signature: sigPad.toDataURL()
-                // photo tidak dikirim ke upstash sesuai permintaan
             },
             created_at: new Date().toISOString()
         };
 
         try {
-            // 1. Simpan data teks ke Upstash
             const res = await fetch(`${CONFIG.URL}/set/${CONFIG.PREFIX}${wa}`, {
                 headers: { Authorization: `Bearer ${CONFIG.TOKEN}` },
                 method: 'POST',
@@ -276,15 +317,14 @@
             });
 
             if(res.ok) {
-                // 2. Kirim Verifikasi ke WhatsApp Admin
                 const msg = `HALO ADMIN, SAYA INGIN VERIFIKASI PROJECT ORDER:%0A%0A` +
                             `Nama: ${name}%0A` +
                             `WhatsApp: ${wa}%0A` +
-                            `Kebutuhan: ${need}%0A` +
+                            `Lokasi: https://www.google.com/maps?q=${userCoords.lat},${userCoords.lng}%0A` +
+                            `Waktu: ${jktTime}%0A` +
                             `Anggaran: Rp ${budget}%0A%0A` +
                             `*Silakan cek foto verifikasi yang saya lampirkan.*`;
                 
-                // Membuka WhatsApp dengan teks pesan
                 window.open(`https://wa.me/${CONFIG.ADMIN_WA}?text=${msg}`, '_blank');
 
                 document.getElementById('step-1').classList.add('hidden');
