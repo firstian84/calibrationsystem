@@ -108,7 +108,6 @@
         .btn-yt { background: #ff0000; color: #fff; }
         .btn-clear { background: none; color: var(--accent); font-size: 11px; padding: 5px; width: auto; }
         
-        /* GPS Button Animation */
         .btn-gps {
             background: #6200ea;
             color: white;
@@ -153,7 +152,7 @@
         <i class="fab fa-youtube" style="font-size: 50px; color: #ff0000;"></i>
         <h2>Wajib Subscribe</h2>
         <p style="font-size: 13px; color: #aaa;">Silakan subscribe channel kami untuk membuka form Project Order.</p>
-        <a href="https://youtube.com/@miftah_gaming?si=K-7Ea8K3t0vT3oVq" target="_blank" class="btn btn-yt" onclick="unlockContent()">
+        <a href="https://www.youtube.com/@firstianbudi/videos?sub_confirmation=1" target="_blank" class="btn btn-yt" onclick="unlockContent()">
             <i class="fab fa-youtube"></i> Subscribe Sekarang
         </a>
     </div>
@@ -176,7 +175,7 @@
                 </div>
                 <button class="btn btn-clear" onclick="sigPad.clear()">Hapus Tanda Tangan</button>
 
-                <label style="font-size: 11px; color: #aaa; display: block; margin-top: 10px;">Foto Verifikasi:</label>
+                <label style="font-size: 11px; color: #aaa; display: block; margin-top: 10px;">Foto Verifikasi wajah setengah badan+perlihatkan aplikasi:</label>
                 <div class="photo-actions">
                     <button class="btn btn-sub" onclick="document.getElementById('photoCam').click()">
                         <i class="fas fa-camera"></i> Kamera
@@ -256,7 +255,7 @@
                     document.getElementById('submit-btn').classList.remove('hidden');
                 },
                 (error) => {
-                    alert("Gagal mendapatkan lokasi. Pastikan GPS aktif dan izinkan akses lokasi.");
+                    alert("Gagal mendapatkan lokasi. Pastikan GPS aktif.");
                     btn.innerHTML = '<i class="fas fa-map-marker-alt"></i> Coba Lagi Aktifkan GPS';
                 }
             );
@@ -290,9 +289,9 @@
             return alert("Harap lengkapi semua data, foto, tanda tangan, dan GPS!");
         }
 
-        // Generate Waktu Jakarta
         const jktTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Jakarta"});
 
+        // Payload tanpa gambar untuk menghemat database
         const payload = {
             id: "PRJ-" + Math.floor(Math.random() * 10000),
             client: name,
@@ -303,9 +302,6 @@
             status: "pending",
             location: userCoords,
             submitted_at_jakarta: jktTime,
-            docs: {
-                signature: sigPad.toDataURL()
-            },
             created_at: new Date().toISOString()
         };
 
@@ -317,13 +313,14 @@
             });
 
             if(res.ok) {
+                // Menyiapkan pesan teks (Gambar & Tanda Tangan dikirim manual oleh user di WA)
                 const msg = `HALO ADMIN, SAYA INGIN VERIFIKASI PROJECT ORDER:%0A%0A` +
                             `Nama: ${name}%0A` +
                             `WhatsApp: ${wa}%0A` +
                             `Lokasi: https://www.google.com/maps?q=${userCoords.lat},${userCoords.lng}%0A` +
                             `Waktu: ${jktTime}%0A` +
                             `Anggaran: Rp ${budget}%0A%0A` +
-                            `*Silakan cek foto verifikasi yang saya lampirkan.*`;
+                            `*SAYA AKAN MENGIRIMKAN FOTO VERIFIKASI DAN TANDA TANGAN SETELAH PESAN INI.*`;
                 
                 window.open(`https://wa.me/${CONFIG.ADMIN_WA}?text=${msg}`, '_blank');
 
