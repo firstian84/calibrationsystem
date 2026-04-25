@@ -1,279 +1,161 @@
-<!DOCTYPE html>
+
+    <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>motoCARE - Project Order</title>
+    <title>Project Management System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
         :root {
-            --color-visit-glow: #00f2fe;
-            --color-visit-glow2: #4facfe;
-            --color-user-glow: #f093fb;
-            --color-user-glow2: #f5576c;
-            --accent-red: #ff3b3b;
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            --primary: #00f2fe;
+            --accent: #ff3b3b;
+            --glass: rgba(255, 255, 255, 0.03);
         }
 
         body { 
             font-family: 'Poppins', sans-serif; 
             margin: 0;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(-45deg, #0f0f0f, #450000, #001529, #000000);
-            background-size: 400% 400%;
-            animation: gradientBG 12s ease infinite;
+            background: #0a0a0a;
             color: white;
-            overflow-x: hidden;
             padding: 20px;
         }
 
         .container { 
-            background: rgba(255, 255, 255, 0.03); 
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            padding: 30px 25px; 
-            width: 90%;
+            background: var(--glass); 
+            backdrop-filter: blur(20px);
+            padding: 30px; 
+            width: 100%;
             max-width: 400px;
-            border-radius: 24px;
+            border-radius: 28px;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            z-index: 1;
             text-align: center;
-            position: relative;
         }
 
         h2 { 
-            color: var(--accent-red);
-            font-weight: 700;
-            font-size: 1.8rem;
-            letter-spacing: 4px;
-            margin-bottom: 5px;
-            text-shadow: 0 0 15px rgba(255, 59, 59, 0.5);
+            color: var(--primary);
+            letter-spacing: 2px;
             text-transform: uppercase;
-        }
-
-        .instruction { 
-            color: #ccc; 
-            font-size: 12px; 
             margin-bottom: 20px;
-            line-height: 1.5;
-            text-align: left;
         }
 
-        .order-box {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 15px;
-            margin-bottom: 15px;
+        .form-group {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 18px;
+            padding: 20px;
             text-align: left;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         input {
             width: 100%;
-            padding: 12px;
-            margin-bottom: 10px;
-            border-radius: 10px;
-            background: rgba(0, 0, 0, 0.2); 
+            padding: 14px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05); 
             border: 1px solid rgba(255, 255, 255, 0.1);
             color: white;
-            font-size: 14px;
             box-sizing: border-box;
             outline: none;
         }
 
-        input:focus { border-color: var(--accent-red); }
-
-        .canvas-container {
-            background: #fff;
-            border-radius: 8px;
-            margin-top: 8px;
-            touch-action: none;
+        .canvas-box {
+            background: white;
+            border-radius: 12px;
+            margin: 10px 0;
+            overflow: hidden;
         }
 
-        #signature-pad { width: 100%; height: 120px; }
+        #sig-canvas { width: 100%; height: 140px; cursor: crosshair; }
 
-        .file-label {
-            display: block;
-            padding: 10px;
-            background: rgba(255,255,255,0.05);
-            border: 1px dashed rgba(255,255,255,0.3);
-            border-radius: 10px;
+        .btn { 
+            padding: 16px; 
+            border: none; 
+            border-radius: 14px; 
+            width: 100%;
+            font-weight: 700;
             cursor: pointer;
-            font-size: 11px;
-            text-align: center;
-            margin-bottom: 10px;
+            text-transform: uppercase;
+            transition: 0.3s;
+            margin-top: 10px;
         }
+
+        .btn-main { background: linear-gradient(90deg, #00f2fe, #4facfe); color: #000; }
+        .btn-clear { background: none; color: var(--accent); font-size: 11px; padding: 5px; }
 
         .preview-img {
             width: 100%;
-            border-radius: 10px;
-            margin-top: 10px;
+            border-radius: 12px;
+            margin: 10px 0;
             display: none;
-            border: 1px solid var(--color-visit-glow);
+            border: 2px solid var(--primary);
         }
 
-        .btn { 
-            padding: 15px; 
-            font-size: 13px; 
-            cursor: pointer; 
-            border: none; 
-            border-radius: 12px; 
-            display: block; 
-            margin: 10px auto; 
-            font-weight: 700;
-            width: 100%;
-            text-transform: uppercase;
-            color: white;
-            transition: 0.3s;
-        }
-
-        .btn-yt { background: linear-gradient(45deg, #ff0000, #990000); }
-        .btn-push { background: linear-gradient(45deg, #0066ff, #003399); }
-        .btn-wa { background: linear-gradient(45deg, #25d366, #128c7e); }
-        .btn-copy { background: linear-gradient(45deg, #f39c12, #e67e22); }
-        .btn-target { background: linear-gradient(45deg, #2ecc71, #27ae60); border: 1px solid #fff; }
-        .btn-clicked { background: #333 !important; opacity: 0.6; pointer-events: none; }
-
-        .va-box { 
-            background: rgba(0, 0, 0, 0.4); 
-            padding: 15px; 
-            border-radius: 12px; 
-            margin: 15px 0; 
-            border: 1px dashed #f39c12; 
-            color: #ffcc00; 
-            font-size: 18px; 
-            font-weight: 700;
-        }
-
-        .hidden { display: none !important; }
-
-        /* Stats */
-        .stats-container { margin-top: 20px; display: flex; flex-direction: column; gap: 8px; align-items: center; }
-        .social-btn {
-            font-size: 9px;
-            font-weight: 800;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            text-transform: uppercase;
-        }
+        .hidden { display: none; }
+        #status-msg { font-size: 12px; margin-top: 15px; color: var(--primary); }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>motoCARE</h2>
+    <h2>Project Order</h2>
     
-    <div id="mainStepSection">
-        <p id="instructionText" class="instruction">
-            1. Subscribe channel & Aktifkan Project Order<br> 
-            2. Lengkapi Dokumen Administrasi Digital<br>
-            3. Biaya aktivasi sistem seumur hidup: <b>Rp20.000</b>
-        </p>
-        <a href="https://www.youtube.com/@firstianbudi/videos?sub_confirmation=1" 
-           target="_blank" id="subscribeBtn" class="btn btn-yt">
-           1. SUBSCRIBE YOUTUBE
-        </a>
-    </div>
-
-    <div id="inputSection" class="hidden">
-        <div class="order-box">
-            <label style="font-size: 11px; color: var(--accent-red); font-weight: 600;">DOKUMEN PROJECT ORDER</label>
-            <input type="text" id="userName" placeholder="Nama Lengkap">
-            <input type="number" id="userWA" placeholder="WhatsApp (628...)">
+    <div id="step-1">
+        <div class="form-group">
+            <input type="text" id="clientName" placeholder="Nama Lengkap">
+            <input type="number" id="clientWA" placeholder="Nomor WhatsApp">
             
-            <label class="file-label" for="userPhoto">
-                <i class="fas fa-camera"></i> FOTO BERSAMA HP (APLIKASI)
-            </label>
-            <input type="file" id="userPhoto" accept="image/*" capture="user" class="hidden" onchange="previewPhoto(this)">
-            <img id="photoPreview" class="preview-img">
+            <label style="font-size: 11px; color: #aaa;">Foto Verifikasi (Pegang HP):</label>
+            <input type="file" id="clientPhoto" accept="image/*" capture="user" onchange="handlePhoto(this)">
+            <img id="imgPreview" class="preview-img">
 
-            <label style="font-size: 10px; margin-top: 10px; display: block; color: #aaa;">TANDA TANGAN DIGITAL:</label>
-            <div class="canvas-container">
-                <canvas id="signature-pad"></canvas>
+            <label style="font-size: 11px; color: #aaa;">Tanda Tangan Digital:</label>
+            <div class="canvas-box">
+                <canvas id="sig-canvas"></canvas>
             </div>
-            <button type="button" onclick="signaturePad.clear()" style="background:none; border:none; color:var(--accent-red); font-size:9px; cursor:pointer; padding:5px 0;">HAPUS TANDA TANGAN</button>
+            <button class="btn-clear" onclick="sigPad.clear()">Hapus Tanda Tangan</button>
         </div>
-        <button class="btn btn-push" id="pushBtn" onclick="pushProjectOrder()">
-            2. KIRIM PROJECT ORDER
-        </button>
+
+        <button class="btn btn-main" onclick="submitProject()">Kirim Project Order</button>
     </div>
 
-    <div id="waSection" class="hidden">
-        <p style="font-size: 13px;">Data tersimpan! Silahkan konfirmasi:</p>
-        <a href="#" id="waLink" target="_blank" class="btn btn-wa" onclick="showVA()">
-            3. KONFIRMASI VIA WA
-        </a>
-    </div>
-
-    <div id="vaSection" class="hidden">
-        <p style="font-size: 12px;">Transfer biaya aktivasi ke:</p>
-        <div class="va-box">
-            <span id="vaNumber">70001087796126529</span><br>
-            <small style="color: #bbb; font-weight: 400; font-size: 10px;">A.N Achmad Firstian</small>
+    <div id="step-2" class="hidden">
+        <div class="form-group" style="text-align: center;">
+            <i class="fas fa-sync fa-spin" style="font-size: 30px; color: var(--primary);"></i>
+            <p id="status-msg">Menunggu Verifikasi Admin...</p>
+            <div id="final-link" class="hidden">
+                <a href="#" id="access-btn" class="btn btn-main" style="display: block; text-decoration: none;">Akses Project</a>
+            </div>
         </div>
-        <button class="btn btn-copy" onclick="copyVA()">
-            4. SALIN NOMOR VA
-        </button>
-    </div>
-
-    <div id="waitingSection" class="hidden">
-        <button class="btn btn-clicked">MENUNGGU VERIFIKASI</button>
-        <p id="checkText" style="font-size: 11px; color: #00ffcc;">Sistem sedang memvalidasi Dokumen & Pembayaran...</p>
-        <a href="https://sites.google.com/view/motocare2026/home" id="finalBtn" class="btn btn-target hidden">
-            5. BUKA MOTO-CARE 
-        </a>
-    </div>
-
-    <div class="stats-container">
-        <div class="social-btn" style="color: var(--color-visit-glow);"><i class="fas fa-eye"></i> <span id="visitor-val">0</span></div>
-        <div class="social-btn" style="color: var(--color-user-glow);"><i class="fas fa-users"></i> <span id="user-val">0</span></div>
     </div>
 </div>
 
 <script>
-    const UPSTASH_URL = "https://enabled-crayfish-71186.upstash.io"; 
-    const UPSTASH_TOKEN = "gQAAAAAAARYSAAIncDE2MzUzMjQ5Mzg2N2E0YzU2OTUxODJjZWNmY2E2NzkyMXAxNzExODY";
-    let signaturePad;
+    const CONFIG = {
+        URL: "https://enabled-crayfish-71186.upstash.io",
+        TOKEN: "gQAAAAAAARYSAAIncDE2MzUzMjQ5Mzg2N2E0YzU2OTUxODJjZWNmY2E2NzkyMXAxNzExODY",
+        PREFIX: "project_order_v2_" // Database baru
+    };
 
-    // Initialization
-    window.addEventListener('DOMContentLoaded', () => {
-        const canvas = document.getElementById('signature-pad');
-        signaturePad = new SignaturePad(canvas);
-        handleVisit();
-    });
+    let sigPad;
 
-    document.getElementById('subscribeBtn').addEventListener('click', function() {
-        const btn = this;
-        setTimeout(() => {
-            btn.classList.add('btn-clicked');
-            btn.innerHTML = "✓ SUBSCRIBED";
-            document.getElementById('inputSection').classList.remove('hidden');
-        }, 1000); 
-    });
+    window.onload = () => {
+        const canvas = document.getElementById('sig-canvas');
+        sigPad = new SignaturePad(canvas);
+    };
 
-    function previewPhoto(input) {
-        const preview = document.getElementById('photoPreview');
+    function handlePhoto(input) {
+        const preview = document.getElementById('imgPreview');
         if (input.files && input.files[0]) {
             const reader = new FileReader();
-            reader.onload = (e) => {
+            reader.onload = e => {
                 preview.src = e.target.result;
                 preview.style.display = 'block';
             };
@@ -281,114 +163,66 @@
         }
     }
 
-    async function pushProjectOrder() {
-        const name = document.getElementById('userName').value;
-        const wa = document.getElementById('userWA').value;
-        const photo = document.getElementById('photoPreview').src;
-        
-        if(!name || !wa || signaturePad.isEmpty() || !photo) {
-            return alert("Lengkapi Nama, WA, Foto, dan Tanda Tangan!");
+    async function submitProject() {
+        const name = document.getElementById('clientName').value;
+        const wa = document.getElementById('clientWA').value;
+        const photo = document.getElementById('imgPreview').src;
+
+        if(!name || !wa || sigPad.isEmpty() || !photo) {
+            return alert("Harap lengkapi semua data, foto, dan tanda tangan!");
         }
 
-        const orderData = { 
-            order_type: "Project Order",
-            nama: name, 
-            whatsapp: wa, 
-            ver: 0, 
-            admin_doc: {
-                ttd: signaturePad.toDataURL(),
-                foto: photo
+        const payload = {
+            id: "PRJ-" + Math.floor(Math.random() * 10000),
+            client: name,
+            contact: wa,
+            status: "pending",
+            docs: {
+                signature: sigPad.toDataURL(),
+                photo: photo
             },
-            timestamp: new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })
+            created_at: new Date().toISOString()
         };
 
         try {
-            const response = await fetch(`${UPSTASH_URL}/set/project_order_${wa}`, {
-                headers: { Authorization: `Bearer ${UPSTASH_TOKEN}` },
+            // PUSH ke database baru
+            const res = await fetch(`${CONFIG.URL}/set/${CONFIG.PREFIX}${wa}`, {
+                headers: { Authorization: `Bearer ${CONFIG.TOKEN}` },
                 method: 'POST',
-                body: JSON.stringify(orderData)
+                body: JSON.stringify(payload)
             });
-            if(response.ok) {
-                localStorage.setItem('motocare_wa', wa);
-                document.getElementById('inputSection').classList.add('hidden');
-                document.getElementById('waSection').classList.remove('hidden');
-                const waMsg = encodeURIComponent(`Halo, saya ${name}. Saya sudah mengirim Project Order MotoCare.`);
-                document.getElementById('waLink').href = `https://wa.me/6287796126529?text=${waMsg}`;
+
+            if(res.ok) {
+                document.getElementById('step-1').classList.add('hidden');
+                document.getElementById('step-2').classList.remove('hidden');
+                startTracking(wa);
             }
-        } catch (e) { alert("Koneksi bermasalah!"); }
+        } catch (e) { alert("Gagal mengirim data!"); }
     }
 
-    function showVA() {
-        document.getElementById('waSection').classList.add('hidden');
-        document.getElementById('vaSection').classList.remove('hidden');
-    }
-
-    async function copyVA() {
-        const vaText = document.getElementById('vaNumber').innerText;
-        const wa = localStorage.getItem('motocare_wa');
-        try {
-            await navigator.clipboard.writeText(vaText);
-            alert("VA Disalin!");
-        } catch (err) { alert("Salin manual: " + vaText); }
-
-        document.getElementById('vaSection').classList.add('hidden');
-        document.getElementById('waitingSection').classList.remove('hidden');
-        startPolling(wa);
-    }
-
-    function startPolling(wa) {
-        if(!wa) return;
-        const interval = setInterval(async () => {
+    function startTracking(wa) {
+        const check = setInterval(async () => {
             try {
-                const response = await fetch(`${UPSTASH_URL}/get/project_order_${wa}`, {
-                    headers: { Authorization: `Bearer ${UPSTASH_TOKEN}` }
+                // GET dari database baru
+                const res = await fetch(`${CONFIG.URL}/get/${CONFIG.PREFIX}${wa}`, {
+                    headers: { Authorization: `Bearer ${CONFIG.TOKEN}` }
                 });
-                const dataRaw = await response.json();
-                if (dataRaw && dataRaw.result) {
-                    const data = JSON.parse(dataRaw.result);
-                    if (data.ver == 1) {
-                        clearInterval(interval);
-                        handleNewUser(); 
-                        document.getElementById('instructionText').classList.add('hidden');
-                        document.getElementById('finalBtn').classList.remove('hidden');
-                        document.getElementById('waitingSection').querySelector('button').classList.add('hidden');
-                        document.getElementById('checkText').innerHTML = "Project Verified!";
-                        alert("Verifikasi Berhasil!");
+                const data = await res.json();
+                
+                if (data.result) {
+                    const project = JSON.parse(data.result);
+                    if (project.status === "verified") {
+                        clearInterval(check);
+                        document.getElementById('status-msg').innerText = "Project Terverifikasi!";
+                        document.getElementById('final-link').classList.remove('hidden');
+                        if(project.link) document.getElementById('access-btn').href = project.link;
+                        alert("Verifikasi Sukses!");
                     }
                 }
-            } catch (e) { }
-        }, 5000);
+            } catch (e) { console.log("Checking..."); }
+        }, 4000);
     }
-
-    // Stats Logic
-    async function updateStats() {
-        try {
-            const resVisit = await fetch(`${UPSTASH_URL}/get/visitor_count`, { headers: { Authorization: `Bearer ${UPSTASH_TOKEN}` } });
-            const dataVisit = await resVisit.json();
-            if (dataVisit.result) document.getElementById('visitor-val').innerText = parseInt(dataVisit.result).toLocaleString('id-ID');
-
-            const resUser = await fetch(`${UPSTASH_URL}/get/user_count`, { headers: { Authorization: `Bearer ${UPSTASH_TOKEN}` } });
-            const dataUser = await resUser.json();
-            if (dataUser.result) document.getElementById('user-val').innerText = parseInt(dataUser.result).toLocaleString('id-ID');
-        } catch (e) { }
-    }
-
-    async function handleVisit() {
-        try {
-            await fetch(`${UPSTASH_URL}/incr/visitor_count`, { headers: { Authorization: `Bearer ${UPSTASH_TOKEN}` } });
-            updateStats();
-        } catch (e) { updateStats(); }
-    }
-
-    async function handleNewUser() {
-        try {
-            await fetch(`${UPSTASH_URL}/incr/user_count`, { headers: { Authorization: `Bearer ${UPSTASH_TOKEN}` } });
-            updateStats();
-        } catch (e) { }
-    }
-
-    setInterval(updateStats, 5000);
 </script>
 
 </body>
-</html>                    
+</html>
