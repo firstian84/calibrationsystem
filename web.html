@@ -1,5 +1,4 @@
-
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -54,7 +53,7 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        input {
+        input, textarea {
             width: 100%;
             padding: 14px;
             margin-bottom: 12px;
@@ -64,6 +63,12 @@
             color: white;
             box-sizing: border-box;
             outline: none;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
         }
 
         .canvas-box {
@@ -112,15 +117,19 @@
             <input type="text" id="clientName" placeholder="Nama Lengkap">
             <input type="number" id="clientWA" placeholder="Nomor WhatsApp">
             
-            <label style="font-size: 11px; color: #aaa;">Foto Verifikasi (Pegang HP):</label>
-            <input type="file" id="clientPhoto" accept="image/*" capture="user" onchange="handlePhoto(this)">
-            <img id="imgPreview" class="preview-img">
+            <input type="text" id="projectNeed" placeholder="Kebutuhan Proyek">
+            <textarea id="projectDetails" placeholder="Rincian Pekerjaan"></textarea>
+            <input type="number" id="projectBudget" placeholder="Anggaran (Rp)">
 
             <label style="font-size: 11px; color: #aaa;">Tanda Tangan Digital:</label>
             <div class="canvas-box">
                 <canvas id="sig-canvas"></canvas>
             </div>
             <button class="btn-clear" onclick="sigPad.clear()">Hapus Tanda Tangan</button>
+
+            <label style="font-size: 11px; color: #aaa; display: block; margin-top: 10px;">Foto Verifikasi (Pegang HP+perlihatan aplikasi):</label>
+            <input type="file" id="clientPhoto" accept="image/*" capture="user" onchange="handlePhoto(this)">
+            <img id="imgPreview" class="preview-img">
         </div>
 
         <button class="btn btn-main" onclick="submitProject()">Kirim Project Order</button>
@@ -149,6 +158,12 @@
     window.onload = () => {
         const canvas = document.getElementById('sig-canvas');
         sigPad = new SignaturePad(canvas);
+        
+        // Memastikan ukuran canvas sesuai dengan box-nya
+        const ratio = Math.max(window.devicePixelRatio || 1, 1);
+        canvas.width = canvas.offsetWidth * ratio;
+        canvas.height = canvas.offsetHeight * ratio;
+        canvas.getContext("2d").scale(ratio, ratio);
     };
 
     function handlePhoto(input) {
@@ -166,9 +181,12 @@
     async function submitProject() {
         const name = document.getElementById('clientName').value;
         const wa = document.getElementById('clientWA').value;
+        const need = document.getElementById('projectNeed').value;
+        const details = document.getElementById('projectDetails').value;
+        const budget = document.getElementById('projectBudget').value;
         const photo = document.getElementById('imgPreview').src;
 
-        if(!name || !wa || sigPad.isEmpty() || !photo) {
+        if(!name || !wa || !need || !details || !budget || sigPad.isEmpty() || !photo) {
             return alert("Harap lengkapi semua data, foto, dan tanda tangan!");
         }
 
@@ -176,6 +194,9 @@
             id: "PRJ-" + Math.floor(Math.random() * 10000),
             client: name,
             contact: wa,
+            project_need: need,
+            project_details: details,
+            budget: budget,
             status: "pending",
             docs: {
                 signature: sigPad.toDataURL(),
@@ -185,7 +206,6 @@
         };
 
         try {
-            // PUSH ke database baru
             const res = await fetch(`${CONFIG.URL}/set/${CONFIG.PREFIX}${wa}`, {
                 headers: { Authorization: `Bearer ${CONFIG.TOKEN}` },
                 method: 'POST',
@@ -203,7 +223,6 @@
     function startTracking(wa) {
         const check = setInterval(async () => {
             try {
-                // GET dari database baru
                 const res = await fetch(`${CONFIG.URL}/get/${CONFIG.PREFIX}${wa}`, {
                     headers: { Authorization: `Bearer ${CONFIG.TOKEN}` }
                 });
@@ -225,4 +244,4 @@
 </script>
 
 </body>
-</html>
+    </html>
