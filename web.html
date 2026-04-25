@@ -97,10 +97,12 @@
 
         .preview-img {
             width: 100%;
+            height: auto;
             border-radius: 12px;
-            margin: 10px 0;
+            margin-top: 15px;
             display: none;
             border: 2px solid var(--primary);
+            object-fit: cover;
         }
 
         .hidden { display: none; }
@@ -129,7 +131,8 @@
 
             <label style="font-size: 11px; color: #aaa; display: block; margin-top: 10px;">Foto Verifikasi (Pegang HP+perlihatan aplikasi):</label>
             <input type="file" id="clientPhoto" accept="image/*" capture="user" onchange="handlePhoto(this)">
-            <img id="imgPreview" class="preview-img">
+            
+            <img id="imgPreview" class="preview-img" alt="Pratinjau Foto">
         </div>
 
         <button class="btn btn-main" onclick="submitProject()">Kirim Project Order</button>
@@ -159,20 +162,22 @@
         const canvas = document.getElementById('sig-canvas');
         sigPad = new SignaturePad(canvas);
         
-        // Memastikan ukuran canvas sesuai dengan box-nya
         const ratio = Math.max(window.devicePixelRatio || 1, 1);
         canvas.width = canvas.offsetWidth * ratio;
         canvas.height = canvas.offsetHeight * ratio;
         canvas.getContext("2d").scale(ratio, ratio);
     };
 
+    // Fungsi untuk menampilkan hasil foto segera setelah dipotret/dipilih
     function handlePhoto(input) {
         const preview = document.getElementById('imgPreview');
         if (input.files && input.files[0]) {
             const reader = new FileReader();
             reader.onload = e => {
                 preview.src = e.target.result;
-                preview.style.display = 'block';
+                preview.style.display = 'block'; // Menampilkan elemen gambar
+                // Scroll otomatis ke hasil foto agar user melihatnya
+                preview.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             };
             reader.readAsDataURL(input.files[0]);
         }
@@ -186,7 +191,7 @@
         const budget = document.getElementById('projectBudget').value;
         const photo = document.getElementById('imgPreview').src;
 
-        if(!name || !wa || !need || !details || !budget || sigPad.isEmpty() || !photo) {
+        if(!name || !wa || !need || !details || !budget || sigPad.isEmpty() || !photo || photo.includes('window.location')) {
             return alert("Harap lengkapi semua data, foto, dan tanda tangan!");
         }
 
@@ -244,4 +249,4 @@
 </script>
 
 </body>
-    </html>
+</html>
