@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Stream Camera - WebRTC</title>
+    <title>Live Stream Camera Fix - WebRTC</title>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             background-color: #121212;
             color: white;
             display: flex;
@@ -16,7 +16,6 @@
             padding: 20px;
             margin: 0;
         }
-
         .card {
             background: #1e1e1e;
             padding: 20px;
@@ -26,7 +25,6 @@
             max-width: 500px;
             text-align: center;
         }
-
         video {
             width: 100%;
             background: #000;
@@ -34,26 +32,26 @@
             margin-top: 10px;
             border: 2px solid #333;
         }
-
         .id-display {
             background: #333;
             padding: 10px;
             border-radius: 5px;
             font-family: monospace;
-            font-size: 1.2em;
+            font-size: 1.1em;
             color: #00e676;
             margin: 10px 0;
             word-break: break-all;
+            user-select: all;
         }
-
         input {
             width: 80%;
             padding: 10px;
             border-radius: 5px;
-            border: none;
+            border: 1px solid #444;
+            background: #252525;
+            color: white;
             margin-bottom: 10px;
         }
-
         button {
             padding: 10px 20px;
             border: none;
@@ -62,26 +60,24 @@
             color: white;
             font-weight: bold;
             cursor: pointer;
-            transition: 0.3s;
         }
-
-        button:hover { background-color: #1976D2; }
-        .status { font-size: 0.8em; margin-top: 5px; color: #bbb; }
+        .status { font-size: 0.8em; margin-top: 10px; color: #bbb; }
+        h3 { margin-bottom: 5px; font-size: 1em; color: #2196F3; }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <h2>Camera Stream</h2>
+        <h2>Internet Camera Stream</h2>
         
-        <p>ID Unik Anda:</p>
-        <div id="my-id" class="id-display">Mendapatkan ID...</div>
+        <p>ID Unik Anda (Berikan ke teman):</p>
+        <div id="my-id" class="id-display">Sedang memuat ID...</div>
         
         <hr style="border: 0.5px solid #333; margin: 20px 0;">
 
-        <input type="text" id="remote-id" placeholder="Masukkan ID Perangkat Lain">
-        <button onclick="connectToPeer()">Lihat Kamera Mereka</button>
-        <div id="status-text" class="status">Siap menghubungkan</div>
+        <input type="text" id="remote-id" placeholder="Masukkan ID teman di sini">
+        <button onclick="connectToPeer()">Hubungkan & Lihat Kamera</button>
+        <div id="status-text" class="status">Menyiapkan sistem...</div>
 
         <h3>Kamera Saya</h3>
         <video id="localVideo" autoplay muted playsinline></video>
@@ -93,75 +89,95 @@
     <script>
         let localStream;
         const statusText = document.getElementById('status-text');
+        const remoteVideo = document.getElementById('remoteVideo');
 
-        // Konfigurasi PeerJS dengan Google STUN Server agar bisa lewat Internet
+        // KONFIGURASI PEERJS DENGAN TURN SERVER (PENTING UNTUK INTERNET/DATA SELULER)
         const peer = new Peer({
             config: {
                 'iceServers': [
-                    { url: 'stun:stun.l.google.com:19302' },
-                    { url: 'stun:stun1.l.google.com:19302' }
-                ]
+                    { urls: 'stun:stun.l.google.com:19302' },
+                    { urls: 'stun:stun1.l.google.com:19302' },
+                    // TURN Server gratis untuk membantu menembus firewall ISP
+                    { 
+                        urls: 'turn:openrelay.metered.ca:80',
+                        username: 'openrelayproject',
+                        credential: 'openrelayproject'
+                    },
+                    { 
+                        urls: 'turn:openrelay.metered.ca:443',
+                        username: 'openrelayproject',
+                        credential: 'openrelayproject'
+                    }
+                ],
+                'sdpSemantics': 'unified-plan'
             }
         });
 
-        // 1. Ambil akses kamera lokal
+        // 1. Inisialisasi Kamera Lokal
         async function initCamera() {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { width: 640, height: 480 }, 
+                    audio: true 
+                });
                 localStream = stream;
                 document.getElementById('localVideo').srcObject = stream;
-                console.log("Kamera lokal aktif");
+                statusText.innerText = "Kamera lokal siap.";
             } catch (err) {
-                console.error("Gagal akses kamera:", err);
-                alert("Mohon izinkan akses kamera!");
+                console.error("Akses kamera ditolak:", err);
+                statusText.innerText = "Gagal akses kamera: " + err.message;
             }
         }
 
-        // 2. Saat Peer terbuka, tampilkan ID-nya
+        // 2. Saat ID Peer Berhasil Dibuat
         peer.on('open', (id) => {
             document.getElementById('my-id').innerText = id;
-            statusText.innerText = "Online - Menunggu koneksi";
+            statusText.innerText = "Online - Siap menerima panggilan.";
         });
 
-        // 3. Menangani PANGGILAN MASUK (Saat orang lain ingin melihat kamera kita)
+        // 3. Menangani Panggilan Masuk
         peer.on('call', (call) => {
-            statusText.innerText = "Menerima panggilan...";
-            call.answer(localStream); // Kirim balik video kita
+            statusText.innerText = "Panggilan masuk...";
+            call.answer(localStream); // Balas dengan stream kita
             
-            call.on('stream', (remoteStream) => {
-                document.getElementById('remoteVideo').srcObject = remoteStream;
-                statusText.innerText = "Tersambung!";
+            call.on('stream', (incomingStream) => {
+                remoteVideo.srcObject = incomingStream;
+                remoteVideo.onloadedmetadata = () => remoteVideo.play();
+                statusText.innerText = "Tersambung (Menerima)!";
             });
         });
 
-        // 4. Fungsi untuk MENGHUBUNGI perangkat lain
+        // 4. Fungsi Menghubungi ID Lain
         function connectToPeer() {
-            const remoteId = document.getElementById('remote-id').value;
-            if (!remoteId) return alert("Masukkan ID dulu!");
+            const rId = document.getElementById('remote-id').value;
+            if (!rId) return alert("Masukkan ID tujuan!");
+            if (!localStream) return alert("Kamera Anda belum aktif!");
 
-            statusText.innerText = "Menghubungi: " + remoteId;
+            statusText.innerText = "Menghubungi " + rId + "...";
+            const call = peer.call(rId, localStream);
             
-            const call = peer.call(remoteId, localStream);
-            
-            call.on('stream', (remoteStream) => {
-                document.getElementById('remoteVideo').srcObject = remoteStream;
-                statusText.innerText = "Tersambung!";
+            call.on('stream', (incomingStream) => {
+                remoteVideo.srcObject = incomingStream;
+                // Paksa play jika browser memblokir autoplay
+                remoteVideo.onloadedmetadata = () => {
+                    remoteVideo.play().catch(e => console.log("Play error:", e));
+                };
+                statusText.innerText = "Tersambung (Memanggil)!";
             });
 
             call.on('error', (err) => {
-                console.error(err);
-                statusText.innerText = "Gagal menyambung.";
+                statusText.innerText = "Error panggilan: " + err;
             });
         }
 
-        // Jalankan kamera saat halaman dibuka
-        initCamera();
-
-        // Handle error global PeerJS
+        // Handle error umum PeerJS
         peer.on('error', (err) => {
-            console.error("PeerJS Error:", err.type);
-            statusText.innerText = "Error: " + err.type;
+            console.error("PeerJS Error:", err);
+            statusText.innerText = "Koneksi Error: " + err.type;
         });
+
+        // Jalankan kamera saat start
+        initCamera();
     </script>
 </body>
 </html>
