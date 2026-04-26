@@ -1,99 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebRTC Peer Stream</title>
+    <title>Command Center - Firstian Technology</title>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
-        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; background: #121212; color: white; padding: 20px; }
-        video { width: 100%; max-width: 400px; border-radius: 10px; background: #000; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        .menu { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 400px; }
-        input { padding: 12px; border-radius: 5px; border: none; }
-        button { padding: 12px; border-radius: 5px; border: none; cursor: pointer; font-weight: bold; }
-        .btn-start { background: #28a745; color: white; }
-        .btn-join { background: #007bff; color: white; }
-        #peer-id-display { font-size: 0.9rem; color: #aaa; margin-bottom: 10px; }
+        /* Menggunakan style yang sudah Anda miliki sebelumnya */
+        :root {
+            --bg-color: #0d1117; --card-bg: #161b22; 
+            --accent-blue-main: #00d2ff; --accent-red-main: #ff1a1a;
+            --text-main: #e6edf3; --text-dim: #8b949e;
+        }
+        body { background: var(--bg-color); color: var(--text-main); font-family: 'Segoe UI', sans-serif; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .container { width: 100%; max-width: 900px; }
+        .step-card { background: var(--card-bg); border: 1px solid #30363d; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .status-badge { display: inline-block; font-size: 0.7rem; font-weight: bold; padding: 4px 12px; border-radius: 4px; border: 1px solid var(--accent-blue-main); color: var(--accent-blue-main); text-transform: uppercase; margin-bottom: 15px; }
+        
+        /* Camera UI */
+        .video-container { position: relative; width: 100%; background: #000; border-radius: 8px; overflow: hidden; aspect-ratio: 16/9; }
+        video { width: 100%; height: 100%; object-fit: cover; }
+        .cam-overlay { position: absolute; top: 10px; left: 10px; color: #00ff00; font-family: monospace; font-size: 0.8rem; text-shadow: 1px 1px 2px #000; }
+        .btn-connect { width: 100%; background: transparent; border: 1px solid var(--accent-blue-main); color: var(--accent-blue-main); padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; text-transform: uppercase; margin-top: 15px; transition: 0.3s; }
+        .btn-connect:hover { background: var(--accent-blue-main); color: #000; }
     </style>
 </head>
 <body>
 
-    <h2>Live Camera Stream</h2>
-    <p id="peer-id-display">Status: Initializing...</p>
+<div class="container">
+    <h1>PROJECT COMMAND CENTER</h1>
 
-    <video id="remote-video" autoplay playsinline></video>
-    <video id="local-video" autoplay playsinline muted style="width: 150px; position: fixed; bottom: 20px; right: 20px; border: 2px solid white;"></video>
+    <div class="step-card" id="camera-module">
+        <div class="status-badge">Live Internet Stream</div>
+        <h3>Site Monitoring - Remote</h3>
+        
+        <div class="video-container">
+            <div class="cam-overlay" id="cam-status">● DISCONNECTED</div>
+            <video id="remoteVideo" autoplay playsinline></video>
+        </div>
 
-    <div class="menu">
-        <input type="text" id="remote-id-input" placeholder="Enter Friend's ID to View">
-        <button class="btn-join" onclick="joinStream()">Connect & View</button>
-        <hr style="width:100%; border: 0.5px solid #333;">
-        <button class="btn-start" onclick="startBroadcasting()">Start My Broadcast</button>
+        <button class="btn-connect" onclick="startMonitoring()">Connect to Site Camera</button>
     </div>
 
-    <script>
-        const localVideo = document.getElementById('local-video');
-        const remoteVideo = document.getElementById('remote-video');
-        const peerIdDisplay = document.getElementById('peer-id-display');
-        const remoteIdInput = document.getElementById('remote-id-input');
+    <div id="workflow-area"></div>
+</div>
 
-        // 1. Initialize Peer
-        const peer = new Peer(); 
+<script>
+    // ID harus SAMA dengan yang ada di camera.html
+    const TARGET_CAMERA_ID = 'FIRSTIAN-TECH-CAM-01'; 
+    const peer = new Peer(); 
 
-        // Display your ID so you can share it
-        peer.on('open', (id) => {
-            peerIdDisplay.innerText = "Your ID: " + id;
+    function startMonitoring() {
+        const statusEl = document.getElementById('cam-status');
+        statusEl.innerText = "● CONNECTING...";
+        statusEl.style.color = "yellow";
+
+        // Memanggil kamera lewat internet
+        const call = peer.call(TARGET_CAMERA_ID, null);
+
+        call.on('stream', (remoteStream) => {
+            console.log("Stream diterima!");
+            document.getElementById('remoteVideo').srcObject = remoteStream;
+            statusEl.innerText = "● LIVE - REMOTE SITE";
+            statusEl.style.color = "#00ff00";
         });
 
-        // 2. Handle Incoming Calls (For the Viewer)
-        peer.on('call', (call) => {
-            call.answer(); // Answer without sending your own stream back
-            call.on('stream', (remoteStream) => {
-                remoteVideo.srcObject = remoteStream;
-            });
+        call.on('error', (err) => {
+            statusEl.innerText = "● FAILED: " + err;
+            statusEl.style.color = "red";
         });
+    }
 
-        // 3. Broadcaster Function: Start Camera and Wait for Callers
-        async function startBroadcasting() {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: "environment" }, // Uses back camera if available
-                    audio: true 
-                });
-                localVideo.srcObject = stream;
-
-                // When someone calls us, send them the stream
-                peer.on('call', (call) => {
-                    call.answer(stream);
-                    call.on('stream', (remoteStream) => {
-                        remoteVideo.srcObject = remoteStream;
-                    });
-                });
-                
-                alert("Broadcast started! Give your ID to the other phone.");
-            } catch (err) {
-                console.error("Failed to get local stream", err);
-                alert("Camera access denied.");
-            }
+    // PeerJS Global Error Handler
+    peer.on('error', (err) => {
+        if(err.type === 'peer-disconnected') {
+            document.getElementById('cam-status').innerText = "● OFFLINE";
+            document.getElementById('cam-status').style.color = "red";
         }
+    });
+</script>
 
-        // 4. Viewer Function: Connect to the Broadcaster
-        function joinStream() {
-            const remoteId = remoteIdInput.value;
-            if (!remoteId) return alert("Please enter an ID");
-
-            // We call the peer, but we don't need to send our own camera (null)
-            const call = peer.call(remoteId, null);
-            
-            call.on('stream', (remoteStream) => {
-                remoteVideo.srcObject = remoteStream;
-            });
-
-            call.on('error', (err) => {
-                console.error(err);
-                alert("Connection failed.");
-            });
-        }
-    </script>
 </body>
 </html>
