@@ -2,137 +2,76 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Command Center - Multi Viewport</title>
-    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Camera Stream</title>
     <style>
-        :root {
-            --bg: #0d1117; --card: #161b22; --accent: #00d2ff; --neon-green: #00ff41;
-        }
-        body { background: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
-        
-        header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #30363d; padding-bottom: 10px; margin-bottom: 20px; }
-        
-        /* Grid System untuk Multi-Viewport */
-        .monitor-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-            gap: 20px;
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #1a1a1a;
+            color: white;
         }
 
-        .viewport {
-            background: var(--card);
-            border: 1px solid #30363d;
+        .container {
+            text-align: center;
+            width: 90%;
+            max-width: 800px;
+        }
+
+        video {
+            width: 100%;
             border-radius: 12px;
-            overflow: hidden;
-            position: relative;
-            transition: transform 0.3s, border-color 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background-color: #000;
+            transform: scaleX(-1); /* Mirror effect agar seperti cermin */
         }
 
-        .viewport:hover { border-color: var(--accent); transform: scale(1.01); }
-
-        .video-container { width: 100%; aspect-ratio: 16/9; background: #000; display: flex; align-items: center; justify-content: center; }
-        video { width: 100%; height: 100%; object-fit: cover; }
-
-        /* UI Overlays */
-        .overlay-top {
-            position: absolute; top: 0; left: 0; right: 0; padding: 10px;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
-            display: flex; justify-content: space-between; font-family: monospace; font-size: 12px;
+        .status {
+            margin-top: 15px;
+            padding: 10px;
+            font-size: 0.9em;
+            color: #4caf50;
         }
-
-        .status-tag { display: flex; align-items: center; gap: 5px; color: #8b949e; }
-        .dot { width: 8px; height: 8px; background: #555; border-radius: 50%; }
-        .online .dot { background: var(--neon-green); box-shadow: 0 0 8px var(--neon-green); }
-        .online .status-text { color: var(--neon-green); }
-
-        .controls { padding: 15px; display: flex; gap: 10px; }
-        button {
-            flex: 1; background: transparent; border: 1px solid var(--accent);
-            color: var(--accent); padding: 8px; border-radius: 6px; cursor: pointer;
-            font-size: 11px; font-weight: bold; text-transform: uppercase;
-        }
-        button:hover { background: var(--accent); color: #000; }
     </style>
 </head>
 <body>
 
-<header>
-    <div style="font-weight: bold; letter-spacing: 2px;">FIRSTIAN TECH <span style="color:var(--accent)">COMMAND CENTER</span></div>
-    <div id="global-status" style="font-size: 12px; color: #8b949e;">Sistem Siap</div>
-</header>
-
-<div class="monitor-grid">
-    <div class="viewport" id="card-01">
-        <div class="overlay-top" id="stat-01">
-            <div class="status-tag"><div class="dot"></div> <span class="status-text">DISCONNECTED</span></div>
-            <div>CAM_ID: 01-PRODUKSI</div>
-        </div>
-        <div class="video-container">
-            <video id="video-01" autoplay playsinline></video>
-        </div>
-        <div class="controls">
-            <button onclick="connect('FIRSTIAN-TECH-CAM-01', '01')">Hubungkan</button>
-            <button style="border-color:#ff4b4b; color:#ff4b4b;" onclick="closeConn('01')">Putus</button>
-        </div>
+    <div class="container">
+        <h2>Live Camera Stream</h2>
+        <video id="videoElement" autoplay playsinline></video>
+        <div id="status" class="status">Menghubungkan ke kamera...</div>
     </div>
 
-    <div class="viewport" id="card-02">
-        <div class="overlay-top" id="stat-02">
-            <div class="status-tag"><div class="dot"></div> <span class="status-text">DISCONNECTED</span></div>
-            <div>CAM_ID: 02-GUDANG</div>
-        </div>
-        <div class="video-container">
-            <video id="video-02" autoplay playsinline></video>
-        </div>
-        <div class="controls">
-            <button onclick="connect('FIRSTIAN-TECH-CAM-02', '02')">Hubungkan</button>
-            <button style="border-color:#ff4b4b; color:#ff4b4b;" onclick="closeConn('02')">Putus</button>
-        </div>
-    </div>
-</div>
+    <script>
+        const video = document.getElementById('videoElement');
+        const statusText = document.getElementById('status');
 
-<script>
-    const peer = new Peer();
-    const activeCalls = {};
-
-    function connect(targetId, suffix) {
-        const statusDiv = document.getElementById(`stat-${suffix}`);
-        const videoEl = document.getElementById(`video-${suffix}`);
-        
-        statusDiv.querySelector('.status-text').innerText = "CONNECTING...";
-        
-        // Memanggil unit lapangan
-        const call = peer.call(targetId, null);
-        activeCalls[suffix] = call;
-
-        call.on('stream', remoteStream => {
-            videoEl.srcObject = remoteStream;
-            statusDiv.parentElement.classList.add('online');
-            statusDiv.querySelector('.status-text').innerText = "LIVE STREAM";
-        });
-
-        call.on('error', err => {
-            alert("Gagal terhubung ke " + targetId);
-            closeConn(suffix);
-        });
-    }
-
-    function closeConn(suffix) {
-        if(activeCalls[suffix]) {
-            activeCalls[suffix].close();
-            delete activeCalls[suffix];
+        async function startCamera() {
+            try {
+                // Meminta akses ke video saja
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: true, 
+                    audio: false 
+                });
+                
+                // Menghubungkan stream kamera ke elemen video
+                video.srcObject = stream;
+                statusText.innerText = "Kamera Aktif";
+            } catch (err) {
+                console.error("Error mengakses kamera: ", err);
+                statusText.innerText = "Gagal mengakses kamera. Pastikan izin diberikan.";
+                statusText.style.color = "#ff5252";
+            }
         }
-        const card = document.getElementById(`card-${suffix}`);
-        const videoEl = document.getElementById(`video-${suffix}`);
-        card.classList.remove('online');
-        card.querySelector('.status-text').innerText = "DISCONNECTED";
-        videoEl.srcObject = null;
-    }
 
-    peer.on('open', id => {
-        document.getElementById('global-status').innerText = "Monitor ID: " + id;
-    });
-</script>
+        // Jalankan fungsi saat halaman dimuat
+        window.addEventListener('load', startCamera);
+    </script>
 
 </body>
 </html>
