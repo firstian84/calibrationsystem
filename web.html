@@ -1,428 +1,99 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Project Management System</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC Peer Stream</title>
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
-
-        :root {
-            --primary: #00f2fe;
-            --accent: #ff3b3b;
-            --glass: rgba(255, 255, 255, 0.03);
-            --success: #00ff88;
-        }
-
-        body { 
-            font-family: 'Poppins', sans-serif; 
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: #0a0a0a;
-            color: white;
-            padding: 20px;
-            overflow-x: hidden;
-        }
-
-        .container { 
-            background: var(--glass); 
-            backdrop-filter: blur(20px);
-            padding: 30px; 
-            width: 100%;
-            max-width: 400px;
-            border-radius: 28px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
-            box-sizing: border-box;
-        }
-
-        #lock-screen {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        h2 { 
-            color: var(--primary);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 18px;
-            padding: 20px;
-            text-align: left;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 14px;
-            margin-bottom: 12px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.05); 
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            box-sizing: border-box;
-            outline: none;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        .canvas-box {
-            background: white;
-            border-radius: 12px;
-            margin: 10px 0;
-            overflow: hidden;
-            height: 140px;
-        }
-
-        #sig-canvas { 
-            width: 100%; 
-            height: 100%; 
-            cursor: crosshair; 
-            touch-action: none;
-        }
-
-        .btn { 
-            padding: 16px; 
-            border: none; 
-            border-radius: 14px; 
-            width: 100%;
-            font-weight: 700;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: 0.3s;
-            margin-top: 10px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            text-decoration: none;
-        }
-
-        .btn-main { background: linear-gradient(90deg, #00f2fe, #4facfe); color: #000; }
-        .btn-yt { background: #ff0000; color: #fff; }
-        .btn-clear { background: none; color: var(--accent); font-size: 11px; padding: 5px; width: auto; }
-        .btn-ss { background: rgba(0, 242, 254, 0.1); color: var(--primary); font-size: 11px; padding: 5px; width: auto; border: 1px solid var(--primary); }
-        
-        .sig-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .btn-gps {
-            background: #6200ea;
-            color: white;
-            animation: pulse-purple 1.5s infinite;
-            box-shadow: 0 0 0 0 rgba(98, 0, 234, 0.7);
-        }
-
-        @keyframes pulse-purple {
-            0% { transform: scale(0.98); box-shadow: 0 0 0 0 rgba(157, 0, 255, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(157, 0, 255, 0); }
-            100% { transform: scale(0.98); box-shadow: 0 0 0 0 rgba(157, 0, 255, 0); }
-        }
-
-        .btn-sub {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 12px;
-            padding: 10px;
-            border-radius: 10px;
-            flex: 1;
-        }
-
-        .photo-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 5px;
-        }
-
-        .preview-img {
-            width: 100%;
-            height: auto;
-            border-radius: 12px;
-            margin-top: 15px;
-            display: none;
-            border: 2px solid var(--primary);
-            object-fit: cover;
-        }
-
-        .hidden { display: none !important; }
-        #status-msg { font-size: 12px; margin-top: 15px; color: var(--primary); }
-        #gps-status { font-size: 11px; color: var(--success); margin-top: 5px; display: block; text-align: center; }
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; background: #121212; color: white; padding: 20px; }
+        video { width: 100%; max-width: 400px; border-radius: 10px; background: #000; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .menu { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 400px; }
+        input { padding: 12px; border-radius: 5px; border: none; }
+        button { padding: 12px; border-radius: 5px; border: none; cursor: pointer; font-weight: bold; }
+        .btn-start { background: #28a745; color: white; }
+        .btn-join { background: #007bff; color: white; }
+        #peer-id-display { font-size: 0.9rem; color: #aaa; margin-bottom: 10px; }
     </style>
 </head>
-<body id="capture-area">
+<body>
 
-<div class="container">
-    <div id="lock-screen">
-        <i class="fab fa-youtube" style="font-size: 50px; color: #ff0000;"></i>
-        <h2>Wajib Subscribe</h2>
-        <p style="font-size: 13px; color: #aaa;">Silakan subscribe channel kami untuk membuka form Project Order.</p>
-        <a href="https://www.youtube.com/@firstianbudi/videos?sub_confirmation=1" target="_blank" class="btn btn-yt" onclick="unlockContent()">
-            <i class="fab fa-youtube"></i> Subscribe Sekarang
-        </a>
+    <h2>Live Camera Stream</h2>
+    <p id="peer-id-display">Status: Initializing...</p>
+
+    <video id="remote-video" autoplay playsinline></video>
+    <video id="local-video" autoplay playsinline muted style="width: 150px; position: fixed; bottom: 20px; right: 20px; border: 2px solid white;"></video>
+
+    <div class="menu">
+        <input type="text" id="remote-id-input" placeholder="Enter Friend's ID to View">
+        <button class="btn-join" onclick="joinStream()">Connect & View</button>
+        <hr style="width:100%; border: 0.5px solid #333;">
+        <button class="btn-start" onclick="startBroadcasting()">Start My Broadcast</button>
     </div>
 
-    <div id="main-content" class="hidden">
-        <h2>Project Order</h2>
-        
-        <div id="step-1">
-            <div class="form-group">
-                <input type="text" id="clientName" placeholder="Nama Lengkap">
-                <input type="number" id="clientWA" placeholder="Nomor WhatsApp">
-                
-                <input type="text" id="projectNeed" placeholder="Kebutuhan Proyek">
-                <textarea id="projectDetails" placeholder="Rincian Pekerjaan"></textarea>
-                <input type="number" id="projectBudget" placeholder="Anggaran (Rp)">
+    <script>
+        const localVideo = document.getElementById('local-video');
+        const remoteVideo = document.getElementById('remote-video');
+        const peerIdDisplay = document.getElementById('peer-id-display');
+        const remoteIdInput = document.getElementById('remote-id-input');
 
-                <label style="font-size: 11px; color: #aaa;">Tanda Tangan Digital:</label>
-                <div class="canvas-box">
-                    <canvas id="sig-canvas"></canvas>
-                </div>
-                
-                <div class="sig-actions">
-                    <button class="btn btn-clear" onclick="sigPad.clear()">
-                        <i class="fas fa-eraser"></i> Hapus
-                    </button>
-                    <button class="btn btn-ss" onclick="takeScreenshot()">
-                        <i class="fas fa-camera-retro"></i> Screenshot Layar
-                    </button>
-                </div>
+        // 1. Initialize Peer
+        const peer = new Peer(); 
 
-                <label style="font-size: 11px; color: #aaa; display: block; margin-top: 10px;">Foto Verifikasi wajah + aplikasi:</label>
-                <div class="photo-actions">
-                    <button class="btn btn-sub" onclick="document.getElementById('photoCam').click()">
-                        <i class="fas fa-camera"></i> Kamera
-                    </button>
-                    <button class="btn btn-sub" onclick="document.getElementById('photoGal').click()">
-                        <i class="fas fa-image"></i> Galeri
-                    </button>
-                </div>
-                
-                <input type="file" id="photoCam" accept="image/*" capture="user" class="hidden" onchange="handlePhoto(this)">
-                <input type="file" id="photoGal" accept="image/*" class="hidden" onchange="handlePhoto(this)">
-                
-                <img id="imgPreview" class="preview-img" alt="Pratinjau Foto">
-            </div>
-
-            <button id="gps-btn" class="btn btn-gps" onclick="getLocation()">
-                <i class="fas fa-map-marker-alt"></i> Aktifkan GPS Verifikasi
-            </button>
-            <span id="gps-status" class="hidden"><i class="fas fa-check-circle"></i> Lokasi Berhasil Dikunci</span>
-
-            <button id="submit-btn" class="btn btn-main hidden" onclick="submitProject()">
-                <i class="fas fa-paper-plane"></i> Kirim Project Order
-            </button>
-        </div>
-
-        <div id="step-2" class="hidden">
-            <div class="form-group" style="text-align: center;">
-                <i class="fas fa-sync fa-spin" style="font-size: 30px; color: var(--primary);"></i>
-                <p id="status-msg">Menunggu Verifikasi Admin...</p>
-                <div id="final-link" class="hidden">
-                    <a href="#" id="access-btn" class="btn btn-main" style="display: block; text-decoration: none;">
-                        <i class="fas fa-door-open"></i> Akses Project
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    const CONFIG = {
-        URL: "https://enabled-crayfish-71186.upstash.io",
-        TOKEN: "gQAAAAAAARYSAAIncDE2MzUzMjQ5Mzg2N2E0YzU2OTUxODJjZWNmY2E2NzkyMXAxNzExODY",
-        PREFIX: "project_order_v2_",
-        ADMIN_WA: "6287796126529"
-    };
-
-    let sigPad;
-    let userCoords = null;
-
-    function resizeCanvas() {
-        const canvas = document.getElementById('sig-canvas');
-        const ratio = Math.max(window.devicePixelRatio || 1, 1);
-        canvas.width = canvas.offsetWidth * ratio;
-        canvas.height = canvas.offsetHeight * ratio;
-        canvas.getContext("2d").scale(ratio, ratio);
-        if (sigPad) sigPad.clear();
-    }
-
-    window.onload = () => {
-        const canvas = document.getElementById('sig-canvas');
-        sigPad = new SignaturePad(canvas, {
-            backgroundColor: 'rgb(255, 255, 255)',
-            penColor: 'rgb(0, 0, 0)'
+        // Display your ID so you can share it
+        peer.on('open', (id) => {
+            peerIdDisplay.innerText = "Your ID: " + id;
         });
-        
-        resizeCanvas();
-        window.addEventListener("resize", resizeCanvas);
-    };
 
-    function unlockContent() {
-        setTimeout(() => {
-            document.getElementById('lock-screen').classList.add('hidden');
-            document.getElementById('main-content').classList.remove('hidden');
-            setTimeout(resizeCanvas, 100);
-        }, 1000);
-    }
+        // 2. Handle Incoming Calls (For the Viewer)
+        peer.on('call', (call) => {
+            call.answer(); // Answer without sending your own stream back
+            call.on('stream', (remoteStream) => {
+                remoteVideo.srcObject = remoteStream;
+            });
+        });
 
-    // Fungsi Diperbarui: Screenshot Seluruh Layar Form
-    function takeScreenshot() {
-        const element = document.getElementById("capture-area");
-        
-        // Mematikan sementara animasi pulse agar screenshot bersih
-        const gpsBtn = document.getElementById('gps-btn');
-        gpsBtn.style.animation = 'none';
+        // 3. Broadcaster Function: Start Camera and Wait for Callers
+        async function startBroadcasting() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: "environment" }, // Uses back camera if available
+                    audio: true 
+                });
+                localVideo.srcObject = stream;
 
-        html2canvas(element, {
-            backgroundColor: "#0a0a0a",
-            logging: false,
-            useCORS: true,
-            scale: 2 // Kualitas lebih tajam
-        }).then(canvas => {
-            const link = document.createElement('a');
-            const date = new Date().getTime();
-            link.download = `Project_Order_Screen_${date}.png`;
-            link.href = canvas.toDataURL("image/png");
-            link.click();
+                // When someone calls us, send them the stream
+                peer.on('call', (call) => {
+                    call.answer(stream);
+                    call.on('stream', (remoteStream) => {
+                        remoteVideo.srcObject = remoteStream;
+                    });
+                });
+                
+                alert("Broadcast started! Give your ID to the other phone.");
+            } catch (err) {
+                console.error("Failed to get local stream", err);
+                alert("Camera access denied.");
+            }
+        }
+
+        // 4. Viewer Function: Connect to the Broadcaster
+        function joinStream() {
+            const remoteId = remoteIdInput.value;
+            if (!remoteId) return alert("Please enter an ID");
+
+            // We call the peer, but we don't need to send our own camera (null)
+            const call = peer.call(remoteId, null);
             
-            // Kembalikan animasi
-            gpsBtn.style.animation = 'pulse-purple 1.5s infinite';
-            alert("Screenshot layar berhasil disimpan!");
-        });
-    }
-
-    function getLocation() {
-        const btn = document.getElementById('gps-btn');
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mencari Lokasi...';
-
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    userCoords = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude
-                    };
-                    btn.classList.add('hidden');
-                    document.getElementById('gps-status').classList.remove('hidden');
-                    document.getElementById('submit-btn').classList.remove('hidden');
-                },
-                (error) => {
-                    alert("Gagal mendapatkan lokasi. Pastikan GPS aktif dan izinkan akses.");
-                    btn.innerHTML = '<i class="fas fa-map-marker-alt"></i> Coba Lagi Aktifkan GPS';
-                }
-            );
-        } else {
-            alert("Browser tidak mendukung GPS.");
-        }
-    }
-
-    function handlePhoto(input) {
-        const preview = document.getElementById('imgPreview');
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = e => {
-                preview.src = e.target.result;
-                preview.style.display = 'block';
-                preview.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    async function submitProject() {
-        const name = document.getElementById('clientName').value;
-        const wa = document.getElementById('clientWA').value;
-        const need = document.getElementById('projectNeed').value;
-        const details = document.getElementById('projectDetails').value;
-        const budget = document.getElementById('projectBudget').value;
-        const photo = document.getElementById('imgPreview').src;
-
-        if(!name || !wa || !need || !details || !budget || sigPad.isEmpty() || !photo || !userCoords) {
-            return alert("Harap lengkapi semua data, foto, tanda tangan, dan GPS!");
-        }
-
-        const jktTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Jakarta"});
-
-        const payload = {
-            id: "PRJ-" + Math.floor(Math.random() * 10000),
-            client: name,
-            contact: wa,
-            project_need: need,
-            project_details: details,
-            budget: budget,
-            status: "pending",
-            location: userCoords,
-            submitted_at_jakarta: jktTime,
-            created_at: new Date().toISOString()
-        };
-
-        try {
-            const res = await fetch(`${CONFIG.URL}/set/${CONFIG.PREFIX}${wa}`, {
-                headers: { Authorization: `Bearer ${CONFIG.TOKEN}` },
-                method: 'POST',
-                body: JSON.stringify(payload)
+            call.on('stream', (remoteStream) => {
+                remoteVideo.srcObject = remoteStream;
             });
 
-            if(res.ok) {
-                const msg = `*VERIFIKASI PROJECT ORDER*%0A%0A` +
-                            `Nama: ${name}%0A` +
-                            `WhatsApp: ${wa}%0A` +
-                            `Lokasi: http://www.google.com/maps/place/${userCoords.lat},${userCoords.lng}%0A` +
-                            `Waktu: ${jktTime}%0A` +
-                            `Budget: Rp ${budget}%0A%0A` +
-                            `_Catatan: Harap lampirkan hasil screenshot layar dan foto verifikasi Anda setelah pesan ini._`;
-                
-                window.open(`https://wa.me/${CONFIG.ADMIN_WA}?text=${msg}`, '_blank');
-
-                document.getElementById('step-1').classList.add('hidden');
-                document.getElementById('step-2').classList.remove('hidden');
-                startTracking(wa);
-            }
-        } catch (e) { alert("Gagal mengirim data!"); }
-    }
-
-    function startTracking(wa) {
-        const check = setInterval(async () => {
-            try {
-                const res = await fetch(`${CONFIG.URL}/get/${CONFIG.PREFIX}${wa}`, {
-                    headers: { Authorization: `Bearer ${CONFIG.TOKEN}` }
-                });
-                const data = await res.json();
-                
-                if (data.result) {
-                    const project = JSON.parse(data.result);
-                    if (project.status === "verified") {
-                        clearInterval(check);
-                        document.getElementById('status-msg').innerText = "Project Terverifikasi!";
-                        document.getElementById('final-link').classList.remove('hidden');
-                        if(project.link) document.getElementById('access-btn').href = project.link;
-                        alert("Verifikasi Sukses!");
-                    }
-                }
-            } catch (e) { console.log("Menunggu Verifikasi..."); }
-        }, 4000);
-    }
-</script>
-
+            call.on('error', (err) => {
+                console.error(err);
+                alert("Connection failed.");
+            });
+        }
+    </script>
 </body>
-    </html>
+</html>
