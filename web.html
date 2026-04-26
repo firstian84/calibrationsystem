@@ -2,223 +2,76 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Stream & Chat - WebRTC</title>
-    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <title>Chat Tanpa WebSocket</title>
     <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #121212;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            margin: 0;
-        }
-        .card {
-            background: #1e1e1e;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-            width: 100%;
-            max-width: 600px;
-            text-align: center;
-        }
-        .video-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 15px;
-        }
-        video {
-            width: 100%;
-            background: #000;
-            border-radius: 8px;
-            border: 1px solid #333;
-        }
-        .id-display {
-            background: #333;
-            padding: 10px;
-            border-radius: 5px;
-            font-family: monospace;
-            color: #00e676;
-            margin: 10px 0;
-            user-select: all;
-        }
-        /* Style untuk Chat */
-        #chat-box {
-            height: 150px;
-            background: #121212;
-            border: 1px solid #333;
-            border-radius: 8px;
-            margin-top: 15px;
-            padding: 10px;
-            overflow-y: auto;
-            text-align: left;
-            font-size: 0.9em;
-        }
-        .message { margin-bottom: 5px; }
-        .msg-me { color: #2196F3; }
-        .msg-remote { color: #ff9800; }
-
-        .input-group {
-            display: flex;
-            gap: 5px;
-            margin-top: 10px;
-        }
-        input {
-            flex: 1;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #444;
-            background: #252525;
-            color: white;
-        }
-        button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            background-color: #2196F3;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .status { font-size: 0.8em; margin-top: 10px; color: #bbb; }
+        body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
+        #chat-box { height: 300px; background: white; border: 1px solid #ccc; overflow-y: scroll; padding: 10px; margin-bottom: 10px; }
+        .msg { margin-bottom: 8px; padding: 5px; border-bottom: 1px solid #eee; }
+        input { padding: 8px; border: 1px solid #ddd; }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h2>Stream & Live Chat</h2>
-        
-        <div class="id-display" id="my-id">Menghubungkan ke server...</div>
-        
-        <div class="input-group">
-            <input type="text" id="remote-id" placeholder="Masukkan ID Tujuan">
-            <button onclick="connectToPeer()">Hubungkan</button>
-        </div>
-        <div id="status-text" class="status">Menyiapkan kamera...</div>
-
-        <div class="video-container">
-            <div>
-                <small>Kamera Saya</small>
-                <video id="localVideo" autoplay muted playsinline></video>
-            </div>
-            <div>
-                <small>Kamera Lawan</small>
-                <video id="remoteVideo" autoplay playsinline></video>
-            </div>
-        </div>
-
-        <div id="chat-box"></div>
-        <div class="input-group">
-            <input type="text" id="chat-input" placeholder="Ketik pesan untuk tes koneksi...">
-            <button onclick="sendChat()" style="background-color: #4caf50;">Kirim</button>
-        </div>
-    </div>
+    <h2>Public Chat (Polling Method)</h2>
+    <div id="chat-box">Memuat pesan...</div>
+    
+    <input type="text" id="user" placeholder="Nama">
+    <input type="text" id="text" placeholder="Pesan">
+    <button onclick="kirimPesan()">Kirim</button>
 
     <script>
-        let localStream;
-        let currentConn; // Untuk menyimpan koneksi data/chat
-        const statusText = document.getElementById('status-text');
-        const chatBox = document.getElementById('chat-box');
+        // GANTI DENGAN DATA DARI JSONBIN.IO
+        const BIN_ID = 'ID_BIN_KAMU';
+        const API_KEY = '$2b$10$KEY_KAMU';
+        const URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-        const peer = new Peer({
-            config: {
-                'iceServers': [
-                    { urls: 'stun:stun.l.google.com:19302' },
-                    { 
-                        urls: 'turn:openrelay.metered.ca:443',
-                        username: 'openrelayproject',
-                        credential: 'openrelayproject'
-                    }
-                ]
-            }
-        });
-
-        async function init() {
+        // 1. Fungsi Mengambil Pesan
+        async function muatPesan() {
             try {
-                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                document.getElementById('localVideo').srcObject = localStream;
-            } catch (e) {
-                statusText.innerText = "Error Kamera: " + e.message;
-            }
+                let res = await fetch(URL + '/latest', {
+                    headers: { 'X-Master-Key': API_KEY }
+                });
+                let data = await res.json();
+                
+                let html = '';
+                data.record.forEach(m => {
+                    html += `<div class="msg"><b>${m.user}:</b> ${m.text}</div>`;
+                });
+                document.getElementById('chat-box').innerHTML = html;
+            } catch (e) { console.error("Gagal memuat", e); }
         }
 
-        peer.on('open', id => {
-            document.getElementById('my-id').innerText = "ID Anda: " + id;
-            statusText.innerText = "Siap menerima koneksi.";
-        });
+        // 2. Fungsi Mengirim Pesan
+        async function kirimPesan() {
+            const user = document.getElementById('user').value;
+            const text = document.getElementById('text').value;
+            if(!user || !text) return;
 
-        // 1. Menangani koneksi Chat & Video yang MASUK
-        peer.on('connection', conn => {
-            setupChat(conn);
-        });
+            // Ambil data lama dulu
+            let res = await fetch(URL + '/latest', { headers: { 'X-Master-Key': API_KEY } });
+            let currentData = await res.json();
+            let messages = currentData.record;
 
-        peer.on('call', call => {
-            call.answer(localStream);
-            call.on('stream', stream => {
-                document.getElementById('remoteVideo').srcObject = stream;
+            // Tambah pesan baru
+            messages.push({ user, text });
+
+            // Simpan kembali
+            await fetch(URL, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': API_KEY
+                },
+                body: JSON.stringify(messages)
             });
-        });
 
-        // 2. Menghubungi ID Lawan (Video + Chat)
-        function connectToPeer() {
-            const rId = document.getElementById('remote-id').value;
-            if(!rId) return;
-
-            statusText.innerText = "Menghubungkan...";
-            
-            // Hubungkan Chat
-            const conn = peer.connect(rId);
-            setupChat(conn);
-
-            // Hubungkan Video
-            const call = peer.call(rId, localStream);
-            call.on('stream', stream => {
-                document.getElementById('remoteVideo').srcObject = stream;
-                statusText.innerText = "Terhubung dengan video!";
-            });
+            document.getElementById('text').value = '';
+            muatPesan();
         }
 
-        // Fungsi Setup Chat (Berbagi Logika untuk Pengirim & Penerima)
-        function setupChat(conn) {
-            currentConn = conn;
-            conn.on('open', () => {
-                appendMsg("Sistem", "Koneksi chat terbuka!", "msg-me");
-                statusText.innerText = "Data & Chat Terhubung!";
-            });
-
-            conn.on('data', data => {
-                appendMsg("Lawan", data, "msg-remote");
-            });
-
-            conn.on('close', () => {
-                appendMsg("Sistem", "Koneksi terputus.", "msg-remote");
-            });
-        }
-
-        function sendChat() {
-            const msg = document.getElementById('chat-input').value;
-            if (currentConn && currentConn.open && msg) {
-                currentConn.send(msg);
-                appendMsg("Saya", msg, "msg-me");
-                document.getElementById('chat-input').value = "";
-            } else {
-                alert("Belum terhubung ke siapapun!");
-            }
-        }
-
-        function appendMsg(sender, text, className) {
-            const div = document.createElement('div');
-            div.className = "message " + className;
-            div.innerHTML = `<strong>${sender}:</strong> ${text}`;
-            chatBox.appendChild(div);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
-        init();
+        // Jalankan polling setiap 3 detik
+        setInterval(muatPesan, 3000);
+        muatPesan();
     </script>
 </body>
 </html>
