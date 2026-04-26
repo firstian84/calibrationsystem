@@ -2,76 +2,67 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Camera Stream</title>
+    <title>Internet Video Call Sederhana</title>
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
-        body {
-            font-family: sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #1a1a1a;
-            color: white;
-        }
-
-        .container {
-            text-align: center;
-            width: 90%;
-            max-width: 800px;
-        }
-
-        video {
-            width: 100%;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            background-color: #000;
-            transform: scaleX(-1); /* Mirror effect agar seperti cermin */
-        }
-
-        .status {
-            margin-top: 15px;
-            padding: 10px;
-            font-size: 0.9em;
-            color: #4caf50;
-        }
+        body { font-family: sans-serif; background: #121212; color: white; text-align: center; }
+        video { width: 90%; max-width: 500px; border-radius: 10px; background: #000; margin-top: 10px; }
+        .controls { margin: 20px; padding: 20px; border: 1px solid #333; }
+        input { padding: 8px; border-radius: 4px; border: none; }
+        button { padding: 8px 15px; cursor: pointer; background: #2196F3; color: white; border: none; border-radius: 4px; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h2>Live Camera Stream</h2>
-        <video id="videoElement" autoplay playsinline></video>
-        <div id="status" class="status">Menghubungkan ke kamera...</div>
+    <h2>Koneksi Kamera via Internet</h2>
+    
+    <div class="controls">
+        <p>ID Anda: <strong id="my-id">Sedang memuat...</strong></p>
+        <input type="text" id="remote-id" placeholder="Masukkan ID teman">
+        <button onclick="connectToPeer()">Hubungkan (Lihat Kamera Teman)</button>
+    </div>
+
+    <div>
+        <h3>Video Lokal (Kamera Saya)</h3>
+        <video id="localVideo" autoplay muted playsinline></video>
+    </div>
+
+    <div>
+        <h3>Video Remote (Kamera Teman)</h3>
+        <video id="remoteVideo" autoplay playsinline></video>
     </div>
 
     <script>
-        const video = document.getElementById('videoElement');
-        const statusText = document.getElementById('status');
+        const peer = new Peer(); // Membuat ID unik otomatis di server PeerJS
+        let localStream;
 
-        async function startCamera() {
-            try {
-                // Meminta akses ke video saja
-                const stream = await navigator.mediaDevices.getUserMedia({ 
-                    video: true, 
-                    audio: false 
-                });
-                
-                // Menghubungkan stream kamera ke elemen video
-                video.srcObject = stream;
-                statusText.innerText = "Kamera Aktif";
-            } catch (err) {
-                console.error("Error mengakses kamera: ", err);
-                statusText.innerText = "Gagal mengakses kamera. Pastikan izin diberikan.";
-                statusText.style.color = "#ff5252";
-            }
+        // 1. Dapatkan akses kamera lokal saat buka halaman
+        navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+            localStream = stream;
+            document.getElementById('localVideo').srcObject = stream;
+        });
+
+        // 2. Tampilkan ID kita agar bisa diberikan ke orang lain
+        peer.on('open', (id) => {
+            document.getElementById('my-id').innerText = id;
+        });
+
+        // 3. Menjawab panggilan (Jika ada yang mencoba melihat kamera kita)
+        peer.on('call', (call) => {
+            call.answer(localStream); // Kirim stream kamera kita
+            call.on('stream', (userVideoStream) => {
+                document.getElementById('remoteVideo').srcObject = userVideoStream;
+            });
+        });
+
+        // 4. Fungsi untuk menghubungi ID teman
+        function connectToPeer() {
+            const friendId = document.getElementById('remote-id').value;
+            const call = peer.call(friendId, localStream);
+            call.on('stream', (userVideoStream) => {
+                document.getElementById('remoteVideo').srcObject = userVideoStream;
+            });
         }
-
-        // Jalankan fungsi saat halaman dimuat
-        window.addEventListener('load', startCamera);
     </script>
-
 </body>
 </html>
