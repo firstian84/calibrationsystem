@@ -2,95 +2,532 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Publik Sederhana</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #ece5dd; margin: 0; padding: 20px; display: flex; justify-content: center; }
-        .container { width: 100%; max-width: 400px; background: white; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); overflow: hidden; }
-        #chat-box { height: 400px; overflow-y: auto; padding: 15px; background: #fff; display: flex; flex-direction: column; gap: 10px; }
-        .msg { padding: 8px 12px; border-radius: 8px; background: #e1ffc7; align-self: flex-start; max-width: 80%; box-shadow: 0 1px 1px rgba(0,0,0,0.1); }
-        .msg b { display: block; font-size: 0.75em; color: #075e54; margin-bottom: 3px; }
-        .input-area { padding: 10px; background: #f0f0f0; display: flex; flex-direction: column; gap: 8px; }
-        input { padding: 10px; border: 1px solid #ddd; border-radius: 5px; outline: none; }
-        button { padding: 10px; background: #25d366; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        button:hover { background: #128c7e; }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+        :root {
+            --primary: #4facfe;
+            --accent: #ff6b6b;
+            --glass: #ffffff;
+            --success: #2ecc71;
+            --text-main: #333333;
+            --text-sub: #777777;
+            --bg-body: #f4f7f6;
+            --border-color: #eef0f2;
+        }
+
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: var(--bg-body);
+            color: var(--text-main);
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        .container { 
+            background: var(--glass); 
+            padding: 25px; 
+            width: 100%;
+            max-width: 420px;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            box-sizing: border-box;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        h2 { 
+            color: var(--primary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin: 0 0 20px 0;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .form-section {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            background: #fdfdfd; 
+            border: 1.5px solid #f0f0f0;
+            color: var(--text-main);
+            box-sizing: border-box;
+            outline: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, textarea:focus {
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 10px rgba(79, 172, 254, 0.1);
+        }
+
+        textarea { resize: vertical; min-height: 90px; }
+
+        .label-text {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-sub);
+            margin-bottom: 8px;
+            display: block;
+            line-height: 1.4;
+        }
+
+        .canvas-container {
+            background: #fafafa;
+            border-radius: 12px;
+            margin: 5px 0 10px 0;
+            border: 1px dashed #ccc;
+            height: 150px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #sig-canvas { width: 100%; height: 100%; cursor: crosshair; touch-action: none; }
+
+        .btn { 
+            position: relative;
+            padding: 14px; 
+            border: none; 
+            border-radius: 14px; 
+            width: 85%;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+            overflow: hidden;
+            font-size: 13px;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
+            transform: skewX(-25deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 150%; }
+            100% { left: 150%; }
+        }
+
+        .btn-yt { 
+            background: #ff4d4d; color: #fff; 
+            box-shadow: 0 4px 15px rgba(255, 77, 77, 0.3);
+            animation: pulse-red 2s infinite;
+        }
+
+        .btn-main { 
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%); 
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn-gps {
+            background: #7e57c2; color: white;
+            animation: pulse-purple 1.5s infinite;
+            margin-top: 10px;
+        }
+
+        .btn-sub { background: #f8f9fa; color: #555; border: 1px solid #ddd; flex: 1; padding: 10px; font-size: 11px; }
+
+        .btn-clear { background: transparent; color: var(--accent); font-size: 11px; width: auto; padding: 5px 10px; }
+        .btn-ss { background: #e3f2fd; color: var(--primary); font-size: 11px; width: auto; padding: 5px 10px; }
+
+        .btn-disabled {
+            background: #bdc3c7 !important;
+            color: #7f8c8d !important;
+            cursor: not-allowed !important;
+            pointer-events: none !important;
+            box-shadow: none !important;
+        }
+        
+        .finance-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #ddd;
+        }
+
+        .btn-copy {
+            background: #34495e;
+            color: white;
+            font-size: 11px;
+            margin-top: 8px;
+            width: 100%;
+        }
+
+        @keyframes glow-blink {
+            0%, 100% { 
+                opacity: 1; 
+                box-shadow: 0 0 5px rgba(133, 100, 4, 0.2);
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.8; 
+                box-shadow: 0 0 20px #ffc107, inset 0 0 10px #ffc107;
+                background: #fff9e6;
+                color: #000;
+                transform: scale(1.02);
+            }
+        }
+
+        .status-box {
+            background: #fff3cd;
+            color: #856404;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            margin-top: 12px;
+            font-weight: 700;
+            border: 2px solid #ffeeba;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            animation: glow-blink 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse-red {
+            0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(255, 77, 77, 0.3); }
+            50% { transform: scale(1.02); box-shadow: 0 0 20px rgba(255, 77, 77, 0.5); }
+        }
+
+        @keyframes pulse-purple {
+            0% { box-shadow: 0 0 0 0 rgba(126, 87, 194, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(126, 87, 194, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(126, 87, 194, 0); }
+        }
+
+        .flex-row { display: flex; gap: 10px; width: 100%; margin-top: 5px; }
+        .preview-img { width: 100%; border-radius: 12px; margin-top: 15px; display: none; border: 2px solid var(--primary); }
+        .hidden { display: none !important; }
+        #gps-status { color: var(--success); font-weight: 700; font-size: 12px; margin: 10px 0; display: block; }
+
+        /* Style for Embed Container */
+        #yt-embed-container {
+            width: 100%;
+            margin-bottom: 15px;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid #ff0000;
+            background: #000;
+            line-height: 0;
+        }
     </style>
 </head>
-<body>
+<body id="capture-area">
 
 <div class="container">
-    <div id="chat-box">Memuat pesan...</div>
-    <div class="input-area">
-        <input type="text" id="user" placeholder="Nama kamu">
-        <input type="text" id="text" placeholder="Ketik pesan...">
-        <button onclick="kirimPesan()">Kirim</button>
+    <div id="lock-screen">
+        <i class="fab fa-youtube" style="font-size: 60px; color: #ff0000; margin-bottom: 10px;"></i>
+        <p style="font-size: 13px; font-weight: 600; margin-bottom: 15px;">Subscribe untuk melanjutkan PO.</p>
+        
+        <!-- Embed Section -->
+        <div id="yt-embed-container" class="hidden">
+            <iframe width="100%" height="200" src="https://www.youtube.com/embed/videoseries?list=UU6C2v2r_7n6E_X5p5U8W6Ig" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+
+        <button id="btn-yt-action" class="btn btn-yt" onclick="showYoutube()">
+            <i class="fab fa-youtube"></i> KLIK UNTUK SUBSCRIBE
+        </button>
+
+        <button id="btn-continue" class="btn btn-main hidden" onclick="unlockContent()" style="margin-top: 10px; background: #2ecc71;">
+            <i class="fas fa-arrow-right"></i> LANJUTKAN KE FORM PO
+        </button>
+    </div>
+
+    <div id="main-content" class="hidden">
+        <h2>Project Order</h2>
+        
+        <div id="step-1">
+            <div class="form-section">
+                <input type="text" id="clientName" placeholder="Nama Lengkap Pemesan">
+                <input type="number" id="clientWA" placeholder="Nomor WhatsApp (Aktif)">
+                <input type="text" id="projectNeed" placeholder="Jenis Teknis Proyek">
+                <textarea id="projectDetails" placeholder="Rincian Pekerjaan"></textarea>
+                <input type="number" id="projectBudget" placeholder="Anggaran (Rp)">
+
+                <span class="label-text">Tanda Tangan Digital: <br><i>#Ulangi TTD + SSLayar jika tidak terdeteksi</i></span>
+                <div class="canvas-container">
+                    <canvas id="sig-canvas"></canvas>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                    <button class="btn btn-clear" onclick="sigPad.clear()">
+                        <i class="fas fa-eraser"></i> Hapus
+                    </button>
+                    <button class="btn btn-ss" onclick="takeScreenshot()">
+                        <i class="fas fa-camera"></i> Screenshot Layar
+                    </button>
+                </div>
+
+                <span class="label-text">Verifikasi Wajah + Tampilan Aplikasi:</span>
+                <div class="flex-row">
+                    <button class="btn btn-sub" onclick="document.getElementById('photoCam').click()">
+                        <i class="fas fa-camera"></i> Kamera
+                    </button>
+                    <button class="btn btn-sub" onclick="document.getElementById('photoGal').click()">
+                        <i class="fas fa-image"></i> Galeri
+                    </button>
+                </div>
+                
+                <input type="file" id="photoCam" accept="image/*" capture="user" class="hidden" onchange="handlePhoto(this)">
+                <input type="file" id="photoGal" accept="image/*" class="hidden" onchange="handlePhoto(this)">
+                <img id="imgPreview" class="preview-img" alt="Pratinjau Foto">
+            </div>
+
+            <button id="gps-btn" class="btn btn-gps" onclick="getLocation()">
+                <i class="fas fa-map-marker-alt"></i> Verifikasi GPS
+            </button>
+            <span id="gps-status" class="hidden"><i class="fas fa-check-circle"></i> Terverifikasi</span>
+
+            <button id="submit-btn" class="btn btn-main hidden" onclick="submitProject()" style="margin-top: 15px;">
+                <i class="fas fa-paper-plane"></i> KIRIM PROJECT ORDER
+            </button>
+        </div>
+
+        <div id="step-2" class="hidden">
+            <div class="form-section" style="text-align: center; padding: 40px 20px;">
+                <i class="fas fa-sync fa-spin" style="font-size: 40px; color: var(--primary); margin-bottom: 20px;"></i>
+                <p id="status-msg" style="font-weight: 600;">Proses Verifikasi Admin...</p>
+                <div id="final-link" class="hidden">
+                    <a href="#" id="access-btn" target="_blank" class="btn btn-main btn-disabled" style="font-size: 12px; margin-top: 20px;">
+                        <i class="fas fa-check-double"></i> PO DIVERIFIKASI
+                    </a>
+                    
+                    <div class="finance-section">
+                        <span class="label-text">Pembayaran ke rekening berikut:</span>
+                        <p style="font-weight: bold; margin: 5px 0;">BCA 3090128077</p>
+                        <button class="btn btn-copy" onclick="copyAccount()">
+                            <i class="fas fa-copy"></i> COPY NO.REK 
+                        </button>
+                        <div id="fin-msg" class="status-box hidden">
+                            <i class="fas fa-hourglass-half"></i> Menunggu verifikasi finance...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
-    // URL database publik sementara (Ganti ID di akhir jika ingin grup chat baru)
-    const API_URL = "https://api.npoint.io/d936173a146743936081"; 
+    const CONFIG = {
+        URL: "https://enabled-crayfish-71186.upstash.io",
+        TOKEN: "gQAAAAAAARYSAAIncDE2MzUzMjQ5Mzg2N2E0YzU2OTUxODJjZWNmY2E2NzkyMXAxNzExODY",
+        PREFIX: "project_order_",
+        ADMIN_WA: "6287796126529"
+    };
 
-    // 1. Fungsi Memuat Pesan
-    async function muatPesan() {
-        try {
-            const response = await fetch(API_URL);
-            const data = await response.json();
-            
-            const chatBox = document.getElementById('chat-box');
-            if (data.length === 0) {
-                chatBox.innerHTML = "<small style='text-align:center; color:gray;'>Belum ada pesan. Mulai chat!</small>";
-                return;
-            }
+    let sigPad;
+    let userCoords = null;
 
-            chatBox.innerHTML = data.map(m => `
-                <div class="msg">
-                    <b>${m.user}</b>
-                    ${m.text}
-                </div>
-            `).join('');
-            
-            chatBox.scrollTop = chatBox.scrollHeight;
-        } catch (error) {
-            console.error("Gagal mengambil data:", error);
-            document.getElementById('chat-box').innerHTML = "Gagal memuat pesan. Pastikan internet aktif.";
+    function resizeCanvas() {
+        const canvas = document.getElementById('sig-canvas');
+        const ratio = Math.max(window.devicePixelRatio || 1, 1);
+        canvas.width = canvas.offsetWidth * ratio;
+        canvas.height = canvas.offsetHeight * ratio;
+        canvas.getContext("2d").scale(ratio, ratio);
+        if (sigPad) sigPad.clear();
+    }
+
+    window.onload = () => {
+        const canvas = document.getElementById('sig-canvas');
+        sigPad = new SignaturePad(canvas, {
+            backgroundColor: 'rgb(255, 255, 255)',
+            penColor: 'rgb(0, 0, 0)'
+        });
+        resizeCanvas();
+        window.addEventListener("resize", resizeCanvas);
+    };
+
+    // Fungsi untuk menampilkan Embed YouTube
+    function showYoutube() {
+        document.getElementById('yt-embed-container').classList.remove('hidden');
+        document.getElementById('btn-yt-action').classList.add('hidden');
+        
+        // Munculkan tombol lanjut setelah 3 detik
+        setTimeout(() => {
+            document.getElementById('btn-continue').classList.remove('hidden');
+        }, 3000);
+    }
+
+    function unlockContent() {
+        document.getElementById('lock-screen').classList.add('hidden');
+        document.getElementById('main-content').classList.remove('hidden');
+        setTimeout(resizeCanvas, 100);
+    }
+
+    function takeScreenshot() {
+        const element = document.getElementById("capture-area");
+        html2canvas(element, { backgroundColor: "#ffffff", scale: 2 }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `PO_Verify_${new Date().getTime()}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+            alert("Screenshot berhasil disimpan!");
+        });
+    }
+
+    function getLocation() {
+        const btn = document.getElementById('gps-btn');
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mendeteksi Lokasi...';
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                userCoords = { lat: position.coords.latitude, lng: position.coords.longitude };
+                btn.classList.add('hidden');
+                document.getElementById('gps-status').classList.remove('hidden');
+                document.getElementById('submit-btn').classList.remove('hidden');
+            }, () => {
+                alert("Gagal akses lokasi. Aktifkan GPS Anda.");
+                btn.innerHTML = '<i class="fas fa-map-marker-alt"></i> Coba Lagi';
+            });
         }
     }
 
-    // 2. Fungsi Mengirim Pesan
-    async function kirimPesan() {
-        const userInput = document.getElementById('user');
-        const textInput = document.getElementById('text');
+    function handlePhoto(input) {
+        const preview = document.getElementById('imgPreview');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    async function copyAccount() {
+        const rek = "3090128077";
+        const wa = document.getElementById('clientWA').value;
         
-        if (!userInput.value || !textInput.value) return alert("Isi nama dan pesan!");
+        navigator.clipboard.writeText(rek);
+        alert("Nomor Rekening Berhasil di Copy!");
+        document.getElementById('fin-msg').classList.remove('hidden');
+
+        const copyTimeJkt = new Date().toLocaleString("en-US", {timeZone: "Asia/Jakarta"});
 
         try {
-            // Ambil data lama
-            const response = await fetch(API_URL);
-            let messages = await response.json();
+            const resGet = await fetch(`${CONFIG.URL}/get/${CONFIG.PREFIX}${wa}`, {
+                headers: { Authorization: `Bearer ${CONFIG.TOKEN}` }
+            });
+            const dataGet = await resGet.json();
+            
+            if(dataGet.result) {
+                let payload = JSON.parse(dataGet.result);
+                payload.finver = 0; 
+                payload.payment_copied_at = copyTimeJkt;
 
-            // Tambah pesan baru (maksimal 50 pesan biar tidak lemot)
-            messages.push({ user: userInput.value, text: textInput.value });
-            if (messages.length > 50) messages.shift();
+                await fetch(`${CONFIG.URL}/set/${CONFIG.PREFIX}${wa}`, {
+                    headers: { Authorization: `Bearer ${CONFIG.TOKEN}` },
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+            }
+        } catch (e) { console.error("Finance update failed"); }
+    }
 
-            // Simpan data kembali
-            await fetch(API_URL, {
-                method: 'POST', // npoint menggunakan POST untuk update data
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(messages)
+    async function submitProject() {
+        const name = document.getElementById('clientName').value;
+        const wa = document.getElementById('clientWA').value;
+        const budget = document.getElementById('projectBudget').value;
+        const photo = document.getElementById('imgPreview').src;
+
+        if(!name || !wa || sigPad.isEmpty() || !photo || !userCoords) {
+            return alert("Lengkapi data, Foto, Tanda Tangan, dan GPS!");
+        }
+
+        const jktTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Jakarta"});
+        const payload = {
+            id: "PRJ-" + Math.floor(Math.random() * 10000),
+            client: name, contact: wa,
+            project_need: document.getElementById('projectNeed').value,
+            project_details: document.getElementById('projectDetails').value,
+            budget: budget, status: 0, finver: -1, link: "",
+            location: userCoords, submitted_at_jakarta: jktTime
+        };
+
+        try {
+            const res = await fetch(`${CONFIG.URL}/set/${CONFIG.PREFIX}${wa}`, {
+                headers: { Authorization: `Bearer ${CONFIG.TOKEN}` },
+                method: 'POST',
+                body: JSON.stringify(payload)
             });
 
-            textInput.value = "";
-            muatPesan();
-        } catch (error) {
-            alert("Gagal mengirim pesan!");
-            console.error(error);
-        }
+            if(res.ok) {
+                const msg = `*VERIFIKASI PROJECT ORDER*%0A%0ANama: ${name}%0AWA: ${wa}%0ABudget: Rp ${budget}%0A%0A_#lampirkan screenshot & foto verifikasi._`;
+                window.open(`https://wa.me/${CONFIG.ADMIN_WA}?text=${msg}`, '_blank');
+                document.getElementById('step-1').classList.add('hidden');
+                document.getElementById('step-2').classList.remove('hidden');
+                startTracking(wa);
+            }
+        } catch (e) { alert("Error koneksi!"); }
     }
 
-    // Cek pesan setiap 3 detik
-    setInterval(muatPesan, 3000);
-    muatPesan();
+    function startTracking(wa) {
+        setInterval(async () => {
+            try {
+                const res = await fetch(`${CONFIG.URL}/get/${CONFIG.PREFIX}${wa}`, {
+                    headers: { Authorization: `Bearer ${CONFIG.TOKEN}` }
+                });
+                const data = await res.json();
+                if (data.result) {
+                    const project = JSON.parse(data.result);
+                    
+                    if (project.status == 1) {
+                        document.getElementById('status-msg').innerText = "";
+                        document.getElementById('final-link').classList.remove('hidden');
+                        document.getElementById('access-btn').href = project.link || `https://wa.me/${CONFIG.ADMIN_WA}`;
+                        
+                        if(project.finver == 1) {
+                            const btn = document.getElementById('access-btn');
+                            btn.classList.remove('btn-disabled'); 
+                            const finMsg = document.getElementById('fin-msg');
+                            finMsg.innerHTML = "<i class='fas fa-check-circle'></i> Pembayaran Terverifikasi!";
+                            finMsg.style.background = "#d4edda";
+                            finMsg.style.color = "#155724";
+                            finMsg.style.animation = "none";
+                            finMsg.style.boxShadow = "none";
+                            finMsg.style.border = "1px solid #c3e6cb";
+                        }
+                    }
+                }
+            } catch (e) {}
+        }, 4000);
+    }
 </script>
 
 </body>
