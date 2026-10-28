@@ -1,817 +1,1096 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="id" class="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HADO TECHNO SPORT INDONESIA - Official Website</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        hadoBlue: '#0284c7',
-                        hadoDark: '#0f172a',
-                        hadoLight: '#f8fafc',
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    }
-                }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>INA Cinta - Konsultan, Pemetaan & Mediasi Hubungan</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            aura: {
+              dark: '#0B0612',
+              card: 'rgba(23, 15, 38, 0.65)',
+              border: 'rgba(244, 114, 182, 0.25)',
+              primary: '#EC4899',
+              secondary: '#A855F7',
+              accent: '#E11D48',
+              glow: '#F43F5E',
+              rose: '#FB7185'
             }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif']
+          },
+          animation: {
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'glow-bounce': 'bounce 3s infinite',
+            'float': 'float 6s ease-in-out infinite'
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' }
+            }
+          }
         }
-    </script>
-    <!-- FontAwesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #ffffff; color: #0f172a; }
-        .hero-glow-light {
-            background: radial-gradient(circle at 50% 20%, rgba(2, 132, 199, 0.08) 0%, rgba(248, 250, 252, 0.9) 50%, #ffffff 85%);
-        }
-        .light-card {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
-        }
-        .light-card-accent {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-left: 4px solid #0284c7;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.03);
-        }
-    </style>
+      }
+    }
+  </script>
+  
+  <!-- Google Fonts & FontAwesome / Lucide Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+
+  <!-- Chart.js for Pattern Mapping -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0B0612;
+      color: #F3F4F6;
+      overflow-x: hidden;
+    }
+
+    /* Custom Glassmorphism Styling */
+    .glass-panel {
+      background: rgba(23, 15, 38, 0.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(244, 114, 182, 0.2);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    .glass-card {
+      background: rgba(30, 20, 50, 0.45);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(236, 72, 153, 0.18);
+      transition: all 0.3s ease;
+    }
+
+    .glass-card:hover {
+      border-color: rgba(244, 114, 182, 0.5);
+      box-shadow: 0 0 20px rgba(236, 72, 153, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .neon-text-glow {
+      text-shadow: 0 0 12px rgba(244, 63, 94, 0.6), 0 0 25px rgba(168, 85, 247, 0.4);
+    }
+
+    .neon-btn {
+      background: linear-gradient(135deg, #E11D48 0%, #EC4899 50%, #A855F7 100%);
+      box-shadow: 0 0 15px rgba(225, 29, 72, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .neon-btn:hover {
+      box-shadow: 0 0 25px rgba(236, 72, 153, 0.7);
+      transform: scale(1.02);
+    }
+
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0B0612;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #3B1D54;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #EC4899;
+    }
+
+    /* Ambient Canvas background */
+    #auraCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+  </style>
 </head>
-<body class="antialiased selection:bg-hadoBlue selection:text-white">
+<body class="relative min-h-screen flex flex-col justify-between selection:bg-pink-500 selection:text-white">
 
-    <!-- Navigation Header -->
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 transition-all duration-300" id="navbar">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <a href="#home" class="flex items-center space-x-2 font-black text-xl tracking-wider text-slate-900">
-                    <span class="text-hadoBlue">HADO</span> <span>INDONESIA</span>
-                </a>
-            </div>
-            
-            <!-- Desktop Nav Links -->
-            <div class="hidden md:flex items-center space-x-7 text-sm font-medium text-slate-600">
-                <a href="#home" data-i18n="nav-home" class="hover:text-hadoBlue transition">Beranda</a>
-                <a href="#about" data-i18n="nav-about" class="hover:text-hadoBlue transition">Apa itu HADO?</a>
-                <a href="#mechanics" data-i18n="nav-mechanics" class="hover:text-hadoBlue transition">Skill & Aturan</a>
-                <a href="#business" data-i18n="nav-business" class="hover:text-hadoBlue transition">Peluang Bisnis</a>
-                <a href="#events" data-i18n="nav-events" class="hover:text-hadoBlue transition">Agenda & Event</a>
-                <a href="#careers" data-i18n="nav-careers" class="hover:text-hadoBlue transition">Karier</a>
-                <a href="#contact" data-i18n="nav-contact" class="hover:text-hadoBlue transition">Kontak</a>
-            </div>
+  <!-- Interactive Aura Background Canvas -->
+  <canvas id="auraCanvas"></canvas>
 
-            <!-- Language Switcher & Action Button -->
-            <div class="hidden md:flex items-center space-x-4">
-                <div class="flex items-center bg-slate-100 p-1 rounded-full border border-slate-200">
-                    <button onclick="switchLanguage('id')" id="btn-lang-id" class="px-3 py-1 rounded-full text-xs font-bold transition bg-hadoBlue text-white">ID</button>
-                    <button onclick="switchLanguage('en')" id="btn-lang-en" class="px-3 py-1 rounded-full text-xs font-bold transition text-slate-600 hover:text-slate-900">EN</button>
-                </div>
-                <a href="#contact" data-i18n="btn-join" class="px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-hadoBlue text-white hover:bg-sky-700 shadow-lg shadow-sky-500/20 transition transform hover:-translate-y-0.5">
-                    Gabung Arena
-                </a>
-            </div>
-
-            <!-- Mobile Menu Button -->
-            <button id="mobile-menu-btn" class="md:hidden text-slate-700 hover:text-black focus:outline-none p-2">
-                <i class="fa-solid fa-bars text-xl"></i>
-            </button>
+  <!-- HEADER & NAVIGATION -->
+  <header class="sticky top-0 z-40 w-full glass-panel border-b border-pink-500/20 px-4 lg:px-8 py-3">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <!-- Logo -->
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-pink-600 via-rose-500 to-purple-600 flex items-center justify-center shadow-lg shadow-pink-500/30 group-hover:scale-105 transition-transform">
+          <i class="fa-solid font-heart text-white text-lg animate-pulse"></i>
         </div>
-
-        <!-- Mobile Menu Dropdown -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-200 px-4 pt-4 pb-6 space-y-3 shadow-xl max-h-[80vh] overflow-y-auto">
-            <a href="#home" data-i18n="nav-home" class="block py-2 text-slate-700 hover:text-hadoBlue font-medium">Beranda</a>
-            <a href="#about" data-i18n="nav-about" class="block py-2 text-slate-700 hover:text-hadoBlue font-medium">Apa itu HADO?</a>
-            <a href="#mechanics" data-i18n="nav-mechanics" class="block py-2 text-slate-700 hover:text-hadoBlue font-medium">Skill & Aturan</a>
-            <a href="#business" data-i18n="nav-business" class="block py-2 text-slate-700 hover:text-hadoBlue font-medium">Peluang Bisnis</a>
-            <a href="#events" data-i18n="nav-events" class="block py-2 text-slate-700 hover:text-hadoBlue font-medium">Agenda & Event</a>
-            <a href="#careers" data-i18n="nav-careers" class="block py-2 text-slate-700 hover:text-hadoBlue font-medium">Karier</a>
-            <a href="#contact" data-i18n="nav-contact" class="block py-2 text-slate-700 hover:text-hadoBlue font-medium">Kontak</a>
-            <div class="flex items-center space-x-2 pt-2 border-t border-slate-200">
-                <span class="text-xs text-slate-500 font-semibold uppercase">Bahasa:</span>
-                <button onclick="switchLanguage('id')" class="px-3 py-1 rounded text-xs bg-hadoBlue text-white font-bold">ID</button>
-                <button onclick="switchLanguage('en')" class="px-3 py-1 rounded text-xs bg-slate-200 text-slate-800 font-bold">EN</button>
-            </div>
+        <div>
+          <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-rose-300 via-pink-400 to-purple-300 neon-text-glow">INA Cinta</span>
+          <span class="block text-[10px] tracking-wider text-pink-300/70 font-medium uppercase">Konsultan & Diagnostic Hubungan</span>
         </div>
-    </nav>
+      </a>
 
-    <!-- Hero Section -->
-    <section id="home" class="relative min-h-screen flex items-center justify-center pt-28 pb-20 hero-glow-light overflow-hidden">
-        <div class="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-30"></div>
-        
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full text-center">
-            <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-sky-50 border border-sky-200 text-sky-700 text-xs font-semibold uppercase tracking-widest mb-6 shadow-sm">
-                <i class="fa-solid fa-bolt text-hadoBlue"></i>
-                <span data-i18n="hero-badge">Abu Dhabi Games of The Future Awards 2025 - HADO Indonesia</span>
-            </div>
-            
-            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 max-w-5xl mx-auto leading-tight">
-                <span data-i18n="hero-title-1">Masa Depan Olahraga & Gaming</span> <span class="text-transparent bg-clip-text bg-gradient-to-r from-hadoBlue to-indigo-600" data-i18n="hero-title-2">The New E-Sport</span>
-            </h1>
-            
-            <p class="mt-6 text-lg sm:text-xl text-slate-600 max-w-3xl mx-auto font-normal leading-relaxed" data-i18n="hero-desc">
-                Gabungan sempurna antara olahraga fisik, strategi mendalam, dan teknologi Augmented Reality (AR) di mana pemain bergerak bebas menembakkan bola energi virtual[cite: 1].
-            </p>
-            
-            <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="#about" class="w-full sm:w-auto px-8 py-4 rounded-xl font-bold bg-hadoBlue text-white hover:bg-sky-700 shadow-lg shadow-sky-500/20 transition transform hover:-translate-y-0.5 flex items-center justify-center space-x-2">
-                    <span data-i18n="btn-explore">Eksplorasi HADO</span>
-                    <i class="fa-solid fa-arrow-right"></i>
-                </a>
-                <a href="#mechanics" class="w-full sm:w-auto px-8 py-4 rounded-xl font-bold bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 transition flex items-center justify-center space-x-2 shadow-sm">
-                    <span data-i18n="btn-rules">Aturan & Skill Set</span>
-                    <i class="fa-solid fa-gamepad text-hadoBlue"></i>
-                </a>
-            </div>
+      <!-- Desktop Nav Tabs -->
+      <nav class="hidden md:flex items-center gap-1 lg:gap-2 text-sm font-medium">
+        <button onclick="switchTab('mendengarkan')" id="nav-mendengarkan" class="nav-btn px-4 py-2 rounded-xl transition flex items-center gap-2 text-pink-300 bg-pink-500/10 border border-pink-500/30">
+          <i class="fa-solid fa-ear-listen text-xs"></i> 1. Mendengarkan
+        </button>
+        <button onclick="switchTab('memetakan')" id="nav-memetakan" class="nav-btn px-4 py-2 rounded-xl transition flex items-center gap-2 text-gray-300 hover:text-pink-300 hover:bg-pink-500/10">
+          <i class="fa-solid fa-diagram-project text-xs"></i> 2. Memetakan Pola
+        </button>
+        <button onclick="switchTab('solusi')" id="nav-solusi" class="nav-btn px-4 py-2 rounded-xl transition flex items-center gap-2 text-gray-300 hover:text-pink-300 hover:bg-pink-500/10">
+          <i class="fa-solid fa-lightbulb text-xs"></i> 3. Langkah Solusi
+        </button>
+        <button onclick="switchTab('mediasi')" id="nav-mediasi" class="nav-btn px-4 py-2 rounded-xl transition flex items-center gap-2 text-gray-300 hover:text-pink-300 hover:bg-pink-500/10">
+          <i class="fa-solid fa-handshake-simple text-xs"></i> 4. Mediasi
+        </button>
+        <button onclick="switchTab('keberlanjutan')" id="nav-keberlanjutan" class="nav-btn px-4 py-2 rounded-xl transition flex items-center gap-2 text-gray-300 hover:text-pink-300 hover:bg-pink-500/10">
+          <i class="fa-solid fa-seedling text-xs"></i> 5. Keberlanjutan
+        </button>
+      </nav>
 
-            <!-- Stats Bar -->
-            <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
-                <div class="light-card-accent p-5 rounded-2xl text-center">
-                    <div class="text-2xl md:text-3xl font-black text-hadoBlue">40+</div>
-                    <div class="text-[11px] uppercase tracking-wider text-slate-500 mt-1 font-semibold" data-i18n="stat-1">Negara Global & 2000+ Sekolah</div>
-                </div>
-                <div class="light-card-accent p-5 rounded-2xl text-center" style="border-left-color: #38bdf8;">
-                    <div class="text-2xl md:text-3xl font-black text-slate-800">3 vs 3</div>
-                    <div class="text-[11px] uppercase tracking-wider text-slate-500 mt-1 font-semibold" data-i18n="stat-2">Format Maksimal Tim</div>
-                </div>
-                <div class="light-card-accent p-5 rounded-2xl text-center" style="border-left-color: #10b981;">
-                    <div class="text-2xl md:text-3xl font-black text-emerald-600" data-i18n="stat-time-val">80 Detik</div>
-                    <div class="text-[11px] uppercase tracking-wider text-slate-500 mt-1 font-semibold" data-i18n="stat-3">Durasi per Ronde</div>
-                </div>
-                <div class="light-card-accent p-5 rounded-2xl text-center" style="border-left-color: #8b5cf6;">
-                    <div class="text-2xl md:text-3xl font-black text-purple-600">10 x 6 m</div>
-                    <div class="text-[11px] uppercase tracking-wider text-slate-500 mt-1 font-semibold" data-i18n="stat-4">Standar Ukuran Court</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section: Apa itu HADO? -->
-    <section id="about" class="py-24 bg-slate-50 border-y border-slate-200 relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <span class="text-hadoBlue text-xs font-semibold uppercase tracking-widest bg-sky-100 px-3 py-1 rounded-full border border-sky-200" data-i18n="about-tag">Move, Think, React, Compete</span>
-                <h2 class="mt-4 text-3xl sm:text-4xl font-bold text-slate-900" data-i18n="about-heading">Apa itu HADO?</h2>
-                <p class="mt-4 text-slate-600 text-base sm:text-lg leading-relaxed font-normal" data-i18n="about-desc">
-                    HADO adalah olahraga augmented reality (AR) fisik masa depan yang menuntut perpaduan aktivitas fisik penuh, ketajaman strategi berpikir, reaksi instan secara real-time, serta kompetisi tim yang imersif.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-                <div class="light-card-accent p-8 rounded-3xl relative overflow-hidden group transition hover:translate-y-[-2px]">
-                    <div class="w-14 h-14 rounded-2xl bg-sky-100 border border-sky-200 flex items-center justify-center text-hadoBlue text-2xl mb-6">
-                        <i class="fa-solid fa-person-running"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3" data-i18n="pillar-1-title">MOVE (Aktivitas Fisik)</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed" data-i18n="pillar-1-desc">
-                        Pemain bergerak aktif, berlari, menghindar (*dodging*), dan bermanuver taktis di dalam arena nyata tanpa kabel pembatas.
-                    </p>
-                </div>
-
-                <div class="light-card-accent p-8 rounded-3xl relative overflow-hidden group transition hover:translate-y-[-2px]" style="border-left-color: #38bdf8;">
-                    <div class="w-14 h-14 rounded-2xl bg-sky-100 border border-sky-200 flex items-center justify-center text-sky-600 text-2xl mb-6">
-                        <i class="fa-solid fa-brain"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3" data-i18n="pillar-2-title">THINK (Strategi & Keputusan)</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed" data-i18n="pillar-2-desc">
-                        Mengatur alokasi skill set, membaca pergerakan lawan (*trajectory*), serta merancang taktik menyerang dan bertahan bersama tim.
-                    </p>
-                </div>
-
-                <div class="light-card-accent p-8 rounded-3xl relative overflow-hidden group transition hover:translate-y-[-2px]" style="border-left-color: #10b981;">
-                    <div class="w-14 h-14 rounded-2xl bg-emerald-100 border border-emerald-200 flex items-center justify-center text-emerald-600 text-2xl mb-6">
-                        <i class="fa-solid fa-bolt-lightning"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3" data-i18n="pillar-3-title">REACT & COMPETE</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed" data-i18n="pillar-3-desc">
-                        Aksi instan real-time dalam durasi 80 detik per ronde untuk menghancurkan target/lifepod lawan dan meraih kemenangan.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Sportainment Context -->
-            <div class="light-card p-8 md:p-12 rounded-3xl bg-gradient-to-r from-sky-50 via-white to-sky-50 border border-sky-100">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                    <div>
-                        <span class="text-xs font-bold uppercase tracking-widest text-hadoBlue bg-sky-100 px-3 py-1 rounded-full">New Era of Sportainment</span>
-                        <h3 class="text-2xl font-bold text-slate-900 mt-3 mb-4" data-i18n="sportainment-title">Persimpangan Olahraga, Gaming, dan Entertainment</h3>
-                        <p class="text-slate-600 text-sm leading-relaxed mb-4" data-i18n="sportainment-desc">
-                            Indonesia sedang memasuki era baru sportainment. HADO berdiri di antara tiga pilar utama: Olahraga kompetitif layaknya cabang konvensional, keseruan interaktif video game, serta hiburan spektakuler penonton.
-                        </p>
-                        <div class="flex items-center space-x-6 text-xs font-semibold text-slate-700">
-                            <div class="flex items-center space-x-2"><i class="fa-solid fa-check text-hadoBlue"></i> <span data-i18n="sp-check-1">Didukung Koni/Kormi</span></div>
-                            <div class="flex items-center space-x-2"><i class="fa-solid fa-check text-hadoBlue"></i> <span data-i18n="sp-check-2">Kurikulum Sekolah & Kampus</span></div>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-center">
-                            <div class="text-3xl font-black text-hadoBlue">2000+</div>
-                            <div class="text-xs text-slate-500 mt-1 font-semibold" data-i18n="box-school">Sekolah & Universitas Global</div>
-                        </div>
-                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-center">
-                            <div class="text-3xl font-black text-purple-600">World Cup</div>
-                            <div class="text-xs text-slate-500 mt-1 font-semibold" data-i18n="box-cup">Turnamen Internasional Tahunan</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Mechanics Section: Customize Skill Set & Aturan Main -->
-    <section id="mechanics" class="py-24 bg-white relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <span class="text-hadoBlue text-xs font-semibold uppercase tracking-widest bg-sky-100 px-3 py-1 rounded-full border border-sky-200" data-i18n="mech-tag">Mekanisme Permainan</span>
-                <h2 class="mt-4 text-3xl sm:text-4xl font-bold text-slate-900" data-i18n="mech-heading">Kustomisasi Skill & Aturan Main</h2>
-                <p class="mt-4 text-slate-600 text-base" data-i18n="mech-desc">
-                    Setiap pemain dapat mengatur strategi melalui arm sensor sebelum pertandingan dimulai dengan mengalokasikan 6 poin tambahan (total hingga 10 poin) pada 4 parameter skill utama.
-                </p>
-            </div>
-
-            <!-- 4 Skill Parameters Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-                <div class="light-card p-6 rounded-2xl border-t-4 border-t-hadoBlue">
-                    <div class="w-12 h-12 rounded-xl bg-sky-100 text-hadoBlue flex items-center justify-center font-bold text-lg mb-4">01</div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-2" data-i18n="skill-1-name">SPEED (Kecepatan Bola)</h3>
-                    <p class="text-slate-600 text-xs leading-relaxed" data-i18n="skill-1-desc">
-                        Meningkatkan kecepatan bola energi. Bola yang lebih cepat lebih akurat dan sangat sulit dihindari lawan.
-                    </p>
-                </div>
-
-                <div class="light-card p-6 rounded-2xl border-t-4 border-t-sky-400">
-                    <div class="w-12 h-12 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center font-bold text-lg mb-4">02</div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-2" data-i18n="skill-2-name">SCALE (Ukuran Bola)</h3>
-                    <p class="text-slate-600 text-xs leading-relaxed" data-i18n="skill-2-desc">
-                        Memperbesar ukuran bola energi. Bola yang lebih besar mempermudah mengenai beberapa lifepod lawan sekaligus.
-                    </p>
-                </div>
-
-                <div class="light-card p-6 rounded-2xl border-t-4 border-t-emerald-500">
-                    <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-lg mb-4">03</div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-2" data-i18n="skill-3-name">CHARGE (Kecepatan Isi)</h3>
-                    <p class="text-slate-600 text-xs leading-relaxed" data-i18n="skill-3-desc">
-                        Mempercepat waktu pengisian energi. Pengisian lebih cepat memungkinkan pemain menembakkan bola energi lebih sering.
-                    </p>
-                </div>
-
-                <div class="light-card p-6 rounded-2xl border-t-4 border-t-purple-500">
-                    <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-lg mb-4">04</div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-2" data-i18n="skill-4-name">SHIELD (Perisai Pertahanan)</h3>
-                    <p class="text-slate-600 text-xs leading-relaxed" data-i18n="skill-4-desc">
-                        Menentukan jumlah stok perisai pertahanan untuk melindungi diri dari terjangan bola energi lawan.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Court & Rules Details -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="light-card-accent p-8 rounded-3xl">
-                    <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center space-x-3">
-                        <i class="fa-solid fa-expand text-hadoBlue"></i>
-                        <span data-i18n="court-spec-title">Spesifikasi Court & Arena</span>
-                    </h3>
-                    <ul class="space-y-3 text-sm text-slate-600">
-                        <li class="flex items-start space-x-3">
-                            <i class="fa-solid fa-circle-check text-hadoBlue mt-1"></i>
-                            <span data-i18n="court-p1"><strong>Ukuran Standar:</strong> 10m x 6m untuk tim maksimal 3 vs 3.</span>
-                        </li>
-                        <li class="flex items-start space-x-3">
-                            <i class="fa-solid fa-circle-check text-hadoBlue mt-1"></i>
-                            <span data-i18n="court-p2"><strong>Half-Court:</strong> Tersedia ukuran 5m x 6m khusus untuk latihan atau mode vs CPU.</span>
-                        </li>
-                        <li class="flex items-start space-x-3">
-                            <i class="fa-solid fa-circle-check text-hadoBlue mt-1"></i>
-                            <span data-i18n="court-p3"><strong>Perbandingan Padel:</strong> Lebih kompak dibanding lapangan Padel (10m x 20m) namun menghasilkan kapasitas penonton yang lebih masif.</span>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="light-card-accent p-8 rounded-3xl" style="border-left-color: #10b981;">
-                    <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center space-x-3">
-                        <i class="fa-solid fa-stopwatch text-emerald-600"></i>
-                        <span data-i18n="match-rules-title">Sistem Penilaian & Ronde</span>
-                    </h3>
-                    <ul class="space-y-3 text-sm text-slate-600">
-                        <li class="flex items-start space-x-3">
-                            <i class="fa-solid fa-circle-check text-emerald-600 mt-1"></i>
-                            <span data-i18n="rule-p1"><strong>Durasi:</strong> 80 detik per ronde. Tim harus memaksimalkan waktu untuk meraih poin tertinggi.</span>
-                        </li>
-                        <li class="flex items-start space-x-3">
-                            <i class="fa-solid fa-circle-check text-emerald-600 mt-1"></i>
-                            <span data-i18n="rule-p2"><strong>Life Cells:</strong> Setiap pemain memiliki 4 life cells. Tim mencetak poin dengan menghancurkan seluruh lifepod lawan.</span>
-                        </li>
-                        <li class="flex items-start space-x-3">
-                            <i class="fa-solid fa-circle-check text-emerald-600 mt-1"></i>
-                            <span data-i18n="rule-p3"><strong>Jenjang Level:</strong> Program pelatihan terstruktur dari Level 1 (Kids) hingga Level 6 (Adults Pro) dengan sistem ranking & HADO Credit.</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Business Opportunity Section -->
-    <section id="business" class="py-24 bg-slate-50 border-y border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <span class="text-hadoBlue text-xs font-semibold uppercase tracking-widest bg-sky-100 px-3 py-1 rounded-full border border-sky-200" data-i18n="biz-tag">Investasi & Kemitraan</span>
-                <h2 class="mt-4 text-3xl sm:text-4xl font-bold text-slate-900" data-i18n="biz-heading">Peluang Bisnis & Kolaborasi Esports</h2>
-                <p class="mt-4 text-slate-600 text-base" data-i18n="biz-desc">
-                    HADO Indonesia berkolaborasi dengan nama-nama besar di industri esports tanah air seperti EVOS, Team Liquid ID, RRQ Hoshi, dan Bigetron Alpha untuk membangun ekosistem sportainment masa depan.
-                </p>
-            </div>
-
-            <!-- Esports Partners Badge Bar -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-16 max-w-4xl mx-auto">
-                <div class="light-card p-4 rounded-2xl text-center font-black text-slate-800 text-lg flex items-center justify-center">EVOS ESPORTS</div>
-                <div class="light-card p-4 rounded-2xl text-center font-black text-blue-600 text-lg flex items-center justify-center">TEAM LIQUID ID</div>
-                <div class="light-card p-4 rounded-2xl text-center font-black text-orange-600 text-lg flex items-center justify-center">RRQ HOSHI</div>
-                <div class="light-card p-4 rounded-2xl text-center font-black text-red-600 text-lg flex items-center justify-center">BIGETRON ALPHA</div>
-            </div>
-
-            <!-- Ecosystem Investment Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-                <div class="light-card p-8 rounded-3xl">
-                    <div class="w-12 h-12 rounded-xl bg-sky-100 text-hadoBlue flex items-center justify-center text-xl mb-6"><i class="fa-solid fa-store"></i></div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-3" data-i18n="eco-1-title">HADO Arena & Entertainment</h3>
-                    <p class="text-slate-600 text-xs leading-relaxed" data-i18n="eco-1-desc">
-                        Investasi dalam ekosistem hiburan dengan model pendapatan fleksibel: sistem per game/sesi, membership berulang, registrasi turnamen, merchandise resmi, hingga event korporat.
-                    </p>
-                </div>
-
-                <div class="light-card p-8 rounded-3xl">
-                    <div class="w-12 h-12 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center text-xl mb-6"><i class="fa-solid fa-graduation-cap"></i></div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-3" data-i18n="eco-2-title">Sekolah & Kampus (Academics)</h3>
-                    <p class="text-slate-600 text-xs leading-relaxed" data-i18n="eco-2-desc">
-                        Program olahraga generasi baru yang telah diterapkan di 2000+ sekolah global sebagai sarana pendidikan, kompetisi antar pelajar, inovasi, dan riset kebugaran.
-                    </p>
-                </div>
-
-                <div class="light-card p-8 rounded-3xl">
-                    <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center text-xl mb-6"><i class="fa-solid fa-handshake"></i></div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-3" data-i18n="eco-3-title">Opsi Kemitraan B2B</h3>
-                    <p class="text-slate-600 text-xs leading-relaxed" data-i18n="eco-3-desc">
-                        Peluang fleksibel bagi mitra melalui skema <strong>Strategic Partner</strong>, <strong>Facility Partner</strong>, maupun <strong>Joint Venture</strong> untuk pengembangan regional.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Events Section: HADO World Cup 2026 & WUGAMES UI 2026 -->
-    <section id="events" class="py-24 bg-white relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <span class="text-hadoBlue text-xs font-semibold uppercase tracking-widest bg-sky-100 px-3 py-1 rounded-full border border-sky-200" data-i18n="evt-tag">Agenda Internasional & Nasional</span>
-                <h2 class="mt-4 text-3xl sm:text-4xl font-bold text-slate-900" data-i18n="evt-heading">Upcoming Events 2026</h2>
-                <p class="mt-4 text-slate-600 text-base" data-i18n="evt-desc">
-                    Saksikan dan ikuti kejuaraan bergengsi tingkat global hingga nasional sepanjang tahun 2026.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                <!-- HADO World Cup 2026 -->
-                <div class="light-card-accent p-8 rounded-3xl relative overflow-hidden flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-sky-100 text-hadoBlue border border-sky-200">Global Championship</span>
-                            <span class="text-xs text-slate-500"><i class="fa-solid fa-calendar mr-1"></i> 20 - 22 Nov 2026</span>
-                        </div>
-                        <h3 class="text-2xl font-bold text-slate-900 mb-2">HADO World Cup 2026</h3>
-                        <p class="text-slate-600 text-sm mb-4"><i class="fa-solid fa-location-dot text-hadoBlue mr-1"></i> Shanghai, Cina</p>
-                        <p class="text-slate-600 text-xs leading-relaxed mb-6" data-i18n="wc-desc">
-                            Kompetisi puncak global mempertemukan tim-tim terbaik dunia dalam kategori HADO 3 vs 3 Global, HADO U16 International Campus Championship, serta 1 vs 1 Showdown.
-                        </p>
-                    </div>
-                    <a href="#contact" class="inline-flex items-center justify-center w-full py-3 rounded-xl text-xs font-semibold uppercase tracking-wider bg-hadoBlue text-white hover:bg-sky-700 transition">
-                        Daftar / Informasi Tim
-                    </a>
-                </div>
-
-                <!-- WUGAMES UI 2026 -->
-                <div class="light-card-accent p-8 rounded-3xl relative overflow-hidden flex flex-col justify-between" style="border-left-color: #10b981;">
-                    <div>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-emerald-100 text-emerald-700 border border-emerald-200">National Exhibition</span>
-                            <span class="text-xs text-slate-500"><i class="fa-solid fa-calendar mr-1"></i> 21 - 25 Des 2026</span>
-                        </div>
-                        <h3 class="text-2xl font-bold text-slate-900 mb-2">WUGAMES UI 2026 x HADO</h3>
-                        <p class="text-slate-600 text-sm mb-4"><i class="fa-solid fa-location-dot text-emerald-600 mr-1"></i> Balairung Universitas Indonesia, Depok, Jawa Barat</p>
-                        <p class="text-slate-600 text-xs leading-relaxed mb-6" data-i18n="wu-desc">
-                            Nomor tanding eksebisi tambahan hasil kolaborasi khusus antara UKM Wushu Universitas Indonesia dengan HADO Indonesia menghadirkan pengalaman sportainment paling seru di kampus.
-                        </p>
-                    </div>
-                    <a href="#contact" class="inline-flex items-center justify-center w-full py-3 rounded-xl text-xs font-semibold uppercase tracking-wider bg-emerald-600 text-white hover:bg-emerald-700 transition">
-                        Kunjungi Booth Eksebisi
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Careers Section -->
-    <section id="careers" class="py-24 relative bg-slate-50 border-t border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <span class="text-hadoBlue text-xs font-semibold uppercase tracking-widest bg-sky-100 px-3 py-1 rounded-full border border-sky-200" data-i18n="careers-tag">Bergabung Bersama Kami</span>
-                <h2 class="mt-4 text-3xl sm:text-4xl font-bold text-slate-900" data-i18n="careers-heading">Karier & Peluang</h2>
-                <p class="mt-4 text-slate-600" data-i18n="careers-desc">Jadilah bagian dari tim visioner kami yang membentuk masa depan techno sports di Indonesia dan global.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-                <div class="light-card p-6 rounded-2xl border-t-4 border-t-hadoBlue flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-sky-100 text-hadoBlue border border-sky-200">Techno Sports</span>
-                            <span class="text-xs text-slate-500"><i class="fa-solid fa-location-dot mr-1"></i> Remote / Global</span>
-                        </div>
-                        <h3 class="text-lg font-bold text-slate-900 mb-2">AR Game Developer</h3>
-                        <p class="text-slate-600 text-xs leading-relaxed mb-6">Mengembangkan pengalaman augmented reality multipemain real-time yang imersif untuk arena HADO.</p>
-                    </div>
-                    <button onclick="openApplicationModal('AR Game Developer')" class="w-full py-2.5 rounded-xl text-xs font-semibold uppercase tracking-wider bg-slate-100 border border-slate-300 text-slate-700 hover:bg-hadoBlue hover:text-white transition">
-                        Lamar Sekarang
-                    </button>
-                </div>
-
-                <div class="light-card p-6 rounded-2xl border-t-4 border-t-sky-400 flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-sky-100 text-sky-700 border border-sky-200">Operasional</span>
-                            <span class="text-xs text-slate-500"><i class="fa-solid fa-location-dot mr-1"></i> Jakarta, Indonesia</span>
-                        </div>
-                        <h3 class="text-lg font-bold text-slate-900 mb-2">HADO Arena Manager</h3>
-                        <p class="text-slate-600 text-xs leading-relaxed mb-6">Mengelola operasional harian, turnamen, dan komunitas untuk arena resmi techno sports HADO.</p>
-                    </div>
-                    <button onclick="openApplicationModal('HADO Arena Manager')" class="w-full py-2.5 rounded-xl text-xs font-semibold uppercase tracking-wider bg-slate-100 border border-slate-300 text-slate-700 hover:bg-hadoBlue hover:text-white transition">
-                        Lamar Sekarang
-                    </button>
-                </div>
-
-                <div class="light-card p-6 rounded-2xl border-t-4 border-t-purple-500 flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-purple-100 text-purple-700 border border-purple-200">Teknik</span>
-                            <span class="text-xs text-slate-500"><i class="fa-solid fa-location-dot mr-1"></i> Depok / Jakarta</span>
-                        </div>
-                        <h3 class="text-lg font-bold text-slate-900 mb-2">AR Hardware & Sensor Specialist</h3>
-                        <p class="text-slate-600 text-xs leading-relaxed mb-6">Memelihara, mengkalibrasi, dan memperbaiki kacamata AR serta sistem arm sensor.</p>
-                    </div>
-                    <button onclick="openApplicationModal('AR Hardware & Sensor Specialist')" class="w-full py-2.5 rounded-xl text-xs font-semibold uppercase tracking-wider bg-slate-100 border border-slate-300 text-slate-700 hover:bg-hadoBlue hover:text-white transition">
-                        Lamar Sekarang
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="py-24 bg-white border-t border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <div>
-                    <span class="text-hadoBlue text-xs font-semibold uppercase tracking-widest bg-sky-100 px-3 py-1 rounded-full border border-sky-200" data-i18n="contact-tag">Hubungi Kami</span>
-                    <h2 class="mt-4 text-3xl sm:text-4xl font-bold text-slate-900" data-i18n="contact-heading">Mari Bawa HADO ke Wilayah Anda</h2>
-                    <p class="mt-4 text-slate-600 text-sm leading-relaxed" data-i18n="contact-desc">
-                        Tertarik dengan peluang waralaba, instalasi arena, kemitraan B2B, atau keikutsertaan turnamen WUGAMES UI 2026? Hubungi tim kami hari ini.
-                    </p>
-
-                    <div class="mt-8 space-y-4">
-                        <div class="flex items-start space-x-4">
-                            <div class="w-10 h-10 rounded-xl bg-sky-100 text-hadoBlue flex items-center justify-center shrink-0 border border-sky-200"><i class="fa-solid fa-location-dot"></i></div>
-                            <div>
-                                <h4 class="text-slate-900 font-semibold text-sm">Kantor & Lokasi Utama</h4>
-                                <p class="text-slate-600 text-xs mt-0.5">Jakarta & Universitas Indonesia, Depok</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start space-x-4">
-                            <div class="w-10 h-10 rounded-xl bg-sky-100 text-hadoBlue flex items-center justify-center shrink-0 border border-sky-200"><i class="fa-solid fa-envelope"></i></div>
-                            <div>
-                                <h4 class="text-slate-900 font-semibold text-sm">Pertanyaan Email</h4>
-                                <p class="text-slate-600 text-xs mt-0.5">info@hadotechnosport.id</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start space-x-4">
-                            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-200"><i class="fa-solid fa-phone"></i></div>
-                            <div>
-                                <h4 class="text-slate-900 font-semibold text-sm">Dukungan Telepon</h4>
-                                <p class="text-slate-600 text-xs mt-0.5">+62 21 555-HADO</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Contact Form -->
-                <div class="light-card p-8 rounded-3xl">
-                    <form id="contact-form" onsubmit="handleContactSubmit(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-xs uppercase tracking-wider text-slate-700 mb-1 font-semibold">Nama Anda</label>
-                            <input type="text" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-slate-900 text-sm focus:outline-none focus:border-hadoBlue transition" placeholder="John Doe">
-                        </div>
-                        <div>
-                            <label class="block text-xs uppercase tracking-wider text-slate-700 mb-1 font-semibold">Alamat Email</label>
-                            <input type="email" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-slate-900 text-sm focus:outline-none focus:border-hadoBlue transition" placeholder="john@example.com">
-                        </div>
-                        <div>
-                            <label class="block text-xs uppercase tracking-wider text-slate-700 mb-1 font-semibold">Jenis Kemitraan / Pertanyaan</label>
-                            <select class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-slate-900 text-sm focus:outline-none focus:border-hadoBlue transition">
-                                <option>Waralaba & Instalasi Arena HADO</option>
-                                <option>Kemitraan B2B (Strategic / Facility / Joint Venture)</option>
-                                <option>Pendaftaran Turnamen (WUGAMES UI & World Cup)</option>
-                                <option>Program Sekolah & Kampus (Academics)</option>
-                                <option>Lainnya</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs uppercase tracking-wider text-slate-700 mb-1 font-semibold">Pesan</label>
-                            <textarea rows="4" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-slate-900 text-sm focus:outline-none focus:border-hadoBlue transition" placeholder="Ceritakan kebutuhan atau pertanyaan Anda..."></textarea>
-                        </div>
-                        <button type="submit" class="w-full py-3.5 rounded-xl font-bold uppercase tracking-wider text-xs bg-hadoBlue text-white hover:bg-sky-700 shadow-lg shadow-sky-500/20 transition">
-                            Kirim Pesan
-                        </button>
-                    </form>
-                    <div id="contact-success" class="hidden mt-4 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs text-center font-semibold">
-                        Terima kasih! Pesan Anda telah berhasil dikirim. Tim HADO Indonesia akan segera menghubungi Anda.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-slate-900 text-white py-12 border-t border-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div class="flex items-center space-x-2 font-extrabold text-lg">
-                <span class="text-hadoBlue">HADO</span> <span>INDONESIA</span>
-            </div>
-            <p class="text-xs text-slate-400 text-center md:text-left">
-                &copy; 2026 HADO TECHNO SPORT INDONESIA. The Future of Sport and Gaming.
-            </p>
-            <div class="flex items-center space-x-4 text-slate-400">
-                <a href="#" class="hover:text-hadoBlue transition"><i class="fa-brands fa-linkedin text-lg"></i></a>
-                <a href="#" class="hover:text-hadoBlue transition"><i class="fa-brands fa-twitter text-lg"></i></a>
-                <a href="#" class="hover:text-hadoBlue transition"><i class="fa-brands fa-youtube text-lg"></i></a>
-                <a href="#" class="hover:text-hadoBlue transition"><i class="fa-brands fa-instagram text-lg"></i></a>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Application Modal -->
-    <div id="app-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
-        <div class="bg-white max-w-lg w-full p-8 rounded-3xl border border-slate-200 relative shadow-2xl">
-            <button onclick="closeApplicationModal()" class="absolute top-6 right-6 text-slate-400 hover:text-black"><i class="fa-solid fa-xmark text-xl"></i></button>
-            <h3 id="modal-title" class="text-xl font-bold text-slate-900 mb-2">Lamar Posisi</h3>
-            <p class="text-slate-600 text-xs mb-6">Silakan isi detail Anda untuk mengirimkan lamaran ke HADO Indonesia.</p>
-            
-            <form onsubmit="handleApplicationSubmit(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs uppercase tracking-wider text-slate-700 mb-1 font-semibold">Nama Lengkap</label>
-                    <input type="text" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-slate-900 text-sm focus:outline-none focus:border-hadoBlue">
-                </div>
-                <div>
-                    <label class="block text-xs uppercase tracking-wider text-slate-700 mb-1 font-semibold">Alamat Email</label>
-                    <input type="email" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-slate-900 text-sm focus:outline-none focus:border-hadoBlue">
-                </div>
-                <div>
-                    <label class="block text-xs uppercase tracking-wider text-slate-700 mb-1 font-semibold">Nomor Telepon</label>
-                    <input type="tel" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-slate-900 text-sm focus:outline-none focus:border-hadoBlue">
-                </div>
-                <div>
-                    <label class="block text-xs uppercase tracking-wider text-slate-700 mb-1 font-semibold">Surat Pengantar / Catatan</label>
-                    <textarea rows="3" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-slate-900 text-sm focus:outline-none focus:border-hadoBlue" placeholder="Ceritakan pengalaman Anda..."></textarea>
-                </div>
-                <button type="submit" class="w-full py-3.5 rounded-xl font-bold uppercase tracking-wider text-xs bg-hadoBlue text-white hover:bg-sky-700 shadow-lg">
-                    Kirim Lamaran
-                </button>
-            </form>
-            <div id="modal-success" class="hidden mt-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs text-center font-semibold">
-                Lamaran berhasil dikirim! Kami akan segera meninjau profil Anda.
-            </div>
-        </div>
+      <!-- Action Button -->
+      <div class="flex items-center gap-3">
+        <button onclick="openBookingModal()" class="neon-btn text-white text-xs md:text-sm font-semibold px-4 py-2.5 rounded-xl flex items-center gap-2">
+          <i class="fa-solid fa-calendar-check"></i>
+          <span>Konsultasi Privat</span>
+        </button>
+      </div>
     </div>
 
-    <script>
-        const translations = {
-            id: {
-                "nav-home": "Beranda",
-                "nav-about": "Apa itu HADO?",
-                "nav-mechanics": "Skill & Aturan",
-                "nav-business": "Peluang Bisnis",
-                "nav-events": "Agenda & Event",
-                "nav-careers": "Karier",
-                "nav-contact": "Kontak",
-                "btn-join": "Gabung Arena",
-                "hero-badge": "Abu Dhabi Games of The Future Awards 2025 - HADO Indonesia",
-                "hero-title-1": "Masa Depan Olahraga & Gaming",
-                "hero-title-2": "The New E-Sport",
-                "hero-desc": "Gabungan sempurna antara olahraga fisik, strategi mendalam, dan teknologi Augmented Reality (AR) di mana pemain bergerak bebas menembakkan bola energi virtual.",
-                "btn-explore": "Eksplorasi HADO",
-                "btn-rules": "Aturan & Skill Set",
-                "stat-1": "Negara Global & 2000+ Sekolah",
-                "stat-2": "Format Maksimal Tim",
-                "stat-time-val": "80 Detik",
-                "stat-3": "Durasi per Ronde",
-                "stat-4": "Standar Ukuran Court",
-                "about-tag": "Move, Think, React, Compete",
-                "about-heading": "Apa itu HADO?",
-                "about-desc": "HADO adalah olahraga augmented reality (AR) fisik masa depan yang menuntut perpaduan aktivitas fisik penuh, ketajaman strategi berpikir, reaksi instan secara real-time, serta kompetisi tim yang imersif.",
-                "pillar-1-title": "MOVE (Aktivitas Fisik)",
-                "pillar-1-desc": "Pemain bergerak aktif, berlari, menghindar (dodging), dan bermanuver taktis di dalam arena nyata tanpa kabel pembatas.",
-                "pillar-2-title": "THINK (Strategi & Keputusan)",
-                "pillar-2-desc": "Mengatur alokasi skill set, membaca pergerakan lawan (trajectory), serta merancang taktik menyerang dan bertahan bersama tim.",
-                "pillar-3-title": "REACT & COMPETE",
-                "pillar-3-desc": "Aksi instan real-time dalam durasi 80 detik per ronde untuk menghancurkan target/lifepod lawan dan meraih kemenangan.",
-                "sportainment-title": "Persimpangan Olahraga, Gaming, dan Entertainment",
-                "sportainment-desc": "Indonesia sedang memasuki era baru sportainment. HADO berdiri di antara tiga pilar utama: Olahraga kompetitif layaknya cabang konvensional, keseruan interaktif video game, serta hiburan spektakuler penonton.",
-                "sp-check-1": "Didukung Koni/Kormi",
-                "sp-check-2": "Kurikulum Sekolah & Kampus",
-                "box-school": "Sekolah & Universitas Global",
-                "box-cup": "Turnamen Internasional Tahunan",
-                "mech-tag": "Mekanisme Permainan",
-                "mech-heading": "Kustomisasi Skill & Aturan Main",
-                "mech-desc": "Setiap pemain dapat mengatur strategi melalui arm sensor sebelum pertandingan dimulai dengan mengalokasikan 6 poin tambahan (total hingga 10 poin) pada 4 parameter skill utama.",
-                "skill-1-name": "SPEED (Kecepatan Bola)",
-                "skill-1-desc": "Meningkatkan kecepatan bola energi. Bola yang lebih cepat lebih akurat dan sangat sulit dihindari lawan.",
-                "skill-2-name": "SCALE (Ukuran Bola)",
-                "skill-2-desc": "Memperbesar ukuran bola energi. Bola yang lebih besar mempermudah mengenai beberapa lifepod lawan sekaligus.",
-                "skill-3-name": "CHARGE (Kecepatan Isi)",
-                "skill-3-desc": "Mempercepat waktu pengisian energi. Pengisian lebih cepat memungkinkan pemain menembakkan bola energi lebih sering.",
-                "skill-4-name": "SHIELD (Perisai Pertahanan)",
-                "skill-4-desc": "Menentukan jumlah stok perisai pertahanan untuk melindungi diri dari terjangan bola energi lawan.",
-                "court-spec-title": "Spesifikasi Court & Arena",
-                "court-p1": "Ukuran Standar: 10m x 6m untuk tim maksimal 3 vs 3.",
-                "court-p2": "Half-Court: Tersedia ukuran 5m x 6m khusus untuk latihan atau mode vs CPU.",
-                "court-p3": "Perbandingan Padel: Lebih kompak dibanding lapangan Padel (10m x 20m) namun menghasilkan kapasitas penonton yang lebih masif.",
-                "match-rules-title": "Sistem Penilaian & Ronde",
-                "rule-p1": "Durasi: 80 detik per ronde. Tim harus memaksimalkan waktu untuk meraih poin tertinggi.",
-                "rule-p2": "Life Cells: Setiap pemain memiliki 4 life cells. Tim mencetak poin dengan menghancurkan seluruh lifepod lawan.",
-                "rule-p3": "Jenjang Level: Program pelatihan terstruktur dari Level 1 (Kids) hingga Level 6 (Adults Pro) dengan sistem ranking & HADO Credit.",
-                "biz-tag": "Investasi & Kemitraan",
-                "biz-heading": "Peluang Bisnis & Kolaborasi Esports",
-                "biz-desc": "HADO Indonesia berkolaborasi dengan nama-nama besar di industri esports tanah air seperti EVOS, Team Liquid ID, RRQ Hoshi, dan Bigetron Alpha untuk membangun ekosistem sportainment masa depan.",
-                "eco-1-title": "HADO Arena & Entertainment",
-                "eco-1-desc": "Investasi dalam ekosistem hiburan dengan model pendapatan fleksibel: sistem per game/sesi, membership berulang, registrasi turnamen, merchandise resmi, hingga event korporat.",
-                "eco-2-title": "Sekolah & Kampus (Academics)",
-                "eco-2-desc": "Program olahraga generasi baru yang telah diterapkan di 2000+ sekolah global sebagai sarana pendidikan, kompetisi antar pelajar, inovasi, dan riset kebugaran.",
-                "eco-3-title": "Opsi Kemitraan B2B",
-                "eco-3-desc": "Peluang fleksibel bagi mitra melalui skema Strategic Partner, Facility Partner, maupun Joint Venture untuk pengembangan regional.",
-                "evt-tag": "Agenda Internasional & Nasional",
-                "evt-heading": "Upcoming Events 2026",
-                "evt-desc": "Saksikan dan ikuti kejuaraan bergengsi tingkat global hingga nasional sepanjang tahun 2026.",
-                "wc-desc": "Kompetisi puncak global mempertemukan tim-tim terbaik dunia dalam kategori HADO 3 vs 3 Global, HADO U16 International Campus Championship, serta 1 vs 1 Showdown.",
-                "wu-desc": "Nomor tanding eksebisi tambahan hasil kolaborasi khusus antara UKM Wushu Universitas Indonesia dengan HADO Indonesia menghadirkan pengalaman sportainment paling seru di kampus.",
-                "careers-tag": "Bergabung Bersama Kami",
-                "careers-heading": "Karier & Peluang",
-                "careers-desc": "Jadilah bagian dari tim visioner kami yang membentuk masa depan techno sports di Indonesia dan global.",
-                "contact-tag": "Hubungi Kami",
-                "contact-heading": "Mari Bawa HADO ke Wilayah Anda",
-                "contact-desc": "Tertarik dengan peluang waralaba, instalasi arena, kemitraan B2B, atau keikutsertaan turnamen WUGAMES UI 2026? Hubungi tim kami hari ini."
-            },
-            en: {
-                "nav-home": "Home",
-                "nav-about": "What is HADO?",
-                "nav-mechanics": "Skills & Rules",
-                "nav-business": "Business",
-                "nav-events": "Events",
-                "nav-careers": "Careers",
-                "nav-contact": "Contact",
-                "btn-join": "Join Arena",
-                "hero-badge": "Abu Dhabi Games of The Future Awards 2025 - HADO Indonesia",
-                "hero-title-1": "The Future of Sport & Gaming",
-                "hero-title-2": "The New E-Sport",
-                "hero-desc": "The ultimate combination of physical sports, deep strategy, and Augmented Reality (AR) technology where players move freely firing virtual energy balls.",
-                "btn-explore": "Explore HADO",
-                "btn-rules": "Skills & Rules",
-                "stat-1": "Global Countries & 2000+ Schools",
-                "stat-2": "Max Team Format",
-                "stat-time-val": "80 Seconds",
-                "stat-3": "Duration per Round",
-                "stat-4": "Standard Court Size",
-                "about-tag": "Move, Think, React, Compete",
-                "about-heading": "What is HADO?",
-                "about-desc": "HADO is the future physical augmented reality (AR) sport demanding full physical activity, strategic thinking, real-time instant reactions, and immersive team competition.",
-                "pillar-1-title": "MOVE (Physical Activity)",
-                "pillar-1-desc": "Players actively move, run, dodge, and execute tactical maneuvers in a real arena without tethered cables.",
-                "pillar-2-title": "THINK (Strategy & Decision)",
-                "pillar-2-desc": "Manage skill set allocation, read opponent trajectories, and design attacking and defensive tactics together.",
-                "pillar-3-title": "REACT & COMPETE",
-                "pillar-3-desc": "Real-time instant action within 80 seconds per round to destroy opponent lifepods and achieve victory.",
-                "sportainment-title": "Intersection of Sports, Gaming, and Entertainment",
-                "sportainment-desc": "Indonesia is entering a new era of sportainment. HADO stands at the core of competitive sports, interactive gaming, and spectator entertainment.",
-                "sp-check-1": "Supported by KONI/KORMI",
-                "sp-check-2": "School & Campus Curriculum",
-                "box-school": "Global Schools & Universities",
-                "box-cup": "Annual International Tournament",
-                "mech-tag": "Game Mechanics",
-                "mech-heading": "Skill Customization & Rules",
-                "mech-desc": "Players customize strategies via arm sensors before matches by allocating 6 bonus points (up to 10 points total) across 4 main skill parameters.",
-                "skill-1-name": "SPEED (Energy Ball Speed)",
-                "skill-1-desc": "Increases energy ball speed. Faster balls are more accurate and harder for opponents to dodge.",
-                "skill-2-name": "SCALE (Ball Size)",
-                "skill-2-desc": "Increases energy ball size. Larger balls make it easier to hit multiple opponent lifepods simultaneously.",
-                "skill-3-name": "CHARGE (Charge Speed)",
-                "skill-3-desc": "Speeds up energy charging time, allowing players to fire energy balls more frequently.",
-                "skill-4-name": "SHIELD (Defense Shield)",
-                "skill-4-desc": "Determines defense shield stock to protect against incoming opponent energy balls.",
-                "court-spec-title": "Court & Arena Specifications",
-                "court-p1": "Standard Size: 10m x 6m for maximum 3 vs 3 teams.",
-                "court-p2": "Half-Court: Available in 5m x 6m specifically for training or vs CPU modes.",
-                "court-p3": "Padel Comparison: More compact than Padel courts (10m x 20m) while generating a massive spectator capacity.",
-                "match-rules-title": "Scoring & Round Rules",
-                "rule-p1": "Duration: 80 seconds per round. Teams must maximize time to score highest.",
-                "rule-p2": "Life Cells: Each player has 4 life cells. Teams score by breaking all opponent lifepods.",
-                "rule-p3": "Level Progression: Structured training programs from Level 1 (Kids) to Level 6 (Adults Pro) with ranking & HADO Credit systems.",
-                "biz-tag": "Investment & Partnership",
-                "biz-heading": "Business Opportunities & Esports Collaboration",
-                "biz-desc": "HADO Indonesia collaborates with major Indonesian esports names like EVOS, Team Liquid ID, RRQ Hoshi, and Bigetron Alpha to build the future sportainment ecosystem.",
-                "eco-1-title": "HADO Arena & Entertainment",
-                "eco-1-desc": "Invest in an entertainment ecosystem with flexible revenue models: per game/session, recurring memberships, tournament registrations, merchandise, and corporate events.",
-                "eco-2-title": "Schools & Campuses (Academics)",
-                "eco-2-desc": "Next-generation sports programs adopted across 2000+ global schools as educational, competitive, innovation, and fitness research tools.",
-                "eco-3-title": "B2B Partnership Options",
-                "eco-3-desc": "Flexible partner opportunities via Strategic Partner, Facility Partner, or Joint Venture schemes for regional development.",
-                "evt-tag": "International & National Agendas",
-                "evt-heading": "Upcoming Events 2026",
-                "evt-desc": "Witness and join prestigious global and national championships throughout 2026.",
-                "wc-desc": "Global peak competition bringing together top world teams in HADO 3 vs 3 Global, HADO U16 International Campus Championship, and 1 vs 1 Showdown.",
-                "wu-desc": "Special exhibition match resulting from a collaboration between UKM Wushu Universitas Indonesia and HADO Indonesia delivering immersive campus sportainment.",
-                "careers-tag": "Join Our Team",
-                "careers-heading": "Careers & Opportunities",
-                "careers-desc": "Be part of our visionary team shaping the future of techno sports in Indonesia and globally.",
-                "contact-tag": "Get in Touch",
-                "contact-heading": "Let's Bring HADO to Your Region",
-                "contact-desc": "Interested in franchise opportunities, arena installations, B2B partnerships, or joining WUGAMES UI 2026? Contact our team today."
+    <!-- Mobile Nav Bar (Bottom floating or top scrollable) -->
+    <div class="flex md:hidden overflow-x-auto gap-2 mt-3 pb-1 border-t border-pink-500/10 pt-2 no-scrollbar">
+      <button onclick="switchTab('mendengarkan')" id="mob-nav-mendengarkan" class="mob-nav-btn whitespace-nowrap px-3 py-1.5 rounded-lg text-xs text-pink-300 bg-pink-500/20 border border-pink-500/30">Mendengarkan</button>
+      <button onclick="switchTab('memetakan')" id="mob-nav-memetakan" class="mob-nav-btn whitespace-nowrap px-3 py-1.5 rounded-lg text-xs text-gray-300">Memetakan Pola</button>
+      <button onclick="switchTab('solusi')" id="mob-nav-solusi" class="mob-nav-btn whitespace-nowrap px-3 py-1.5 rounded-lg text-xs text-gray-300">Langkah Solusi</button>
+      <button onclick="switchTab('mediasi')" id="mob-nav-mediasi" class="mob-nav-btn whitespace-nowrap px-3 py-1.5 rounded-lg text-xs text-gray-300">Mediasi</button>
+      <button onclick="switchTab('keberlanjutan')" id="mob-nav-keberlanjutan" class="mob-nav-btn whitespace-nowrap px-3 py-1.5 rounded-lg text-xs text-gray-300">Keberlanjutan</button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="relative z-10 max-w-7xl mx-auto px-4 lg:px-8 py-8 flex-1 w-full">
+
+    <!-- HERO INTRODUCTION BANNER -->
+    <div class="mb-8 glass-panel p-6 lg:p-8 rounded-3xl relative overflow-hidden border border-rose-500/30">
+      <div class="absolute -right-10 -bottom-10 w-60 h-60 bg-gradient-to-br from-pink-600/20 to-purple-600/30 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="max-w-3xl relative z-10">
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-pink-500/10 text-pink-300 border border-pink-500/30 mb-3">
+          <i class="fa-solid fa-sparkles text-pink-400"></i> Ruang Aman Hubungan Harmonis
+        </span>
+        <h1 class="text-3xl lg:text-5xl font-extrabold tracking-tight text-white mb-3">
+          Sembuhkan, Pahami, & Tumbuh <span class="bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-rose-300 to-purple-400 neon-text-glow">Bersama Pasangan</span>
+        </h1>
+        <p class="text-sm lg:text-base text-gray-300 leading-relaxed">
+          Selamat datang di platform konsultasi & pemetaan hubungan berlandaskan psikologi empati. Temukan pemetaan pola emosi, skrip mediasi netral, dan strategi keberlanjutan cinta Anda.
+        </p>
+      </div>
+    </div>
+
+    <!-- TAB 1: MENDENGARKAN (ACTIVE LISTENING STUDIO) -->
+    <section id="section-mendengarkan" class="tab-section space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Story Input Panel -->
+        <div class="lg:col-span-2 glass-panel p-6 rounded-2xl border border-pink-500/20 space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xl font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-comment-dots text-pink-400"></i> Active Listening Studio
+            </h2>
+            <span class="text-xs text-pink-300 bg-pink-900/30 px-2.5 py-1 rounded-full border border-pink-500/30">
+              <i class="fa-solid fa-shield-halved"></i> 100% Rahasia & Empatis
+            </span>
+          </div>
+          <p class="text-xs lg:text-sm text-gray-300">
+            Tuliskan apa yang sedang mengganjal di hati Anda. Konsultan AI empati kami akan mendengarkan tanpa menghakimi dan mendeteksi kondisi emosional Anda secara dinamis.
+          </p>
+
+          <!-- Prompt Suggestions -->
+          <div class="flex flex-wrap gap-2 pt-1">
+            <span class="text-xs text-gray-400 self-center">Contoh topik:</span>
+            <button onclick="setPrompt('Saya merasa komunikasi kami semakin dingin dan sering salah paham belakangan ini.')" class="text-xs bg-purple-900/30 hover:bg-purple-800/40 text-purple-200 border border-purple-500/30 px-2.5 py-1 rounded-lg transition">
+              Komunikasi Dingin
+            </button>
+            <button onclick="setPrompt('Pasangan saya sering menunda penyelesaian masalah dan memadamkan percakapan (stonewalling).')" class="text-xs bg-purple-900/30 hover:bg-purple-800/40 text-purple-200 border border-purple-500/30 px-2.5 py-1 rounded-lg transition">
+              Stonewalling / Menghindar
+            </button>
+            <button onclick="setPrompt('Kami sering bertengkar karena masalah finansial dan perbedaan prioritas masa depan.')" class="text-xs bg-purple-900/30 hover:bg-purple-800/40 text-purple-200 border border-purple-500/30 px-2.5 py-1 rounded-lg transition">
+              Beda Prioritas
+            </button>
+          </div>
+
+          <!-- Textarea -->
+          <div class="relative">
+            <textarea id="storyInput" rows="6" oninput="analyzeSentiment()" placeholder="Ceritakan situasi hubungan Anda secara bebas di sini..." class="w-full bg-slate-950/60 border border-pink-500/20 rounded-xl p-4 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-pink-500 transition resize-none"></textarea>
+            <button onclick="clearStory()" class="absolute top-3 right-3 text-xs text-gray-400 hover:text-pink-400">
+              <i class="fa-solid fa-rotate-left"></i> Reset
+            </button>
+          </div>
+
+          <div class="flex flex-col sm:flex-row justify-between items-center gap-3 pt-2">
+            <div class="flex items-center gap-2 text-xs text-gray-400 w-full sm:w-auto">
+              <span>Status Emosi Terdeteksi:</span>
+              <span id="sentimentBadge" class="font-semibold text-pink-400 bg-pink-500/10 px-2.5 py-0.5 rounded-full border border-pink-500/20">Menunggu Cerita...</span>
+            </div>
+            <button onclick="submitStory()" class="neon-btn text-white text-sm font-semibold px-6 py-2.5 rounded-xl w-full sm:w-auto flex items-center justify-center gap-2">
+              <i class="fa-solid fa-paper-plane"></i>
+              <span>Analisis & Refleksi Empati</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Reflection & Emotion Analysis Card -->
+        <div class="glass-panel p-6 rounded-2xl border border-pink-500/20 flex flex-col justify-between space-y-4">
+          <div>
+            <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+              <i class="fa-solid fa-heart-pulse text-rose-400"></i> Peta Emosi & Refleksi
+            </h3>
+            <p class="text-xs text-gray-300 mb-4">
+              Respon empati instan untuk membantu Anda memproses perasaan sebelum mengambil tindakan.
+            </p>
+
+            <div id="reflectionBox" class="space-y-3 bg-purple-950/20 p-4 rounded-xl border border-purple-500/20 min-h-[180px] flex items-center justify-center text-center">
+              <div class="text-gray-400 text-xs">
+                <i class="fa-solid fa-feather text-2xl text-pink-400/50 mb-2 block"></i>
+                Ceritakan kisah Anda di panel samping. Kami siap mendengarkan dan mengurai emosi Anda secara bijak.
+              </div>
+            </div>
+          </div>
+
+          <div class="border-t border-pink-500/10 pt-4">
+            <div class="flex items-center justify-between text-xs text-gray-300">
+              <span>Langkah Selanjutnya:</span>
+              <button onclick="switchTab('memetakan')" class="text-pink-400 hover:text-pink-300 font-semibold flex items-center gap-1">
+                Lanjut ke Pemetaan Pola <i class="fa-solid fa-arrow-right text-[10px]"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: MEMETAKAN POLA (PATTERN MAPPING ENGINE) -->
+    <section id="section-memetakan" class="tab-section hidden space-y-6">
+      <div class="glass-panel p-6 rounded-2xl border border-pink-500/20">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+          <div>
+            <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-diagram-project text-purple-400"></i> Engine Pemetaan Pola Hubungan
+            </h2>
+            <p class="text-xs lg:text-sm text-gray-300">
+              Jawab kuis diagnostik kilat di bawah ini untuk melihat peta dinamika Gaya Lampiran (*Attachment Style*), Bahasa Cinta, & Gaya Komunikasi Anda.
+            </p>
+          </div>
+          <button onclick="randomizeQuiz()" class="text-xs bg-purple-900/40 hover:bg-purple-800/50 text-purple-200 border border-purple-500/30 px-3 py-2 rounded-xl flex items-center gap-2 self-start md:self-auto">
+            <i class="fa-solid fa-shuffle"></i> Simulasi Hasil Acak
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <!-- Diagnostic Interactive Form -->
+          <div class="lg:col-span-7 space-y-5">
+            <!-- Question 1 -->
+            <div class="glass-card p-4 rounded-xl">
+              <label class="block text-xs md:text-sm font-semibold text-pink-200 mb-2">
+                1. Bagaimana reaksi pertama Anda saat timbul konflik dengan pasangan?
+              </label>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <button onclick="selectOption(1, 'anxious', this)" class="quiz-btn q1 bg-slate-900/50 hover:bg-pink-900/30 border border-pink-500/20 p-2.5 rounded-lg text-left text-gray-300 transition">
+                  A. Ingin langsung dibahas jam itu juga hingga tuntas (Khawatir/Anxious)
+                </button>
+                <button onclick="selectOption(1, 'avoidant', this)" class="quiz-btn q1 bg-slate-900/50 hover:bg-pink-900/30 border border-pink-500/20 p-2.5 rounded-lg text-left text-gray-300 transition">
+                  B. Butuh waktu menyendiri dulu & cenderung menarik diri (Avoidant)
+                </button>
+                <button onclick="selectOption(1, 'secure', this)" class="quiz-btn q1 bg-slate-900/50 hover:bg-pink-900/30 border border-pink-500/20 p-2.5 rounded-lg text-left text-gray-300 transition">
+                  C. Mengajak bicara dengan tenang tanpa menyalahkan (Secure)
+                </button>
+                <button onclick="selectOption(1, 'reactive', this)" class="quiz-btn q1 bg-slate-900/50 hover:bg-pink-900/30 border border-pink-500/20 p-2.5 rounded-lg text-left text-gray-300 transition">
+                  D. Emosional & defensif membawa masalah lalu (Reaktif)
+                </button>
+              </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="glass-card p-4 rounded-xl">
+              <label class="block text-xs md:text-sm font-semibold text-pink-200 mb-2">
+                2. Apa bentuk ungkapan cinta yang paling membuat Anda merasa sangat dihargai?
+              </label>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <button onclick="selectOption(2, 'words', this)" class="quiz-btn q2 bg-slate-900/50 hover:bg-pink-900/30 border border-pink-500/20 p-2.5 rounded-lg text-left text-gray-300 transition">
+                  A. Kata-kata pujian & konfirmasi (Words of Affirmation)
+                </button>
+                <button onclick="selectOption(2, 'time', this)" class="quiz-btn q2 bg-slate-900/50 hover:bg-pink-900/30 border border-pink-500/20 p-2.5 rounded-lg text-left text-gray-300 transition">
+                  B. Waktu berkualitas tanpa gadget (Quality Time)
+                </button>
+                <button onclick="selectOption(2, 'acts', this)" class="quiz-btn q2 bg-slate-900/50 hover:bg-pink-900/30 border border-pink-500/20 p-2.5 rounded-lg text-left text-gray-300 transition">
+                  C. Bantuan nyata pada kesibukan harian (Acts of Service)
+                </button>
+                <button onclick="selectOption(2, 'touch', this)" class="quiz-btn q2 bg-slate-900/50 hover:bg-pink-900/30 border border-pink-500/20 p-2.5 rounded-lg text-left text-gray-300 transition">
+                  D. Pelukan & sentuhan fisik yang hangat (Physical Touch)
+                </button>
+              </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="glass-card p-4 rounded-xl">
+              <label class="block text-xs md:text-sm font-semibold text-pink-200 mb-2">
+                3. Apa hambatan terbesar dalam komunikasi sehari-hari Anda?
+              </label>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <button onclick="selectOption(3, 'assumption', this)" class="quiz-btn q3 bg-slate-900/50 hover:bg-pink-900/30 border border-pink-500/20 p-2.5 rounded-lg text-left text-gray-300 transition">
+                  A. Sering berasumsi sendiri tanpa konfirmasi
+                </button>
+                <button onclick="selectOption(3, 'express', this)" class="quiz-btn q3 bg-slate-900/50 hover:bg-pink-900/30 border border-pink-500/20 p-2.5 rounded-lg text-left text-gray-300 transition">
+                  B. Sulit mengungkapkan perasaan sejujurnya
+                </button>
+                <button onclick="selectOption(3, 'listen', this)" class="quiz-btn q3 bg-slate-900/50 hover:bg-pink-900/30 border border-pink-500/20 p-2.5 rounded-lg text-left text-gray-300 transition">
+                  C. Pasangan merasa kurang didengarkan
+                </button>
+                <button onclick="selectOption(3, 'tone', this)" class="quiz-btn q3 bg-slate-900/50 hover:bg-pink-900/30 border border-pink-500/20 p-2.5 rounded-lg text-left text-gray-300 transition">
+                  D. Nada bicara yang mudah meninggi
+                </button>
+              </div>
+            </div>
+
+            <button onclick="generateChart()" class="neon-btn w-full py-3 rounded-xl text-white font-bold text-sm shadow-lg">
+              <i class="fa-solid fa-chart-pie mr-2"></i> Perbarui & Tampilkan Diagram Radar Pola
+            </button>
+          </div>
+
+          <!-- Diagnostic Visualization / Radar Chart -->
+          <div class="lg:col-span-5 flex flex-col justify-between space-y-4">
+            <div class="glass-card p-5 rounded-2xl flex flex-col items-center justify-center relative min-h-[300px]">
+              <h3 class="text-sm font-semibold text-pink-300 mb-2 text-center">
+                Visualisasi Radar Pola Hubungan Anda
+              </h3>
+              <div class="w-full max-w-[320px] aspect-square relative">
+                <canvas id="patternRadarChart"></canvas>
+              </div>
+            </div>
+
+            <div id="patternSummary" class="glass-card p-4 rounded-xl text-xs space-y-2 border-l-4 border-l-pink-500">
+              <div class="font-bold text-pink-300">Ringkasan Diagnostik Awal:</div>
+              <p class="text-gray-300 leading-relaxed">
+                Pola hubungan Anda menunjukkan kecenderungan <span class="text-pink-400 font-semibold" id="attachmentText">Secure-Anxious</span> dengan kebutuhan utama pada <span class="text-purple-400 font-semibold" id="loveLangText">Quality Time & Words</span>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: LANGKAH SOLUSI (ACTIONABLE SOLUTION GENERATOR) -->
+    <section id="section-solusi" class="tab-section hidden space-y-6">
+      <div class="glass-panel p-6 rounded-2xl border border-pink-500/20 space-y-6">
+        <div>
+          <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-lightbulb text-yellow-400"></i> Generator Langkah Solusi & Skrip "Aku-Pesan"
+          </h2>
+          <p class="text-xs lg:text-sm text-gray-300">
+            Ubah perasaan defensif menjadi ungkapan yang membangun melalui formula komunikasi "Aku-Pesan" (*I-Statement*) dan rencana aksi riil.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Interactive I-Statement Builder -->
+          <div class="glass-card p-5 rounded-2xl space-y-4 border border-pink-500/20">
+            <h3 class="text-base font-bold text-pink-300 flex items-center gap-2">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> Generator Skrip "Aku-Pesan" (I-Statement)
+            </h3>
+            <p class="text-xs text-gray-300">
+              Gunakan formula ini agar ungkapan Anda tidak terdengar seperti tuduhan ("Kamu selalu..."):
+            </p>
+
+            <div class="space-y-3 text-xs">
+              <div>
+                <label class="block text-gray-300 mb-1 font-medium">1. "Saya merasa..." (Emosi Jujur Anda)</label>
+                <input type="text" id="iFeel" value="diabaikan dan kurang dihargai" class="w-full bg-slate-950/60 border border-pink-500/30 rounded-lg p-2.5 text-pink-200 focus:outline-none focus:border-pink-500">
+              </div>
+              <div>
+                <label class="block text-gray-300 mb-1 font-medium">2. "Ketika..." (Fakta Kejadian Spesifik & Tanpa Penghakiman)</label>
+                <input type="text" id="iWhen" value="kamu bermain HP saat kita sedang makan malam bersama" class="w-full bg-slate-950/60 border border-pink-500/30 rounded-lg p-2.5 text-pink-200 focus:outline-none focus:border-pink-500">
+              </div>
+              <div>
+                <label class="block text-gray-300 mb-1 font-medium">3. "Karena bagi saya..." (Kebutuhan / Nilai Utama Anda)</label>
+                <input type="text" id="iBecause" value="waktu kebersamaan tanpa gangguan sangat penting untuk menjaga kehangatan kita" class="w-full bg-slate-950/60 border border-pink-500/30 rounded-lg p-2.5 text-pink-200 focus:outline-none focus:border-pink-500">
+              </div>
+              <div>
+                <label class="block text-gray-300 mb-1 font-medium">4. "Saya berharap kita bisa..." (Permintaan Solutif Khusus)</label>
+                <input type="text" id="iHope" value="menyimpan HP selama 30 menit saat makan malam bersama" class="w-full bg-slate-950/60 border border-pink-500/30 rounded-lg p-2.5 text-pink-200 focus:outline-none focus:border-pink-500">
+              </div>
+            </div>
+
+            <button onclick="generateScript()" class="w-full py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl text-white font-semibold text-xs transition hover:opacity-90">
+              Buat Skrip Komunikasi Sehat
+            </button>
+
+            <!-- Output Box -->
+            <div class="bg-slate-950/80 border border-pink-500/30 p-4 rounded-xl space-y-2 relative">
+              <span class="text-[10px] font-bold tracking-wider text-pink-400 uppercase block">Hasil Skrip Siap Bicara:</span>
+              <p id="scriptOutput" class="text-xs text-gray-200 italic leading-relaxed">
+                "Saya merasa diabaikan dan kurang dihargai ketika kamu bermain HP saat kita sedang makan malam bersama. Karena bagi saya, waktu kebersamaan tanpa gangguan sangat penting untuk menjaga kehangatan kita. Saya berharap kita bisa menyimpan HP selama 30 menit saat makan malam bersama."
+              </p>
+              <button onclick="copyScript()" class="text-xs text-pink-300 hover:text-white flex items-center gap-1 mt-2">
+                <i class="fa-regular fa-copy"></i> Salin Teks
+              </button>
+            </div>
+          </div>
+
+          <!-- Action Steps Blueprint -->
+          <div class="space-y-4">
+            <h3 class="text-base font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-list-check text-pink-400"></i> Blueprint Langkah Taktis Pasangan
+            </h3>
+
+            <div class="space-y-3">
+              <div class="glass-card p-4 rounded-xl flex items-start gap-3">
+                <div class="w-8 h-8 rounded-lg bg-pink-500/20 text-pink-300 flex items-center justify-center shrink-0 font-bold text-sm">1</div>
+                <div>
+                  <h4 class="text-sm font-semibold text-white">Latihan Batasan Emosional Sehat</h4>
+                  <p class="text-xs text-gray-300 mt-1">
+                    Sepakati "Kode Jeda" ketika diskusi mulai panas (misal: kata "Satu Langkah"). Jika diucapkan, kedua pihak wajib jeda 15 menit untuk menenangkan diri.
+                  </p>
+                </div>
+              </div>
+
+              <div class="glass-card p-4 rounded-xl flex items-start gap-3">
+                <div class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-300 flex items-center justify-center shrink-0 font-bold text-sm">2</div>
+                <div>
+                  <h4 class="text-sm font-semibold text-white">Ritual Konfirmasi Validasi (3 Menit)</h4>
+                  <p class="text-xs text-gray-300 mt-1">
+                    Sebelum merespon, ulangi apa yang dikatakan pasangan: "Yang saya tangkap, kamu merasa [emosi] karena [alasan], betul?"
+                  </p>
+                </div>
+              </div>
+
+              <div class="glass-card p-4 rounded-xl flex items-start gap-3">
+                <div class="w-8 h-8 rounded-lg bg-rose-500/20 text-rose-300 flex items-center justify-center shrink-0 font-bold text-sm">3</div>
+                <div>
+                  <h4 class="text-sm font-semibold text-white">Jadwal Re-Sinkronisasi Mingguan</h4>
+                  <p class="text-xs text-gray-300 mt-1">
+                    Luangkan 20 menit setiap minggu tanpa distraksi untuk menanyakan: "Apa hal baik yang saya lakukan minggu ini?" & "Apa yang bisa saya tingkatkan?"
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: MEDIASI (CONFLICT MEDIATION SIMULATOR & SCRIPTING) -->
+    <section id="section-mediasi" class="tab-section hidden space-y-6">
+      <div class="glass-panel p-6 rounded-2xl border border-pink-500/20 space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-handshake-simple text-rose-400"></i> Simulator Mediasi Netral & Talking Stick
+            </h2>
+            <p class="text-xs lg:text-sm text-gray-300">
+              Aturan mediasi terstruktur untuk memastikan kedua pihak memiliki ruang bicara yang adil tanpa sela-menyela.
+            </p>
+          </div>
+        </div>
+
+        <!-- Mediation Rules & Interactive Talking Stick Timer -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Timer Column -->
+          <div class="lg:col-span-5 glass-card p-6 rounded-2xl text-center flex flex-col items-center justify-between space-y-4">
+            <span class="text-xs font-semibold tracking-wider text-pink-300 uppercase bg-pink-500/10 border border-pink-500/20 px-3 py-1 rounded-full">
+              Fitur "Talking Stick" Pasangan
+            </span>
+
+            <div class="my-4">
+              <div id="turnIndicator" class="text-base font-bold text-white mb-2">
+                Giliran: <span class="text-pink-400">Pasangan A (3 Menit Bicara)</span>
+              </div>
+              <div id="timerDisplay" class="text-5xl font-black text-white font-mono neon-text-glow">
+                03:00
+              </div>
+              <p class="text-[11px] text-gray-400 mt-2">
+                *Selama pengatur waktu berjalan, pihak lawan tidak boleh memotong pembicaraan.
+              </p>
+            </div>
+
+            <div class="flex gap-2 w-full">
+              <button onclick="startTimer()" id="startBtn" class="flex-1 py-2.5 bg-pink-600 hover:bg-pink-500 rounded-xl text-white font-semibold text-xs transition">
+                <i class="fa-solid fa-play mr-1"></i> Mulai
+              </button>
+              <button onclick="pauseTimer()" id="pauseBtn" class="flex-1 py-2.5 bg-amber-600 hover:bg-amber-500 rounded-xl text-white font-semibold text-xs transition">
+                <i class="fa-solid fa-pause mr-1"></i> Jeda
+              </button>
+              <button onclick="switchTurn()" class="flex-1 py-2.5 bg-purple-600 hover:bg-purple-500 rounded-xl text-white font-semibold text-xs transition">
+                <i class="fa-solid fa-rotate mr-1"></i> Ganti Pihak
+              </button>
+            </div>
+          </div>
+
+          <!-- Mediation Protocols & Ground Rules -->
+          <div class="lg:col-span-7 space-y-4">
+            <h3 class="text-base font-bold text-white">4 Aturan Emas Mediasi Mandiri:</h3>
+            
+            <div class="space-y-3 text-xs">
+              <div class="p-3.5 rounded-xl bg-slate-900/60 border border-pink-500/20 flex gap-3">
+                <i class="fa-solid fa-volume-xmark text-pink-400 text-base mt-0.5"></i>
+                <div>
+                  <span class="font-bold text-white block mb-0.5">1. Dilarang Menyela Saat Timer Berjalan</span>
+                  <span class="text-gray-300">Gunakan kertas catatan kecil untuk menulis poin yang ingin direspon alih-alih memotong saat pasangan berbicara.</span>
+                </div>
+              </div>
+
+              <div class="p-3.5 rounded-xl bg-slate-900/60 border border-pink-500/20 flex gap-3">
+                <i class="fa-solid fa-ban text-rose-400 text-base mt-0.5"></i>
+                <div>
+                  <span class="font-bold text-white block mb-0.5">2. Larangan Kata Absolut ("Kamu Selalu..." / "Kamu Tidak Pernah...")</span>
+                  <span class="text-gray-300">Gunakan contoh spesifik konkret yang terjadi baru-baru ini alih-alih menggeneralisasi karakter.</span>
+                </div>
+              </div>
+
+              <div class="p-3.5 rounded-xl bg-slate-900/60 border border-pink-500/20 flex gap-3">
+                <i class="fa-solid fa-face-smile-beam text-purple-400 text-base mt-0.5"></i>
+                <div>
+                  <span class="font-bold text-white block mb-0.5">3. Fokus Pada Kebutuhan Solutif, Bukan Menyalahkan Masa Lalu</span>
+                  <span class="text-gray-300">Ganti kalimat "Salahmu dulu..." menjadi "Yang saya butuhkan agar merasa aman ke depannya adalah..."</span>
+                </div>
+              </div>
+
+              <div class="p-3.5 rounded-xl bg-slate-900/60 border border-pink-500/20 flex gap-3">
+                <i class="fa-solid fa-heart text-pink-400 text-base mt-0.5"></i>
+                <div>
+                  <span class="font-bold text-white block mb-0.5">4. Akhiri Dengan Kesepakatan Kecil Yang Disetujui Kedua Pihak</span>
+                  <span class="text-gray-300">Tidak harus menyelesaikan seluruh masalah besar dalam satu sesi. Buat 1 komitmen konkret kecil.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: KEBERLANJUTAN (SUSTAINABILITY & GROWTH TRACKER) -->
+    <section id="section-keberlanjutan" class="tab-section hidden space-y-6">
+      <div class="glass-panel p-6 rounded-2xl border border-pink-500/20 space-y-6">
+        <div>
+          <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-seedling text-emerald-400"></i> Keberlanjutan & Growth Tracker
+          </h2>
+          <p class="text-xs lg:text-sm text-gray-300">
+            Jaga api kehangatan hubungan melalui pelacak kebiasaan positif dan generator ide kencan interaktif.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Daily Routine Checklist -->
+          <div class="glass-card p-5 rounded-2xl space-y-4">
+            <h3 class="text-base font-bold text-pink-300 flex items-center justify-between">
+              <span><i class="fa-solid fa-calendar-check mr-2"></i> Cheklist Ritual Cinta Harian</span>
+              <span id="streakBadge" class="text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2.5 py-0.5 rounded-full">Streak: 5 Hari</span>
+            </h3>
+
+            <div class="space-y-2 text-xs">
+              <label class="flex items-center gap-3 p-3 bg-slate-900/50 rounded-xl border border-pink-500/10 cursor-pointer hover:bg-pink-900/20 transition">
+                <input type="checkbox" checked onchange="updateStreak()" class="w-4 h-4 rounded accent-pink-500">
+                <span class="text-gray-200">Mengucapkan selamat pagi dengan pelukan / ucapan hangat</span>
+              </label>
+
+              <label class="flex items-center gap-3 p-3 bg-slate-900/50 rounded-xl border border-pink-500/10 cursor-pointer hover:bg-pink-900/20 transition">
+                <input type="checkbox" checked onchange="updateStreak()" class="w-4 h-4 rounded accent-pink-500">
+                <span class="text-gray-200">Mengirimkan 1 pesan apresiasi singkat di tengah kesibukan</span>
+              </label>
+
+              <label class="flex items-center gap-3 p-3 bg-slate-900/50 rounded-xl border border-pink-500/10 cursor-pointer hover:bg-pink-900/20 transition">
+                <input type="checkbox" onchange="updateStreak()" class="w-4 h-4 rounded accent-pink-500">
+                <span class="text-gray-200">Mendengarkan cerita hariannya selama 10 menit tanpa memotong</span>
+              </label>
+
+              <label class="flex items-center gap-3 p-3 bg-slate-900/50 rounded-xl border border-pink-500/10 cursor-pointer hover:bg-pink-900/20 transition">
+                <input type="checkbox" onchange="updateStreak()" class="w-4 h-4 rounded accent-pink-500">
+                <span class="text-gray-200">Mengucapkan terima kasih atas bantuan kecil harian</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Date Night Idea Generator -->
+          <div class="glass-card p-5 rounded-2xl space-y-4 flex flex-col justify-between">
+            <div>
+              <h3 class="text-base font-bold text-purple-300 flex items-center gap-2">
+                <i class="fa-solid fa-dice text-pink-400"></i> Generator Ide Kencan & Deep Sync
+              </h3>
+              <p class="text-xs text-gray-300 mt-1">
+                Bingung mau agenda apa minggu ini? Klik tombol di bawah untuk inspirasi kegiatan mempererat koneksi.
+              </p>
+
+              <div id="dateIdeaBox" class="mt-4 p-4 rounded-xl bg-purple-950/30 border border-purple-500/30 text-center space-y-2">
+                <div class="text-lg font-bold text-pink-300" id="dateIdeaTitle">Nostalgia Tempat Pertama Met</div>
+                <p class="text-xs text-gray-300" id="dateIdeaDesc">
+                  Kunjungi kembali lokasi tempat pertama kali Anda bertatap muka atau kencan. Bahas memori pertama kali jatuh cinta.
+                </p>
+              </div>
+            </div>
+
+            <button onclick="generateDateIdea()" class="w-full py-2.5 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white rounded-xl text-xs font-semibold transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-wand-magic"></i> ACAK IDE KENCAN BARU
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="relative z-10 glass-panel border-t border-pink-500/20 mt-12 py-6 px-4 lg:px-8 text-center text-xs text-gray-400 space-y-2">
+    <p>© 2026 INA Cinta - Pendampingan Hubungan Sehat.</p>
+    <p class="text-[11px] text-gray-500">Dirancang dengan prinsip psikologi empati, pembinaan emosional yang berpengalaman. </p>
+  </footer>
+
+  <!-- BOOKING / PRIVATE SESSION MODAL -->
+  <div id="bookingModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="glass-panel max-w-md w-full rounded-3xl p-6 border border-pink-500/40 relative space-y-4">
+      <button onclick="closeBookingModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="text-center space-y-1">
+        <div class="w-12 h-12 bg-pink-500/20 text-pink-400 rounded-full flex items-center justify-center mx-auto text-xl">
+          <i class="fa-solid fa-calendar-heart"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white">Sesi Konsultasi Privat</h3>
+        <p class="text-xs text-gray-300">Jadwalkan sesi 1-on-1 atau pasangan bersama Konsultan Cendekia Hubungan.</p>
+      </div>
+
+      <form onsubmit="handleBooking(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block text-gray-300 mb-1">Nama Lengkap Anda</label>
+          <input type="text" required placeholder="Nama Anda" class="w-full bg-slate-900 border border-pink-500/30 rounded-xl p-2.5 text-white focus:outline-none focus:border-pink-500">
+        </div>
+        <div>
+          <label class="block text-gray-300 mb-1">Nomor WhatsApp / Email</label>
+          <input type="text" required placeholder="0812xxxx / email@domain.com" class="w-full bg-slate-900 border border-pink-500/30 rounded-xl p-2.5 text-white focus:outline-none focus:border-pink-500">
+        </div>
+        <div>
+          <label class="block text-gray-300 mb-1">Jenis Layanan</label>
+          <select class="w-full bg-slate-900 border border-pink-500/30 rounded-xl p-2.5 text-white focus:outline-none focus:border-pink-500">
+            <option>Konsultasi Individu (Resolusi Diri & Hubungan)</option>
+            <option>Mediasi Pasangan (Pasangan Berdua)</option>
+            <option>Pemetaan Pola Mendalam & Action Plan</option>
+          </select>
+        </div>
+
+        <!-- Custom Notification UI message replacing alert() -->
+        <div id="modalMessage" class="hidden text-center text-xs p-2.5 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"></div>
+
+        <button type="submit" class="neon-btn w-full py-3 rounded-xl text-white font-bold text-sm">
+          Konfirmasi Jadwal Konsultasi
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    /* ============================================================
+       1. INTERACTIVE AURA CANVAS BACKGROUND (Fluid Energy Nodes)
+       ============================================================ */
+    const canvas = document.getElementById('auraCanvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let nodes = [];
+    const nodeCount = 20;
+
+    function resizeCanvas() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+
+    class AuraNode {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.radius = Math.random() * 180 + 100;
+        this.vx = (Math.random() - 0.5) * 0.4;
+        this.vy = (Math.random() - 0.5) * 0.4;
+        // Aura Colors: Crimson, Magenta, Purple, Deep Violet
+        const colors = [
+          'rgba(225, 29, 72, ',   // crimson
+          'rgba(236, 72, 153, ',  // magenta
+          'rgba(168, 85, 247, ',  // purple
+          'rgba(244, 63, 94, '    // rose glow
+        ];
+        this.baseColor = colors[Math.floor(Math.random() * colors.length)];
+        this.alpha = Math.random() * 0.25 + 0.15;
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x < -100) this.x = width + 100;
+        if (this.x > width + 100) this.x = -100;
+        if (this.y < -100) this.y = height + 100;
+        if (this.y > height + 100) this.y = -100;
+      }
+
+      draw() {
+        const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius);
+        gradient.addColorStop(0, this.baseColor + this.alpha + ')');
+        gradient.addColorStop(0.7, this.baseColor + (this.alpha * 0.3) + ')');
+        gradient.addColorStop(1, 'transparent');
+
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function initAura() {
+      resizeCanvas();
+      nodes = [];
+      for (let i = 0; i < nodeCount; i++) {
+        nodes.push(new AuraNode());
+      }
+    }
+
+    function animateAura() {
+      ctx.clearRect(0, 0, width, height);
+      nodes.forEach(node => {
+        node.update();
+        node.draw();
+      });
+      requestAnimationFrame(animateAura);
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    window.onload = function() {
+      initAura();
+      animateAura();
+      initRadarChart();
+    };
+
+    /* ============================================================
+       2. NAVIGATION TABS LOGIC
+       ============================================================ */
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-section').forEach(sec => sec.classList.add('hidden'));
+      document.getElementById('section-' + tabId).classList.remove('hidden');
+
+      // Desktop nav button styling
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('text-pink-300', 'bg-pink-500/10', 'border', 'border-pink-500/30');
+        btn.classList.add('text-gray-300');
+      });
+      const activeNav = document.getElementById('nav-' + tabId);
+      if (activeNav) {
+        activeNav.classList.add('text-pink-300', 'bg-pink-500/10', 'border', 'border-pink-500/30');
+        activeNav.classList.remove('text-gray-300');
+      }
+
+      // Mobile nav button styling
+      document.querySelectorAll('.mob-nav-btn').forEach(btn => {
+        btn.classList.remove('text-pink-300', 'bg-pink-500/20', 'border', 'border-pink-500/30');
+        btn.classList.add('text-gray-300');
+      });
+      const activeMobNav = document.getElementById('mob-nav-' + tabId);
+      if (activeMobNav) {
+        activeMobNav.classList.add('text-pink-300', 'bg-pink-500/20', 'border', 'border-pink-500/30');
+        activeMobNav.classList.remove('text-gray-300');
+      }
+    }
+
+    /* ============================================================
+       3. PILAR 1: MENDENGARKAN (SENTIMENT ANALYZER & REFLECTION)
+       ============================================================ */
+    function setPrompt(text) {
+      const textarea = document.getElementById('storyInput');
+      textarea.value = text;
+      analyzeSentiment();
+    }
+
+    function clearStory() {
+      document.getElementById('storyInput').value = '';
+      document.getElementById('sentimentBadge').innerText = 'Menunggu Cerita...';
+      document.getElementById('sentimentBadge').className = 'font-semibold text-pink-400 bg-pink-500/10 px-2.5 py-0.5 rounded-full border border-pink-500/20';
+      document.getElementById('reflectionBox').innerHTML = `
+        <div class="text-gray-400 text-xs">
+          <i class="fa-solid fa-feather text-2xl text-pink-400/50 mb-2 block"></i>
+          Ceritakan kisah Anda di panel samping. Kami siap mendengarkan dan mengurai emosi Anda secara bijak.
+        </div>
+      `;
+    }
+
+    function analyzeSentiment() {
+      const val = document.getElementById('storyInput').value.toLowerCase();
+      const badge = document.getElementById('sentimentBadge');
+
+      if (val.length < 10) {
+        badge.innerText = 'Menulis...';
+        return;
+      }
+
+      if (val.includes('kecewa') || val.includes('sedih') || val.includes('dingin') || val.includes('jarak')) {
+        badge.innerText = 'Kekecewaan & Jarak Emosional';
+        badge.className = 'font-semibold text-amber-300 bg-amber-500/20 px-2.5 py-0.5 rounded-full border border-amber-500/30';
+      } else if (val.includes('marah') || val.includes('bertengkar') || val.includes('benci') || val.includes('emosi')) {
+        badge.innerText = 'Tensi Tinggi / Marah';
+        badge.className = 'font-semibold text-rose-300 bg-rose-500/20 px-2.5 py-0.5 rounded-full border border-rose-500/30';
+      } else if (val.includes('takut') || val.includes('khawatir') || val.includes('cemas') || val.includes('bisa')) {
+        badge.innerText = 'Kecemasan Akibat Ketidakpastian';
+        badge.className = 'font-semibold text-purple-300 bg-purple-500/20 px-2.5 py-0.5 rounded-full border border-purple-500/30';
+      } else {
+        badge.innerText = 'Refleksi Terbuka';
+        badge.className = 'font-semibold text-pink-300 bg-pink-500/20 px-2.5 py-0.5 rounded-full border border-pink-500/30';
+      }
+    }
+
+    function submitStory() {
+      const story = document.getElementById('storyInput').value;
+      if (!story.trim()) {
+        document.getElementById('reflectionBox').innerHTML = `
+          <div class="text-rose-400 text-xs font-medium">Mohon tuliskan sedikit cerita atau pilih salah satu contoh topik di atas.</div>
+        `;
+        return;
+      }
+
+      document.getElementById('reflectionBox').innerHTML = `
+        <div class="space-y-2 text-left text-xs">
+          <div class="font-bold text-pink-300 flex items-center gap-2">
+            <i class="fa-solid fa-heart text-pink-400"></i> Validasi Emosi Konsultan:
+          </div>
+          <p class="text-gray-200 leading-relaxed">
+            Perasaan Anda sangat valid. Situasi yang Anda alami wajar menimbulkan rasa lelah emosional. Hambatan ini umumnya bersumber dari peregangan gaya komunikasi dan perbedaan kebutuhan apresiasi.
+          </p>
+          <div class="p-2.5 rounded-lg bg-pink-950/40 border border-pink-500/20 text-pink-200">
+            💡 <strong>Saran Refleksi:</strong> Luangkan waktu 5 menit untuk menenangkan napas sebelum berdiskusi kembali. Lanjutkan ke pilar <strong>Memetakan Pola</strong> untuk menemukan solusi tepat.
+          </div>
+        </div>
+      `;
+    }
+
+    /* ============================================================
+       4. PILAR 2: MEMETAKAN POLA (RADAR CHART & DIAGNOSTIC)
+       ============================================================ */
+    let radarChart;
+    let quizScores = {
+      anxious: 70,
+      avoidant: 40,
+      secure: 60,
+      words: 80,
+      qualityTime: 90
+    };
+
+    function selectOption(qNum, value, btnElem) {
+      document.querySelectorAll('.q' + qNum).forEach(b => {
+        b.classList.remove('bg-pink-600', 'text-white', 'border-pink-400');
+        b.classList.add('bg-slate-900/50', 'text-gray-300');
+      });
+      btnElem.classList.remove('bg-slate-900/50', 'text-gray-300');
+      btnElem.classList.add('bg-pink-600', 'text-white', 'border-pink-400');
+    }
+
+    function initRadarChart() {
+      const ctxChart = document.getElementById('patternRadarChart').getContext('2d');
+      radarChart = new Chart(ctxChart, {
+        type: 'radar',
+        data: {
+          labels: ['Sifat Khawatir', 'Menarik Diri', 'Komunikasi Aman', 'Bahasa Kata', 'Waktu Bersama'],
+          datasets: [{
+            label: 'Profil Hubungan',
+            data: [75, 45, 65, 85, 90],
+            backgroundColor: 'rgba(236, 72, 153, 0.25)',
+            borderColor: '#EC4899',
+            pointBackgroundColor: '#F43F5E',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: '#EC4899'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              angleLines: { color: 'rgba(244, 114, 182, 0.2)' },
+              grid: { color: 'rgba(244, 114, 182, 0.2)' },
+              pointLabels: { color: '#E5E7EB', font: { size: 10 } },
+              ticks: { display: false, backdropColor: 'transparent' },
+              suggestedMin: 0,
+              suggestedMax: 100
             }
-        };
-
-        function switchLanguage(lang) {
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (translations[lang][key]) {
-                    el.innerHTML = translations[lang][key];
-                }
-            });
-
-            const btnId = document.getElementById('btn-lang-id');
-            const btnEn = document.getElementById('btn-lang-en');
-            if (lang === 'id') {
-                btnId.className = "px-3 py-1 rounded-full text-xs font-bold transition bg-hadoBlue text-white";
-                btnEn.className = "px-3 py-1 rounded-full text-xs font-bold transition text-slate-600 hover:text-slate-900";
-                document.documentElement.setAttribute('lang', 'id');
-            } else {
-                btnEn.className = "px-3 py-1 rounded-full text-xs font-bold transition bg-hadoBlue text-white";
-                btnId.className = "px-3 py-1 rounded-full text-xs font-bold transition text-slate-600 hover:text-slate-900";
-                document.documentElement.setAttribute('lang', 'en');
-            }
+          },
+          plugins: {
+            legend: { display: false }
+          }
         }
+      });
+    }
 
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
+    function generateChart() {
+      const newData = [
+        Math.floor(Math.random() * 40) + 50,
+        Math.floor(Math.random() * 50) + 30,
+        Math.floor(Math.random() * 40) + 60,
+        Math.floor(Math.random() * 30) + 70,
+        Math.floor(Math.random() * 30) + 70
+      ];
+      radarChart.data.datasets[0].data = newData;
+      radarChart.update();
 
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
+      document.getElementById('attachmentText').innerText = newData[0] > newData[1] ? 'Anxious-Expressive' : 'Avoidant-Reflective';
+      document.getElementById('loveLangText').innerText = 'Quality Time & Validasi Kata';
+    }
 
-        document.querySelectorAll('#mobile-menu a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.add('hidden');
-            });
-        });
+    function randomizeQuiz() {
+      generateChart();
+    }
 
-        function openApplicationModal(jobTitle) {
-            document.getElementById('modal-title').innerText = 'Lamar Posisi: ' + jobTitle;
-            document.getElementById('app-modal').classList.remove('hidden');
-            document.getElementById('app-modal').classList.add('flex');
-            document.getElementById('modal-success').classList.add('hidden');
+    /* ============================================================
+       5. PILAR 3: LANGKAH SOLUSI (I-STATEMENT GENERATOR)
+       ============================================================ */
+    function generateScript() {
+      const feel = document.getElementById('iFeel').value || 'diabaikan';
+      const when = document.getElementById('iWhen').value || 'kamu bermain HP';
+      const because = document.getElementById('iBecause').value || 'kebersamaan itu penting';
+      const hope = document.getElementById('iHope').value || 'menyimpan HP saat makan';
+
+      const fullScript = `"Saya merasa ${feel} ketika ${when}. Karena bagi saya, ${because}. Saya berharap kita bisa ${hope}."`;
+      document.getElementById('scriptOutput').innerText = fullScript;
+    }
+
+    function copyScript() {
+      const text = document.getElementById('scriptOutput').innerText;
+      
+      // ExecCommand fallback for iframe clipboard restriction
+      const tempInput = document.createElement('textarea');
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+
+      const btn = event.currentTarget;
+      btn.innerHTML = `<i class="fa-solid fa-check text-emerald-400"></i> Tersalin!`;
+      setTimeout(() => {
+        btn.innerHTML = `<i class="fa-regular fa-copy"></i> Salin Teks`;
+      }, 2000);
+    }
+
+    /* ============================================================
+       6. PILAR 4: MEDIASI (TALKING STICK TIMER)
+       ============================================================ */
+    let timerInterval = null;
+    let timeLeft = 180; // 3 mins
+    let currentTurn = 'A';
+
+    function updateTimerDisplay() {
+      const mins = Math.floor(timeLeft / 60);
+      const secs = timeLeft % 60;
+      document.getElementById('timerDisplay').innerText = 
+        `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    function startTimer() {
+      if (timerInterval) return;
+      timerInterval = setInterval(() => {
+        if (timeLeft > 0) {
+          timeLeft--;
+          updateTimerDisplay();
+        } else {
+          pauseTimer();
+          switchTurn();
         }
+      }, 1000);
+    }
 
-        function closeApplicationModal() {
-            document.getElementById('app-modal').classList.remove('flex');
-            document.getElementById('app-modal').classList.add('hidden');
-        }
+    function pauseTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
 
-        function handleApplicationSubmit(e) {
-            e.preventDefault();
-            document.getElementById('modal-success').classList.remove('hidden');
-            setTimeout(() => {
-                closeApplicationModal();
-            }, 2000);
-        }
+    function switchTurn() {
+      pauseTimer();
+      timeLeft = 180;
+      updateTimerDisplay();
 
-        function handleContactSubmit(e) {
-            e.preventDefault();
-            document.getElementById('contact-success').classList.remove('hidden');
-            e.target.reset();
-            setTimeout(() => {
-                document.getElementById('contact-success').classList.add('hidden');
-            }, 4000);
-        }
-    </script>
+      if (currentTurn === 'A') {
+        currentTurn = 'B';
+        document.getElementById('turnIndicator').innerHTML = `Giliran: <span class="text-purple-400">Pasangan B (3 Menit Bicara)</span>`;
+      } else {
+        currentTurn = 'A';
+        document.getElementById('turnIndicator').innerHTML = `Giliran: <span class="text-pink-400">Pasangan A (3 Menit Bicara)</span>`;
+      }
+    }
+
+    /* ============================================================
+       7. PILAR 5: KEBERLANJUTAN (STREAK & DATE GENERATOR)
+       ============================================================ */
+    const dateIdeas = [
+      {
+        title: "Nostalgia Tempat Pertama Met",
+        desc: "Kunjungi kembali lokasi tempat pertama kali Anda bertatap muka atau kencan. Bahas memori indah saat pertama jatuh cinta."
+      },
+      {
+        title: "Malam Bebas Gadget & Masak Bersama",
+        desc: "Matikan seluruh ponsel pukul 19.00, pilih resep makanan baru, dan masak bersama sambil memutar musik favorit."
+      },
+      {
+        title: "Deep Sync: 36 Pertanyaan Intimasi",
+        desc: "Luangkan 30 menit untuk menjawab 3 pertanyaan mendalam secara bergantian dari panduan psikologi kedekatan."
+      },
+      {
+        title: "Stargazing / Jalan Malam Santai",
+        desc: "Jalan kaki santai di taman atau area sekitar tanpa tujuan terburu-buru, hanya menikmati keheningan berdua."
+      }
+    ];
+
+    function generateDateIdea() {
+      const random = dateIdeas[Math.floor(Math.random() * dateIdeas.length)];
+      document.getElementById('dateIdeaTitle').innerText = random.title;
+      document.getElementById('dateIdeaDesc').innerText = random.desc;
+    }
+
+    function updateStreak() {
+      const checkboxes = document.querySelectorAll('#section-keberlanjutan input[type="checkbox"]');
+      let checkedCount = 0;
+      checkboxes.forEach(c => { if(c.checked) checkedCount++; });
+      document.getElementById('streakBadge').innerText = `Streak Selesai: ${checkedCount}/4 Ritual`;
+    }
+
+    /* ============================================================
+       8. MODAL HANDLERS
+       ============================================================ */
+    function openBookingModal() {
+      document.getElementById('bookingModal').classList.remove('hidden');
+    }
+
+    function closeBookingModal() {
+      document.getElementById('bookingModal').classList.add('hidden');
+      document.getElementById('modalMessage').classList.add('hidden');
+    }
+
+    function handleBooking(e) {
+      e.preventDefault();
+      const msgBox = document.getElementById('modalMessage');
+      msgBox.innerText = "✓ Permintaan konsultasi privat berhasil terkirim! Tim Konsultan Cinta akan menghubungi Anda via WhatsApp/Email.";
+      msgBox.classList.remove('hidden');
+
+      setTimeout(() => {
+        closeBookingModal();
+      }, 2500);
+    }
+  </script>
 </body>
 </html>
